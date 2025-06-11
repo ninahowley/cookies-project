@@ -32,5 +32,4 @@ if mac:
 
 cookies = m.upload_cookies()
 
-if not cookies.empty:
-    m.display_cookies(cookies)
+m.display_cookies(cookies)
