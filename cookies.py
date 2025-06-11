@@ -32,4 +32,6 @@ if mac:
 
 cookies = m.upload_cookies()
 
-m.display_cookies(cookies)
+m.display_raw_cookies(cookies)
+
+m.sort_cookie_domains(cookies)
