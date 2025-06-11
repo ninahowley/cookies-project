@@ -4,15 +4,15 @@ import pandas as pd
 import tempfile
 
 def display_windows_filepath():
-      st.write("**Your filepath will look something like this**")
+      st.write("**Follow this filepath, replacing 'your profile' with your windows login username...**")
       st.write(rf"C:\Users\your profile\AppData\Local\Google\Chrome\User Data\Default\Network")
-      st.write("Make sure to replace 'your profile' with your windows login name!")
       st.write("\n**Upload:** Cookies.db")
 
 def display_mac_filepath():
-      st.write("**Your filepath will look something like this**")
-      st.write(rf"Working on it...")
-    #   st.write("Make sure to replace 'your profile' with your windows login name!")
+      st.write("**Follow these instructions to find your cookies...**")
+      st.write("1. Open Finder")
+      st.write("2. Command + Shift + G")
+      st.write("Type: '~/Library/Application Support/Google/Chrome/Default/")
       st.write("\n**Upload:** Cookies.db")
 
 def display_cookies():
