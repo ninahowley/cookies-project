@@ -25,7 +25,7 @@ def upload_cookies() -> pd.DataFrame:
     """
     Collects Cookies.db from user and returns it as a pandas dataframe.
     """
-    db_file = st.file_uploader("")
+    db_file = st.file_uploader("Upload your cookies!")
 
     if db_file is not None:
         # Create a temporary file to store the uploaded DB
@@ -52,10 +52,10 @@ def get_domain(host_key: str) -> str:
     Returns the domain associated with a cookie's host key.
     """
     try:
-        parts = host_key.split(".")
+        parts = str(host_key).split(".")
         return (parts[-2], f".{parts[-1]}")
     except IndexError:
-        return host_key
+        return str(host_key)
 
 def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     """
@@ -65,21 +65,25 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
         host_keys = cookies['host_key']
         domain_dict = {}
         for key in host_keys:
-            print(key)
-            domain = get_domain(key)
+            domain = get_domain(key)[0]
             if domain not in domain_dict:
                 domain_dict[domain] = 1
             else:
                 domain_dict[domain] = domain_dict[domain] +1
+        
+        st.write("**Domains breakdown...**")
         st.write(domain_dict)
+
         return domain_dict
+    
     else:
         return
 
-print(get_domain(".vote.org"))
-print(get_domain("chat.google.com"))
-print(get_domain(".workspace.google.com"))
-print(get_domain("github.com"))
+# print(get_domain(".vote.org"))
+# print(get_domain("chat.google.com"))
+# print(get_domain(".workspace.google.com"))
+# print(get_domain("github.com"))
+# print(get_domain("localhost"))
 
 
 

@@ -9,7 +9,8 @@ import methods as m
 
 st.set_page_config(
         page_title="Cookies Streamlit",
-        layout="centered")
+        layout="centered",
+        )
 
 st.header("Cookies Streamlit (WIP)")
 
