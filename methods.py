@@ -3,8 +3,8 @@ import sqlite3
 import pandas as pd
 import tempfile
 
-def display_windows_filepath(user):
-      st.write("1. **Copy this filepath:**", rf"C:\Users\{user}\AppData\Local\Google\Chrome\User Data\Default\Network")
+def display_windows_filepath():
+      st.write("1. **Copy this filepath:**", rf"C:\Users\[your profile]\AppData\Local\Google\Chrome\User Data\Default\Network")
       st.write("2. **Upload:** Cookies.db")
 
 def display_mac_filepath(user):
