@@ -1,8 +1,6 @@
 import streamlit as st
 import os 
-import sqlite3
 import pandas as pd
-import tempfile
 
 import methods as m
 
