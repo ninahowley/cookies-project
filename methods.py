@@ -4,11 +4,12 @@ import pandas as pd
 import tempfile
 
 def display_windows_filepath():
-      st.write("1. **Copy this filepath:**", rf"C:\Users\[your profile]\AppData\Local\Google\Chrome\User Data\Default\Network")
+      st.write("1. **Go to this filepath:**", rf"C:\Users\your profile\AppData\Local\Google\Chrome\User Data\Default\Network")
+      st.write("    a. **Replace**: 'your profile' with your windows profile username.")
       st.write("2. **Upload:** Cookies.db")
 
 def display_mac_filepath():
-      st.write("1. **Copy this filepath:**", rf"Working on it...")
+      st.write("1. **Go to this filepath:**", rf"Working on it...")
       st.write("2. **Upload:** Cookies.db")
 
 def display_cookies():
