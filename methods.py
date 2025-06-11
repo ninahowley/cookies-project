@@ -36,7 +36,7 @@ def upload_cookies() -> pd.DataFrame:
             conn = sqlite3.connect(tmp_db_path)
             cur = conn.cursor()
 
-            df = pd.read_sql_query(f"SELECT * FROM cookies;", conn)
+            df = pd.read_sql_query(f"SELECT * FROM cookies", conn)
             if not df.empty:
                 return df
                         
