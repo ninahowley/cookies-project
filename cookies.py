@@ -13,8 +13,8 @@ st.set_page_config(
 
 st.header("Cookies Streamlit (WIP)")
 
-user = os.getlogin()
-st.write("Hello, ", user)
+# user = os.getlogin()
+# st.write("Hello, ", user)
 
 cookies = ""     
 st.write("Which operating system are you using?")
@@ -25,9 +25,9 @@ with c1:
         mac = col2.button("Mac", key="mac")
 
 if windows:
-      cookies = m.display_windows_filepath(user)
+      cookies = m.display_windows_filepath()
 
 if mac:
-      cookies = m.display_mac_filepath(user)
+      cookies = m.display_mac_filepath()
 
 st.write(m.display_cookies())

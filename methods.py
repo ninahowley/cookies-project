@@ -7,7 +7,7 @@ def display_windows_filepath():
       st.write("1. **Copy this filepath:**", rf"C:\Users\[your profile]\AppData\Local\Google\Chrome\User Data\Default\Network")
       st.write("2. **Upload:** Cookies.db")
 
-def display_mac_filepath(user):
+def display_mac_filepath():
       st.write("1. **Copy this filepath:**", rf"Working on it...")
       st.write("2. **Upload:** Cookies.db")
 
