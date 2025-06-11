@@ -70,11 +70,23 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
                 domain_dict[domain] = 1
             else:
                 domain_dict[domain] = domain_dict[domain] +1
-        
-        st.write("**Domains breakdown...**")
-        st.write(domain_dict)
 
-        return domain_dict
+        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Count"])
+        sorted_df = df.sort_values(by=['Count'], ascending=False)
+
+        st.header("**Top 10 domains...**")
+        top_10 = sorted_df.head(10)
+        st.bar_chart(
+            data=top_10,
+            x="Domain",
+            y="Count",
+            horizontal=True,
+            )
+        
+        st.header("**Domains breakdown...**")
+        st.write(sorted_df)
+
+        return sorted_df
     
     else:
         return
