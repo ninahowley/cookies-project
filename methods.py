@@ -32,5 +32,6 @@ def upload_cookies():
                 return df
                         
 def display_cookies(cookies):
-    st.write(cookies)
+    if isinstance(cookies, pd.DataFrame):
+        st.write(cookies)
 
