@@ -16,7 +16,7 @@ st.header("Cookies Streamlit (WIP)")
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-cookies = ""     
+cookies = None    
 st.write("Which operating system are you using?")
 c1, c2 = st.columns((1.5,3))
 with c1:
@@ -30,4 +30,7 @@ if windows:
 if mac:
       cookies = m.display_mac_filepath()
 
-st.write(m.display_cookies())
+cookies = m.upload_cookies()
+
+if not cookies.empty:
+    m.display_cookies(cookies)
