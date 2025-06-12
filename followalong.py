@@ -1,3 +1,30 @@
 import streamlit as st
+import os 
+import pandas as pd
 
-st.header("WIP")
+import methods as m
+
+st.header("Cookies Streamlit (WIP)")
+
+# user = os.getlogin()
+# st.write("Hello, ", user)
+
+cookies = None    
+st.write("Which operating system are you using?")
+c1, c2 = st.columns((1.5,3))
+with c1:
+        col1, col2 = st.columns((2), gap="small")
+        windows = col1.button("Windows", key="windows")
+        mac = col2.button("Mac", key="mac")
+
+if windows:
+      cookies = m.display_windows_filepath()
+
+if mac:
+      cookies = m.display_mac_filepath()
+
+cookies = m.upload_cookies()
+
+m.display_raw_cookies(cookies)
+
+m.sort_cookie_domains(cookies)
