@@ -5,7 +5,6 @@ st.set_page_config(
         initial_sidebar_state="expanded",
         layout="wide")
 
-# Pages configuration setup - will show as part of the sidebar
 pages = {
     "Menu": [
         st.Page("introduction.py", title="Introduction"), #intro to cookies --> example db
