@@ -9,7 +9,21 @@ st.header("Cookies Streamlit (WIP)")
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-cookies = None    
+# Creating a form submission to count the number of cookies on a single website. 
+# We can use it for our wellesley college website demo.
+st.header("How many cookies does the Wellesley College website have?")
+
+cookie_count = st.form("cookies_count")
+
+with cookie_count:
+       st.write("Paste https://www.wellesley.edu/ below to find out!")
+       website = cookie_count.text_input('Enter a website:') 
+       st.form_submit_button("Click for number of cookies")
+
+
+
+cookies = None
+st.header("You try!")
 st.write("Which operating system are you using?")
 c1, c2 = st.columns((1.5,3))
 with c1:
