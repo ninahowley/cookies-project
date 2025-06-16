@@ -36,7 +36,7 @@ def upload_cookies() -> pd.DataFrame:
             conn = sqlite3.connect(tmp_db_path)
             cur = conn.cursor()
 
-            df = pd.read_sql_query(f"SELECT * FROM cookies", conn)
+            df = pd.read_sql_query(f"SELECT creation_utc, host_key, top_frame_site_key, name, value, path, expires_utc, is_secure, is_httponly, last_access_utc, has_expires, is_persistent, priority, samesite, source_scheme, source_port, last_update_utc,source_type,has_cross_site_ancestor FROM cookies", conn)
             if not df.empty:
                 return df
                         
