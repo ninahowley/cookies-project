@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import tempfile
+import csv
 
 def display_windows_filepath():
     """
@@ -97,5 +98,25 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
 # print(get_domain("github.com"))
 # print(get_domain("localhost"))
 
+def categorize_cookies(cookies):
+    with open("open-cookie-database.csv", 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        all_cookies = list(reader)
 
+    domains = [row["Domain"] for row in all_cookies]
+    category = [row["Category"] for row in all_cookies]
+    dom_cat = dict(zip(domains, category))
+    print(dom_cat)
+    if isinstance(cookies, pd.DataFrame):
+        host_keys = cookies['host_key']
+        domain_dict = {}
+        for key in host_keys:
+            if key.lstrip('.') in dom_cat.keys():
+                print(key.lstrip('.'))
+                domain_dict[key] = dom_cat[key.lstrip('.')]
+            else:
+                domain_dict[key] = "Unknown"
 
+        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
+        st.header("Categorization of your cookies")
+        st.dataframe(df)

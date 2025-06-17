@@ -42,3 +42,5 @@ cookies = m.upload_cookies()
 m.display_raw_cookies(cookies)
 
 m.sort_cookie_domains(cookies)
+
+m.categorize_cookies(cookies)
