@@ -122,4 +122,29 @@ def categorize_cookies(cookies):
         st.header("Categorization of your cookies")
         st.dataframe(df)
 
-def 
+def display_description(selection: str) -> str:
+    descriptions_dict = {
+        'creation_utc':"Specifies the exact time that a cookie was placed on your computer.\n\nUTC stands for 'Coordinated Universal Time'.\n\nAll timezones, such as EST, are defined by their offset from UTC.",
+        'host_key':"Specifies the domain or subdomain that a cookie is associated with.\n\nCetermines which website(s) can access and use that cookie.\n\nFor example, a host key of .example.com allows the cookie to be used by www.example.com and sub.example.com.",
+        'top_frame_site_key':"",
+        'name':"", 
+        'value':"",
+        'encrypted_value':"", 
+        'path':"", 
+        'expires_utc':"",
+        'is_secure':"", 
+        'is_httponly':"", 
+        'last_access_utc':"", 
+        'has_expires':"",
+        'is_persistent':"", 
+        'priority':"", 
+        'samesite':"", 
+        'source_scheme':"",
+        'source_port':"", 
+        'last_update_utc':"", 
+        'source_type':"", 
+        'has_cross_site_ancestor':""
+        }
+    
+    
+    return descriptions_dict[selection]

@@ -26,10 +26,7 @@ columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name',
            'is_persistent', 'priority', 'samesite', 'source_scheme',
            'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
 
-col2.write("**<< This is what Chrome's cookies look like as they are stored within your computer!**")
 selection = col2.selectbox(options=columns,label="Choose a column to learn more about.")
 
 if selection:
-    col2.write("This is a work in progress.")
-    col2.write("Column description here...")
-    #m.display_description(selection) --> need to create this function
+    col2.write(m.display_description(selection))
