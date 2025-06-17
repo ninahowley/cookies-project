@@ -92,6 +92,7 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     else:
         return
 
+# testing
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))
 # print(get_domain(".workspace.google.com"))
@@ -120,3 +121,5 @@ def categorize_cookies(cookies):
         df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
         st.header("Categorization of your cookies")
         st.dataframe(df)
+
+def 
