@@ -2,7 +2,6 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import tempfile
-import requests
 
 def display_windows_filepath():
     """
@@ -92,36 +91,58 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     else:
         return
 
-#Getting cookies
-def get_cookies(website):
-    if st.form_submit_button("Fetch First-Party Cookies"):
-        try:
-            response = requests.get(website)
-            cookies = response.cookies
-
-            st.success(f"{len(cookies)} cookie(s) found.")
-
-        # Display each cookie
-            for cookie in cookies:
-                st.write({
-                    "name": cookie.name,
-                    "value": cookie.value,
-                    "domain": cookie.domain,
-                    "path": cookie.path,
-                    "expires": cookie.expires,
-                    "secure": cookie.secure
-                })
-        except Exception as e:
-            st.error(f"Failed to fetch cookies: {e}")
-
-#Cookie Security visualization
-
-
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))
 # print(get_domain(".workspace.google.com"))
 # print(get_domain("github.com"))
 # print(get_domain("localhost"))
 
+def categorize_cookies(cookies):
+    with open("open-cookie-database.csv", 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        all_cookies = list(reader)
 
+    domains = [row["Domain"] for row in all_cookies]
+    category = [row["Category"] for row in all_cookies]
+    dom_cat = dict(zip(domains, category))
+    print(dom_cat)
+    if isinstance(cookies, pd.DataFrame):
+        host_keys = cookies['host_key']
+        domain_dict = {}
+        for key in host_keys:
+            if key.lstrip('.') in dom_cat.keys():
+                print(key.lstrip('.'))
+                domain_dict[key] = dom_cat[key.lstrip('.')]
+            else:
+                domain_dict[key] = "Unknown"
 
+        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
+        st.header("Categorization of your cookies")
+        st.dataframe(df)
+
+def display_description(selection: str) -> str:
+    descriptions_dict = {
+        'creation_utc':"Specifies the exact time that a cookie was placed on your computer.\n\nUTC stands for 'Coordinated Universal Time'.\n\nAll timezones, such as EST, are defined by their offset from UTC.",
+        'host_key':"Specifies the domain or subdomain that a cookie is associated with.\n\nCetermines which website(s) can access and use that cookie.\n\nFor example, a host key of .example.com allows the cookie to be used by www.example.com and sub.example.com.",
+        'top_frame_site_key':"",
+        'name':"", 
+        'value':"",
+        'encrypted_value':"", 
+        'path':"", 
+        'expires_utc':"",
+        'is_secure':"", 
+        'is_httponly':"", 
+        'last_access_utc':"", 
+        'has_expires':"",
+        'is_persistent':"", 
+        'priority':"", 
+        'samesite':"", 
+        'source_scheme':"",
+        'source_port':"", 
+        'last_update_utc':"", 
+        'source_type':"", 
+        'has_cross_site_ancestor':""
+        }
+    
+    
+    return descriptions_dict[selection]
