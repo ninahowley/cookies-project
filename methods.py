@@ -2,6 +2,7 @@ import streamlit as st
 import sqlite3
 import pandas as pd
 import tempfile
+import requests
 
 def display_windows_filepath():
     """
@@ -90,6 +91,31 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     
     else:
         return
+
+#Getting cookies
+def get_cookies(website):
+    if st.form_submit_button("Fetch First-Party Cookies"):
+        try:
+            response = requests.get(website)
+            cookies = response.cookies
+
+            st.success(f"{len(cookies)} cookie(s) found.")
+
+        # Display each cookie
+            for cookie in cookies:
+                st.write({
+                    "name": cookie.name,
+                    "value": cookie.value,
+                    "domain": cookie.domain,
+                    "path": cookie.path,
+                    "expires": cookie.expires,
+                    "secure": cookie.secure
+                })
+        except Exception as e:
+            st.error(f"Failed to fetch cookies: {e}")
+
+#Cookie Security visualization
+
 
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))
