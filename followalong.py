@@ -3,6 +3,7 @@ import os
 import pandas as pd
 
 import methods as m
+import visualization_methods as vm
 
 st.header("Cookies Streamlit (WIP)")
 
@@ -71,4 +72,6 @@ st.write("You selected:", visualization)
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
 
-m.categorize_cookies(cookies)
+# m.categorize_cookies(cookies)
+
+vm.persistent_cookies(cookies)
