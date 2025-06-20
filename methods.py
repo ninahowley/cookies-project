@@ -4,12 +4,9 @@ import pandas as pd
 import tempfile
 import requests
 import csv
-<<<<<<< HEAD
 from bs4 import BeautifulSoup
 import time
-=======
 import plotly.express as px
->>>>>>> a0b639559c879f0bd96375489f9af53fe4e2ffbe
 
 def display_windows_filepath():
     """
