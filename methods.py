@@ -138,6 +138,21 @@ def pie_chart(cookies):
     else:
         st.write("No data yet. Input data for visualization.")
 
+#domains for secure
+def on_secure(cookies):
+    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
+        secure_cookies = cookies[cookies['is_secure'] == 1]['host_key'].unique() #NumPy array of unique domain values
+        st.write("Here are the domains with secure cookies:")
+        for domain in secure_cookies:
+            st.write(domain)
+
+def on_insecure(cookies):
+    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
+        insecure_cookies = cookies[cookies['is_secure'] == 0]['host_key'].unique() #NumPy array of unique domain values
+        st.write("Here are the domains with insecure cookies:")
+        for domain in insecure_cookies:
+            st.write(domain)
+
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))
 # print(get_domain(".workspace.google.com"))

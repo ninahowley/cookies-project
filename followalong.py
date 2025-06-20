@@ -73,7 +73,22 @@ if visualization == "Cookie Security":
     st.header("Cookie Security")
     st.write("Let's learn about cookie security! Below is a pie chart showing the proportions of your secure and insecure cookies.")
     #creating cookie security pie charts
-    m.pie_chart(cookies)
+    col1, col2 = st.columns((1,1))
+    with col1:
+        m.pie_chart(cookies)
+    
+    with col2:
+        st.write("Toggle to view domains that have secure vs not secure cookies!")
+        col1, col2 = st.columns((1,1))
+        with col1:
+            on_secure = col1.toggle("Secure")
+            if on_secure:
+                m.on_secure(cookies)
+        with col2:
+            on_insecure = col2.toggle("Not Secure")
+            if on_insecure:
+                m.on_insecure(cookies)
+        
     st.subheader("Secure vs. insecure cookies")
     st.write("Secure cookies are designed to only be transmitted over HTTPS, which means they are encrypted during when sent from the domain to server and less vulnerable to interception. " \
     "Web browsers (or user agents) will only include the cookie in an HTTPS request, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
