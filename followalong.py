@@ -75,3 +75,5 @@ m.sort_cookie_domains(cookies)
 # m.categorize_cookies(cookies)
 
 vm.persistent_cookies(cookies)
+
+vm.last_accessed(cookies)
