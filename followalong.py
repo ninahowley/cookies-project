@@ -71,3 +71,4 @@ st.write("You selected:", visualization)
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
 
+m.categorize_cookies(cookies)
