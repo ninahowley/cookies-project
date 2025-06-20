@@ -101,11 +101,8 @@ if visualization == "Cookie Security":
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
 
-<<<<<<< HEAD
-m.categorize_cookies(cookies)
+# m.categorize_cookies(cookies)
 
 vm.persistent_cookies(cookies)
-=======
->>>>>>> a0b639559c879f0bd96375489f9af53fe4e2ffbe
 
 vm.last_accessed(cookies)
