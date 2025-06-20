@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 import methods as m
-
+import visualization_methods as vm
 
 st.header("Cookies Streamlit (WIP)")
 
@@ -102,4 +102,4 @@ if visualization == "Cookie Security":
 m.sort_cookie_domains(cookies)
 
 
-
+vm.last_accessed(cookies)

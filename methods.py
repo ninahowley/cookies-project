@@ -167,16 +167,20 @@ def categorize_cookies(cookies):
     domains = [row["Domain"] for row in all_cookies]
     category = [row["Category"] for row in all_cookies]
     dom_cat = dict(zip(domains, category))
-    print(dom_cat)
     if isinstance(cookies, pd.DataFrame):
-        host_keys = cookies['host_key']
+        host_keys = cookies['host_key'].unique()
         domain_dict = {}
         for key in host_keys:
             if key.lstrip('.') in dom_cat.keys():
-                print(key.lstrip('.'))
+                print(f'{key.lstrip('.')} in database')
                 domain_dict[key] = dom_cat[key.lstrip('.')]
             else:
-                domain_dict[key] = "Unknown"
+                base_url = f'https://cookiepedia.co.uk/website/{key}'
+                response = requests.get(base_url)
+                if response.status_code == 200:
+                    print(f'{key.lstrip('.')} found with requests')
+                else:
+                    domain_dict[key] = 'Unknown'
 
         df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
         st.header("Categorization of your cookies")
@@ -208,3 +212,15 @@ def display_description(selection: str) -> str:
     
     
     return descriptions_dict[selection]
+
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
+ 
+# request the target site with the User Agent
+# response = requests.get("http://httpbin.io/user-agent", headers=headers)
+
+# key = 'google'
+# base_url = f'https://cookiepedia.co.uk/website/{key}'
+# response = requests.get(base_url, headers=headers)
+# print(response.text)
+# if response.status_code == 200:
+#     print(f'{key.lstrip('.')} found with requests')
