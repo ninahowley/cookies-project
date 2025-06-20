@@ -68,11 +68,20 @@ visualization = st.selectbox(
     index=None,
     placeholder="Select topic to explore..."
 )
-st.write("You selected:", visualization)
 
 if visualization == "Cookie Security":
+    st.header("Cookie Security")
+    st.write("Let's learn about cookie security! Below is a pie chart showing the proportions of your secure and insecure cookies.")
     #creating cookie security pie charts
     m.pie_chart(cookies)
+    st.subheader("Secure vs. insecure cookies")
+    st.write("Secure cookies are designed to only be transmitted over HTTPS, which means they are encrypted during when sent from the domain to server and less vulnerable to interception. " \
+    "Web browsers (or user agents) will only include the cookie in an HTTPS request, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
+    "protect data in transit between the user's browser to server." \
+    "\n\nHowever, insecure cookies can be sent over HTTP, which transmits data in plain text, potentially exposing this information to attackers. " \
+    "\n\n In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. *is_secure* = 1 means it's secure and *is_secure* = 0 means it's insecure. ")
+    st.subheader("")
+    
 
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
