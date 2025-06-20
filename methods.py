@@ -4,6 +4,8 @@ import pandas as pd
 import tempfile
 import requests
 import csv
+from bs4 import BeautifulSoup
+import time
 
 def display_windows_filepath():
     """
@@ -136,16 +138,29 @@ def categorize_cookies(cookies):
         host_keys = cookies['host_key'].unique()
         domain_dict = {}
         for key in host_keys:
-            if key.lstrip('.') in dom_cat.keys():
+            if key.lstrip('.') in dom_cat.keys() and key not in domain_dict.keys():
                 print(f'{key.lstrip('.')} in database')
                 domain_dict[key] = dom_cat[key.lstrip('.')]
             else:
-                base_url = f'https://cookiepedia.co.uk/website/{key}'
-                response = requests.get(base_url)
+                base_url = f'https://cookiepedia.co.uk/website/{key.lstrip('.')}'
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
+                response = requests.get("http://httpbin.io/user-agent", headers=headers)
+                response = requests.get(base_url, headers=headers)
                 if response.status_code == 200:
-                    print(f'{key.lstrip('.')} found with requests')
+                    try:
+                        soup = BeautifulSoup(response.text, 'html.parser')
+                        cookie_type = soup.find(class_='cookie-details clearfix')
+                        cookie_type = cookie_type.find_all('li')
+                        cookie_type = str(cookie_type[0]).split(' ')[-1]
+                        cookie_type = cookie_type.split('<')[0]
+                        domain_dict[key] = cookie_type
+                        time.sleep(2)
+                        print(f'{key} retrieved')
+                    except:
+                        domain_dict[key] = 'Unknown'
                 else:
                     domain_dict[key] = 'Unknown'
+                    print(f'{key} not found')
 
         df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
         st.header("Categorization of your cookies")
@@ -181,11 +196,17 @@ def display_description(selection: str) -> str:
 headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
  
 # request the target site with the User Agent
-# response = requests.get("http://httpbin.io/user-agent", headers=headers)
+response = requests.get("http://httpbin.io/user-agent", headers=headers)
 
-# key = 'google'
-# base_url = f'https://cookiepedia.co.uk/website/{key}'
-# response = requests.get(base_url, headers=headers)
-# print(response.text)
-# if response.status_code == 200:
-#     print(f'{key.lstrip('.')} found with requests')
+key = 'google'
+base_url = f'https://cookiepedia.co.uk/website/{key}'
+response = requests.get(base_url, headers=headers)
+print(response.text)
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, 'html.parser')
+    cookie = soup.find(class_='cookie-details clearfix')
+    cookie = cookie.find_all('li')
+    print(cookie[0])
+    cookie = str(cookie[0]).split(' ')[-1]
+    cookie = cookie.split('<')[0]
+    print(cookie)

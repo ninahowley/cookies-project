@@ -26,5 +26,4 @@ def last_accessed(cookies):
         df['existing'] = df['time'].rank(method='max').astype(int)
         df = df.groupby('time')['existing'].agg('max').reset_index()
         fig = px.line(df, x='time', y='existing')
-        st.write(df.sort_values('time'))
         st.plotly_chart(fig)
