@@ -4,6 +4,7 @@ import pandas as pd
 
 import methods as m
 
+
 st.header("Cookies Streamlit (WIP)")
 
 # user = os.getlogin()
@@ -64,10 +65,17 @@ st.write("After you upload, toggle through these topics to visualize your own co
 visualization = st.selectbox(
     "Click here to learn about each topic",
     ["Cookie Security", "Third Party Cookies", "Persistent Cookies", "Size of Cookies"],
-    index=0,  # or None if you want no default selection
+    index=None,
+    placeholder="Select topic to explore..."
 )
 st.write("You selected:", visualization)
 
+if visualization == "Cookie Security":
+    #creating cookie security pie charts
+    m.pie_chart(cookies)
+
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
+
+
 

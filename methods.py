@@ -4,6 +4,7 @@ import pandas as pd
 import tempfile
 import requests
 import csv
+import plotly.express as px
 
 def display_windows_filepath():
     """
@@ -116,7 +117,26 @@ def get_cookies(website):
             st.error(f"Failed to fetch cookies: {e}")
 
 #Cookie Security visualization
+def pie_chart(cookies):
+    if cookies is not None:
+        counts = cookies['is_secure'].value_counts().rename({1: 'Secure', 0: 'Not Secure'})
+        df = counts.reset_index()
+        df.columns = ['Security', 'Count']
 
+        fig = px.pie(df, 
+                     values='Count', 
+                     names='Security', 
+                     title='Proportion of Secure and Insecure Cookies', 
+                     color= 'Security',
+                     color_discrete_map = {
+                         'Secure': '#dc8e5e',
+                         'Not Secure': '#3f1c13',
+                     })
+        fig.update_traces(textinfo = 'label+percent')
+        fig.update_layout(showlegend=False)
+        st.plotly_chart(fig)
+    else:
+        st.write("No data yet. Input data for visualization.")
 
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))
