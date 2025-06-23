@@ -4,6 +4,9 @@ import pandas as pd
 import tempfile
 import requests
 import csv
+from bs4 import BeautifulSoup
+import time
+import plotly.express as px
 
 def display_windows_filepath():
     """
@@ -116,7 +119,41 @@ def get_cookies(website):
             st.error(f"Failed to fetch cookies: {e}")
 
 #Cookie Security visualization
+def pie_chart(cookies):
+    if cookies is not None:
+        counts = cookies['is_secure'].value_counts().rename({1: 'Secure', 0: 'Not Secure'})
+        df = counts.reset_index()
+        df.columns = ['Security', 'Count']
 
+        fig = px.pie(df, 
+                     values='Count', 
+                     names='Security', 
+                     title='Proportion of Secure and Insecure Cookies', 
+                     color= 'Security',
+                     color_discrete_map = {
+                         'Secure': '#dc8e5e',
+                         'Not Secure': '#3f1c13',
+                     })
+        fig.update_traces(textinfo = 'label+percent')
+        fig.update_layout(showlegend=False)
+        st.plotly_chart(fig)
+    else:
+        st.write("No data yet. Input data for visualization.")
+
+#domains for secure
+def on_secure(cookies):
+    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
+        secure_cookies = cookies[cookies['is_secure'] == 1]['host_key'].unique() #NumPy array of unique domain values
+        st.write("Here are the domains with secure cookies:")
+        for domain in secure_cookies:
+            st.write(domain)
+
+def on_insecure(cookies):
+    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
+        insecure_cookies = cookies[cookies['is_secure'] == 0]['host_key'].unique() #NumPy array of unique domain values
+        st.write("Here are the domains with insecure cookies:")
+        for domain in insecure_cookies:
+            st.write(domain)
 
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))
@@ -132,16 +169,33 @@ def categorize_cookies(cookies):
     domains = [row["Domain"] for row in all_cookies]
     category = [row["Category"] for row in all_cookies]
     dom_cat = dict(zip(domains, category))
-    print(dom_cat)
     if isinstance(cookies, pd.DataFrame):
-        host_keys = cookies['host_key']
+        host_keys = cookies['host_key'].unique()
         domain_dict = {}
         for key in host_keys:
-            if key.lstrip('.') in dom_cat.keys():
-                print(key.lstrip('.'))
+            if key.lstrip('.') in dom_cat.keys() and key not in domain_dict.keys():
+                print(f'{key.lstrip('.')} in database')
                 domain_dict[key] = dom_cat[key.lstrip('.')]
             else:
-                domain_dict[key] = "Unknown"
+                base_url = f'https://cookiepedia.co.uk/website/{key.lstrip('.')}'
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
+                response = requests.get("http://httpbin.io/user-agent", headers=headers)
+                response = requests.get(base_url, headers=headers)
+                if response.status_code == 200:
+                    try:
+                        soup = BeautifulSoup(response.text, 'html.parser')
+                        cookie_type = soup.find(class_='cookie-details clearfix')
+                        cookie_type = cookie_type.find_all('li')
+                        cookie_type = str(cookie_type[0]).split(' ')[-1]
+                        cookie_type = cookie_type.split('<')[0]
+                        domain_dict[key] = cookie_type
+                        time.sleep(2)
+                        print(f'{key} retrieved')
+                    except:
+                        domain_dict[key] = 'Unknown'
+                else:
+                    domain_dict[key] = 'Unknown'
+                    print(f'{key} not found')
 
         df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
         st.header("Categorization of your cookies")
@@ -173,3 +227,21 @@ def display_description(selection: str) -> str:
     
     
     return descriptions_dict[selection]
+
+headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
+ 
+# request the target site with the User Agent
+response = requests.get("http://httpbin.io/user-agent", headers=headers)
+
+key = 'google'
+base_url = f'https://cookiepedia.co.uk/website/{key}'
+response = requests.get(base_url, headers=headers)
+print(response.text)
+if response.status_code == 200:
+    soup = BeautifulSoup(response.text, 'html.parser')
+    cookie = soup.find(class_='cookie-details clearfix')
+    cookie = cookie.find_all('li')
+    print(cookie[0])
+    cookie = str(cookie[0]).split(' ')[-1]
+    cookie = cookie.split('<')[0]
+    print(cookie)
