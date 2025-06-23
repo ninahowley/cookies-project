@@ -228,20 +228,20 @@ def display_description(selection: str) -> str:
     
     return descriptions_dict[selection]
 
-headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
+# headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
  
-# request the target site with the User Agent
-response = requests.get("http://httpbin.io/user-agent", headers=headers)
+# # request the target site with the User Agent
+# response = requests.get("http://httpbin.io/user-agent", headers=headers)
 
-key = 'google'
-base_url = f'https://cookiepedia.co.uk/website/{key}'
-response = requests.get(base_url, headers=headers)
-print(response.text)
-if response.status_code == 200:
-    soup = BeautifulSoup(response.text, 'html.parser')
-    cookie = soup.find(class_='cookie-details clearfix')
-    cookie = cookie.find_all('li')
-    print(cookie[0])
-    cookie = str(cookie[0]).split(' ')[-1]
-    cookie = cookie.split('<')[0]
-    print(cookie)
+# key = 'google'
+# base_url = f'https://cookiepedia.co.uk/website/{key}'
+# response = requests.get(base_url, headers=headers)
+# print(response.text)
+# if response.status_code == 200:
+#     soup = BeautifulSoup(response.text, 'html.parser')
+#     cookie = soup.find(class_='cookie-details clearfix')
+#     cookie = cookie.find_all('li')
+#     print(cookie[0])
+#     cookie = str(cookie[0]).split(' ')[-1]
+#     cookie = cookie.split('<')[0]
+#     print(cookie)
