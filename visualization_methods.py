@@ -65,13 +65,13 @@ def securityVsParty(cookies):
                 else:
                     ti+=1
     
-    df = pd.DataFrame({
-        "Party": ["First Party", "Third Party"],
-        "Security": ["Secure", "Insecure"],
-        "Count": [fs, fi, ts, ti]
-    })
+        df = pd.DataFrame({
+            "Party": ["Fisrst Party", "Third Party"],
+            "Security": ["Secure", "Insecure"],
+            "Count": [fs, fi, ts, ti]
+        })
 
-    return df
+        return df
     
 
 
