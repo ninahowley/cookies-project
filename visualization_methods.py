@@ -10,7 +10,7 @@ def persistent_cookies(cookies):
         st.write(persistent)
         st.write(total)
         st.write(f'{persistent/total * 100}% of your cookies are persistent!')
-
+       
 def convert_time(time):
     time = time/1000000
     time = time - 11644473600
@@ -28,41 +28,51 @@ def last_accessed(cookies):
         fig = px.line(df, x='time', y='existing')
         st.plotly_chart(fig)
 
+def is_Secure(cookie): 
+    """
+    Helper method.
+    Returns true if secure, false if insecure. 
+    """
+    return cookie['is_secure'] == 1
+
+def is_FirstParty(cookie): 
+   """
+   Helper method.
+   Returns true if first party, false if third party.
+   """
+   return cookie['has_cross_site_ancestor'] == 1
+
 def securityVsParty(cookies):
     """"
-    STILL WORKING!!!!!
     Returns a dataframe that will be converted into a stacked bar chart. 
     Shows the proportions of first party/third party cookies that are secure/insecure respectively. 
     X = First Party Cookie, Third Party Cookie
     Stack = Secure Cookie, Insecure Cookie 
     Y = Frequency 
     """
-    # initialize four lists 1st + secure, 3rd + secure, 1st + insecure, 3rd + insecure 
-    fs = []
-    ts = []
-    fi = []
-    ti = []
-    for cookie in cookies: 
-        party = cookie["has_cross_site_ancestor"]
-        security = cookie["is_secure"]
-        if party == 0 and security == 1:
-            fs.append(cookie)
-        if party == 1 and security == 1:
-            ts.append(cookie)
-        if party == 0 and security == 0:
-            fi.append(cookie)
-        else:
-            ti.append(cookie)
+    # initialize four counters (first secure, third secure etc)
+    fs, ts, fi, ti = 0
+    if isinstance(cookies, pd.DataFrame):
+        for _, cookie in cookies.iterrows():
+            if is_FirstParty(cookie):
+                if is_Secure(cookie): 
+                    fs+=1
+                else: 
+                    fi+=1
+            else:
+                if is_Secure(cookie):
+                    ts+=1
+                else:
+                    ti+=1
     
-    first = fs + fi
-    third = ts + ti
+        df = pd.DataFrame({
+            "Party": ["Fisrst Party", "Third Party"],
+            "Security": ["Secure", "Insecure"],
+            "Count": [fs, fi, ts, ti]
+        })
 
-    df = pd.DataFrame(
-        {
-            "col1": [len(first), len(third)],
-            "col2": [[len(fs), len(fi)], [len(ts), len(ti)]]
-    }
-    )
+        return df
+    
 
 
 
