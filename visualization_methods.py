@@ -51,7 +51,7 @@ def securityVsParty(cookies):
     Y = Frequency 
     """
     # initialize four counters (first secure, third secure etc)
-    fs, ts, fi, ti = 0
+    fs, ts, fi, ti = 0, 0, 0, 0
     if isinstance(cookies, pd.DataFrame):
         for _, cookie in cookies.iterrows():
             if is_FirstParty(cookie):
@@ -66,13 +66,33 @@ def securityVsParty(cookies):
                     ti+=1
     
         df = pd.DataFrame({
-            "Party": ["Fisrst Party", "Third Party"],
-            "Security": ["Secure", "Insecure"],
+            "Party": ["First Party", "First Party", "Third Party", "Third Party"],
+            "Security": ["Secure", "Insecure", "Secure", "Insecure"],
             "Count": [fs, fi, ts, ti]
         })
+        fig = px.bar(df, x = "Party", y = "Count", color = "Security", title = "Party Security Cookies")
+        st.plotly_chart(fig)
 
-        return df
-    
+def sameSite(cookies): 
+    """
+    Labels and counts cookies with samesite = none, lax, strict (or NA). 
+    """    
+    none = []
+    lax = []
+    strict = []
+    unspecified = []
+    if isinstance(cookies, pd.DataFrame):
+        for _, cookie in cookies.iterrows():
+            value = cookie['samesite']
+            if value == 0: 
+                none.append(cookie)
+            elif value == 1:
+                lax.append(cookie)
+            elif value == 2:
+                strict.append(cookie)
+            else:
+                unspecified.append(cookie)
+        
 
 
 

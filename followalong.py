@@ -98,6 +98,11 @@ if visualization == "Cookie Security":
     st.subheader("")
     
 
+if visualization == "Third Party Cookies":
+     st.header("Third Party Cookies")
+     st.write("What proportion of your first/third party cookies are secure/insecure?")
+     vm.securityVsParty(cookies)
+
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
 
