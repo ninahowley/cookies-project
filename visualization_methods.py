@@ -5,11 +5,17 @@ import pandas as pd
 
 def persistent_cookies(cookies):
     if isinstance(cookies, pd.DataFrame):
+        # df = cookies[['host_key', 'is_persistent']]
         persistent = cookies['is_persistent'].sum()
         total = len(cookies['is_persistent'])
-        st.write(persistent)
-        st.write(total)
-        st.write(f'{persistent/total * 100}% of your cookies are persistent!')
+        data = {
+            'Type' : ['persistent', 'not persistent'],
+            'Amount' : [persistent, total-persistent]
+        }
+        df = pd.DataFrame(data=data)
+        fig = px.pie(df, values='Amount', color='Type', title='Persistent Cookies')
+        st.plotly_chart(fig)
+        st.write(f'{(persistent/total * 100).round(2)}% of your cookies are persistent!')
        
 def convert_time(time):
     time = time/1000000
