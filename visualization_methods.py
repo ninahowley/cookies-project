@@ -16,10 +16,6 @@ def persistent_cookies(cookies):
         fig = px.pie(df, values='Amount', color='Type', title='Persistent Cookies')
         st.plotly_chart(fig)
         st.write(f'{(persistent/total * 100).round(2)}% of your cookies are persistent!')
-        
-        st.write(persistent)
-        st.write(total)
-        st.write(f'{persistent/total * 100}% of your cookies are persistent!')
        
 def convert_time(time):
     time = time/1000000
