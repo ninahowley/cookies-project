@@ -89,10 +89,51 @@ if visualization == "Cookie Security":
         
     vm.double_bar(cookies)
         
+
+    st.subheader("SameSite Cookies")
+    st.write("The SameSite attribute is set in place to protect against Cross-Site Request Forgery (CSRF) attacks, where a malicious website tricks the browser into performing unwanted actions." \
+     "For example, hackers can inherit the user's cookies and send unauthorized commands to another website, appearing as a 'trusted user'." \
+     " SameSite is here to limit when cookies can be sent.")
+
+    st.write("*You can hover above the pie chart to see the exact count for each attribute.*")
     
+    c1, c2 = st.columns((1,1), gap = "large")
+    with c1:
+        vm.sameSite(cookies)
+        st.caption("*: Chrome treats unspecified sameSite attributes as lax.")
+    with c2:
+          option = st.selectbox("Now, let's dive a little deeper into what each of these values means!", ("None", "Lax", "Strict"))
+          if option == "None":
+               st.write("Cookies will be shared between sites with all cross-site requests, but this requires that the cookie is a Secure one. This attribute can be used for Third Party cookies.")
+          elif option == "Lax":
+               st.write("Cookies will be shared across domains, meaning that they will be sent for top-level navigations. For example, when you click on a link leading to the site, the cookie will be sent.")
+               st.write("Chrome's default is to treat the SameSite attribute as = Lax if it is missing.")
+          else:
+               st.write("Cookies will only be sent if the request originates from the same site. Examples of websites that use SameSite = Strict are financial service websites, where privacy of personal information is incredibly crucial.")
+
+if visualization == "Third Party Cookies":
+     st.subheader("Third Party Cookies")
+     st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
+     st.write("What distinguishes a third party cookie from a third party cookie?")
+     df = pd.DataFrame(
+          {
+               "Aspect": ["Purpose", "Data Ownership", "Management"],
+               "First Party Cookies": ["Store user data and preferences",
+                           "Set by the website you're visintg",
+                           "Supported by all browsers and can be blcoked or deleted by user"],
+               "Third Party Cookies": ["Tracks user activity across multiple sites",
+                          "Set by external servers",
+                          "Supported by all browsers but increasingly blocked by default"]
+          }
+     )
+     st.table(df)
+     # st.video() eventually include a demo clip of how to check your third party cookies in real time
 
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
 
+# m.categorize_cookies(cookies)
+
+vm.persistent_cookies(cookies)
 
 vm.last_accessed(cookies)
