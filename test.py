@@ -4,6 +4,7 @@ import db_sync
 import sqlite3
 import pandas as pd
 import methods
+import methods
 
 db_sync.download_db_from_github()
 

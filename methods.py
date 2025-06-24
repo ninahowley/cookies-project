@@ -250,5 +250,11 @@ def display_description(selection: str) -> str:
 
 def generate_username():
     int = random.randint(100, 999)
+<<<<<<< HEAD
     flavors = ['Vanilla', 'Chocolate', 'Cinnamon', 'Sugar', 'Mint', 'Lemon', 'Maple', 'Oatmeal', 'Butter']
     return f"{random.choice(flavors)} Cookie {int}"
+=======
+    adjectives = ['Sweet', 'Sour', 'Soft', 'Tiny', 'Huge', 'Classic', 'Fresh']
+    flavors = ['Vanilla', 'Chocolate', 'Cinnamon', 'Sugar', 'Mint', 'Lemon', 'Maple', 'Oatmeal', 'Butter']
+    return f"{random.choice(adjectives)} {random.choice(flavors)} {int}"
+>>>>>>> b932164a07bca2c337bdaa4dcadfb2d1cee7675c
