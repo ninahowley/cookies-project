@@ -10,6 +10,7 @@ pages = {
         st.Page("introduction.py", title="Introduction"), #intro to cookies --> example db
         st.Page("followalong.py", title="Follow Along"),
         st.Page("resources.py", title="Resources"),
+        st.Page("test.py", title="Test"),
     ]
 }
 
