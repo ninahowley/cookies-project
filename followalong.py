@@ -6,26 +6,13 @@ import methods as m
 import visualization_methods as vm
 import plotly.graph_objects as go
 
-st.header("Cookies Streamlit (WIP)")
+st.header(":cookie: An Introduction to Web Cookies")
+st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
 
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-# Creating a form submission to count the number of cookies on a single website. 
-# We can use it for our wellesley college website demo.
-# unfortunately only fetches first party cookies...
-st.header("How many cookies does the Wellesley College website have?")
-
-cookie_count = st.form("cookies_count")
-
-with cookie_count:
-       st.write("Paste https://www.wellesley.edu/ below to find out!")
-       website = cookie_count.text_input('Enter a website:') 
-       cookies_count = m.get_cookies(website)
-
-
 cookies = None
-st.header("You try!")
 st.write("Click the buttons below for instructions on how to upload your cookies, depending on your operating system.")
 c1, c2 = st.columns((1.5,3))
 with c1:
@@ -60,33 +47,36 @@ st.button(
 if st.session_state.show_db:
     m.display_raw_cookies(cookies)
 
-st.write("After you upload, toggle through these topics to visualize your own cookies and learn about these concepts!")
+st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
 #creating selectbox for visualizations
 visualization = st.selectbox(
     "Click here to learn about each topic",
-    ["Cookie Security", "Third Party Cookies", "Persistent Cookies", "Size of Cookies"],
+    ["Domain Exploration", "Cookie Security", "Third Party Cookies", "Persistent Cookies", "Size of Cookies"],
     index=None,
-    placeholder="Select topic to explore..."
+    placeholder="Select a topic to explore..."
 )
 
 #Cookie Security selection
 if visualization == "Cookie Security":
     st.header("Cookie Security")
-    st.write("Let's learn about cookie security! Below is a pie chart showing the proportions of your secure and insecure cookies.")
+    st.write("Let's explore the secure and samesite cookies! :cookie: ")
     #creating cookie security pie charts
-    col1, col2 = st.columns((1,1))
-    with col1:
-        vm.pie_chart(cookies)
+    #col1, col2 = st.columns((1,1))
+    #with col1:
     
-    with col2:
-        st.subheader("Secure vs. insecure cookies")
-        st.write("**Secure cookies** are designed to **only be transmitted over HTTPS**, which means they are encrypted only when sent from the domain to server and are less vulnerable to interception. " \
-        "Web browsers (or user agents) will only include the cookie in an **HTTPS request**, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
-        "protect data in transit between the user's browser to server." \
-        "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. " \
-        "\n\n In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
-        
+    
+    #with col2:
+    st.subheader("Secure vs. insecure cookies")
+    st.write("Let's learn about cookie security! Below is a pie chart showing the proportions of your secure and insecure cookies.")
+
+    st.write("\n\n**Secure cookies** are designed to **only be transmitted over HTTPS**, which means they are encrypted only when sent from the domain to server and are less vulnerable to interception. " \
+    "Web browsers (or user agents) will only include the cookie in an **HTTPS request**, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
+    "protect data in transit between the user's browser to server." \
+    "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. ")
+    vm.pie_chart(cookies)
+    st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
+
     vm.double_bar(cookies)
         
 
@@ -130,10 +120,25 @@ if visualization == "Third Party Cookies":
      # st.video() eventually include a demo clip of how to check your third party cookies in real time
 
 #creating some initial visualizations
-m.sort_cookie_domains(cookies)
+if visualization == "Domain Exploration":
+    m.sort_cookie_domains(cookies)
 
 # m.categorize_cookies(cookies)
 
-vm.persistent_cookies(cookies)
+if visualization == "Persistent Cookies":
+    vm.persistent_cookies(cookies)
 
-vm.last_accessed(cookies)
+if visualization == "Size of Cookies":
+    vm.last_accessed(cookies)
+
+# Creating a form submission to count the number of cookies on a single website. 
+# We can use it for our wellesley college website demo.
+# unfortunately only fetches first party cookies...
+st.header("How many cookies does the Wellesley College website have?")
+
+cookie_count = st.form("cookies_count")
+
+with cookie_count:
+       st.write("Paste https://www.wellesley.edu/ below to find out!")
+       website = cookie_count.text_input('Enter a website:') 
+       cookies_count = m.get_cookies(website)
