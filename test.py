@@ -3,6 +3,7 @@ import db_methods as db
 import db_sync
 import sqlite3
 import pandas as pd
+import methods
 
 db_sync.download_db_from_github()
 
@@ -13,14 +14,13 @@ cookies = pd.read_sql_query(f"SELECT * FROM cookies", conn)
 
 st.write(db.get_db())
 
-username = st.text_input("Input a test username")
-upload = st.button("Test uploading cookies?")
+username = methods.generate_username()
+st.write(f"Test username: {username}")
+
+upload = st.button("Test uploading cookies")
 if upload:
-    if username:
-        db.upload_cookies(str(username), cookies)
-        st.rerun()
-    else:
-        st.warning("Input a test username to upload")
+    db.upload_cookies(str(username), cookies)
+    st.rerun()
 
 clear = st.button("Clear cookies DB")
 if clear:
