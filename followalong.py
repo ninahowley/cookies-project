@@ -118,6 +118,23 @@ if visualization == "Cookie Security":
           else:
                st.write("Cookies will only be sent if the request originates from the same site. Examples of websites that use SameSite = Strict are financial service websites, where privacy of personal information is incredibly crucial.")
 
+if visualization == "Third Party Cookies":
+     st.subheader("Third Party Cookies")
+     st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
+     st.write("What distinguishes a third party cookie from a third party cookie?")
+     df = pd.DataFrame(
+          {
+               "Aspect": ["Purpose", "Data Ownership", "Management"],
+               "First Party Cookies": ["Store user data and preferences",
+                           "Set by the website you're visintg",
+                           "Supported by all browsers and can be blcoked or deleted by user"],
+               "Third Party Cookies": ["Tracks user activity across multiple sites",
+                          "Set by external servers",
+                          "Supported by all browsers but increasingly blocked by default"]
+          }
+     )
+     st.table(df)
+     # st.video() eventually include a demo clip of how to check your third party cookies in real time
 
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
