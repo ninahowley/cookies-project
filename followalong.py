@@ -96,15 +96,28 @@ if visualization == "Cookie Security":
     "\n\nHowever, insecure cookies can be sent over HTTP, which transmits data in plain text, potentially exposing this information to attackers. " \
     "\n\n In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. *is_secure* = 1 means it's secure and *is_secure* = 0 means it's insecure. ")
     st.subheader("")
+
+    st.subheader("SameSite Cookies")
+    st.write("The SameSite attribute is set in place to protect against Cross-Site Request Forgery (CSRF) attacks, where a malicious website tricks the browser into performing unwanted actions." \
+     "For example, hackers can inherit the user's cookies and send unauthorized commands to another website, appearing as a 'trusted user'." \
+     " SameSite is here to limit when cookies can be sent.")
+
+    st.write("*You can hover above the pie chart to see the exact count for each attribute.*")
     
+    c1, c2 = st.columns((1,1), gap = "large")
+    with c1:
+        vm.sameSite(cookies)
+        st.caption("*: Chrome treats unspecified sameSite attributes as lax.")
+    with c2:
+          option = st.selectbox("Now, let's dive a little deeper into what each of these values means!", ("None", "Lax", "Strict"))
+          if option == "None":
+               st.write("Cookies will be shared between sites with all cross-site requests, but this requires that the cookie is a Secure one. This attribute can be used for Third Party cookies.")
+          elif option == "Lax":
+               st.write("Cookies will be shared across domains, meaning that they will be sent for top-level navigations. For example, when you click on a link leading to the site, the cookie will be sent.")
+               st.write("Chrome's default is to treat the SameSite attribute as = Lax if it is missing.")
+          else:
+               st.write("Cookies will only be sent if the request originates from the same site. Examples of websites that use SameSite = Strict are financial service websites, where privacy of personal information is incredibly crucial.")
 
-if visualization == "Third Party Cookies":
-     st.header("Third Party Cookies")
-     st.write("What proportion of your first/third party cookies are secure/insecure?")
-     vm.securityVsParty(cookies)
-
-     # Only putting this here for now but we can move it 
-     vm.sameSite(cookies)
 
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)

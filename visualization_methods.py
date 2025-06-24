@@ -83,27 +83,25 @@ def sameSite(cookies):
     """
     Labels and counts cookies with samesite = none, lax, strict (or NA). 
     """    
-    none, lax, strict, unspecified = 0, 0, 0, 0
+    none, lax, strict = 0, 0, 0
     if isinstance(cookies, pd.DataFrame):
         for _, cookie in cookies.iterrows():
             value = cookie['samesite']
             if value == 0: 
                 none += 1
-            elif value == 1:
-                lax += 1
             elif value == 2:
                 strict += 1
             else:
-                unspecified += 1
+                lax += 1
         df = pd.DataFrame({
-            "SameSite": ["None", "Lax", "Strict", "Unspecified"],
-            "Count": [none, lax, strict, unspecified]
+            "SameSite": ["None", "Lax*", "Strict"],
+            "Count": [none, lax, strict]
         })
 
-        df = df.sort_values(by="Count", ascending=False)
-        
-        fig = px.bar(df, x = "SameSite", y = "Count", title = "SameSite Attribute Distribution")
+        fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution")
         st.plotly_chart(fig)
+    else:
+        st.write("No data yet. Input data for visualization.")
         
 
 
