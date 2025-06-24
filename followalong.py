@@ -4,6 +4,7 @@ import pandas as pd
 
 import methods as m
 import visualization_methods as vm
+import plotly.graph_objects as go
 
 st.header("Cookies Streamlit (WIP)")
 
@@ -69,33 +70,25 @@ visualization = st.selectbox(
     placeholder="Select topic to explore..."
 )
 
+#Cookie Security selection
 if visualization == "Cookie Security":
     st.header("Cookie Security")
     st.write("Let's learn about cookie security! Below is a pie chart showing the proportions of your secure and insecure cookies.")
     #creating cookie security pie charts
     col1, col2 = st.columns((1,1))
     with col1:
-        m.pie_chart(cookies)
+        vm.pie_chart(cookies)
     
     with col2:
-        st.write("Toggle to view domains that have secure vs not secure cookies!")
-        col1, col2 = st.columns((1,1))
-        with col1:
-            on_secure = col1.toggle("Secure")
-            if on_secure:
-                m.on_secure(cookies)
-        with col2:
-            on_insecure = col2.toggle("Not Secure")
-            if on_insecure:
-                m.on_insecure(cookies)
+        st.subheader("Secure vs. insecure cookies")
+        st.write("**Secure cookies** are designed to **only be transmitted over HTTPS**, which means they are encrypted only when sent from the domain to server and are less vulnerable to interception. " \
+        "Web browsers (or user agents) will only include the cookie in an **HTTPS request**, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
+        "protect data in transit between the user's browser to server." \
+        "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. " \
+        "\n\n In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
         
-    st.subheader("Secure vs. insecure cookies")
-    st.write("Secure cookies are designed to only be transmitted over HTTPS, which means they are encrypted during when sent from the domain to server and less vulnerable to interception. " \
-    "Web browsers (or user agents) will only include the cookie in an HTTPS request, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
-    "protect data in transit between the user's browser to server." \
-    "\n\nHowever, insecure cookies can be sent over HTTP, which transmits data in plain text, potentially exposing this information to attackers. " \
-    "\n\n In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. *is_secure* = 1 means it's secure and *is_secure* = 0 means it's insecure. ")
-    st.subheader("")
+    vm.double_bar(cookies)
+        
     
 
 #creating some initial visualizations
