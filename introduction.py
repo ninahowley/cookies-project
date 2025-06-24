@@ -8,9 +8,6 @@ import db_sync
 
 import methods as m
 
-db_sync.download_db_from_github()
-
-
 st.title("Introduction")
 
 st.header("Diclaimer")

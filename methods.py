@@ -7,6 +7,7 @@ import csv
 from bs4 import BeautifulSoup
 import time
 import plotly.express as px
+import random
 
 def display_windows_filepath():
     """
@@ -246,3 +247,9 @@ def display_description(selection: str) -> str:
 #     cookie = str(cookie[0]).split(' ')[-1]
 #     cookie = cookie.split('<')[0]
 #     print(cookie)
+
+def generate_username():
+    int = random.randint(100, 999)
+    adjectives = ['Sweet', 'Sour', 'Soft', 'Tiny', 'Huge', 'Classic', 'Fresh']
+    flavors = ['Vanilla', 'Chocolate', 'Cinnamon', 'Sugar', 'Mint', 'Lemon', 'Maple', 'Oatmeal', 'Butter']
+    return f"{random.choice(adjectives)} {random.choice(flavors)} {int}"
