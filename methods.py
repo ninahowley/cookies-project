@@ -216,13 +216,6 @@ def display_description(selection: str) -> str:
 #     cookie = cookie.split('<')[0]
 #     print(cookie)
 
-# def cookiebot():
-#     API_KEY = 'VGRYUUxmUlhsTlhzNWREMysxblpYcDNXdnp1aGlKSXRMS3BlejFiYy9qbTF4QTBqK0gydUlRPT0='
-#     serial = '19e13c45-0ef6-4b5b-b4b8-89d6c7404549'
-#     culture = 'default'
-#     domain = 'drive.google.com'
-#     url = f'https://consent.cookiebot.com/api/v1/{API_KEY}/json/domaingroup/{serial}/{culture}/domain/{domain}/cookies'
-
 #     response = requests.get(url)
 
 #     print(response.text)
@@ -232,7 +225,7 @@ def display_description(selection: str) -> str:
 
 def your_cookie_type(cookies):
     if isinstance(cookies, pd.DataFrame):
-        API_KEY = '81a5ca4827694a4e8df617bf61a6df42'
+        API_KEY = ''
         base_url = 'https://api.spoonacular.com/food/products/search'
         offset = len(cookies['host_key']) % 990
         params = {'apiKey': API_KEY, 'query': 'cookie', 'offset': offset, 'number': 1}
