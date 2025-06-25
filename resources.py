@@ -31,7 +31,7 @@ with three:
 with four: 
      left, right = st.columns([1,2])
      with left:
-         st.markdown("<br><br><br><br>", unsafe_allow_html=True)  # Adds vertical space
+         st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)  # Adds vertical space
          st.caption("Third party cookies are bad but maybe not the worst...")
          st.subheader("Be careful of tracking pixels!")
      with right:
