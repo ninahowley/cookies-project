@@ -16,9 +16,9 @@ def download_db_from_github():
     Downloads the latest DB file from your private GitHub repo
     and saves it to /tmp/ for use by Streamlit.
     """
-    token = st.secrets["github"]["token"]
-    repo = st.secrets["github"]["repo"]
-    path = st.secrets["github"]["db_path"]
+    token = st.secrets.github.token
+    repo = st.secrets.github.repo
+    path = st.secrets.github.db_path
     url = f"https://api.github.com/repos/{repo}/contents/{path}"
 
     headers = {
