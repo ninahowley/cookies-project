@@ -217,7 +217,6 @@ def display_description(selection: str) -> str:
 #     cookie = cookie.split('<')[0]
 #     print(cookie)
 
-<<<<<<< HEAD
 # def cookiebot():
 #     API_KEY = 'VGRYUUxmUlhsTlhzNWREMysxblpYcDNXdnp1aGlKSXRMS3BlejFiYy9qbTF4QTBqK0gydUlRPT0='
 #     serial = '19e13c45-0ef6-4b5b-b4b8-89d6c7404549'
@@ -245,9 +244,7 @@ def cookie_type(cookies):
 
         st.write(cookie)
     
-=======
 def generate_username():
     int = random.randint(100, 999)
     flavors = ['Vanilla', 'Chocolate', 'Cinnamon', 'Sugar', 'Mint', 'Lemon', 'Maple', 'Oatmeal', 'Butter']
     return f"{random.choice(flavors)} Cookie {int}"
->>>>>>> 68dbdfb1a7a10c2015c44cfb0842a000493bce1c

@@ -82,9 +82,7 @@ def securityVsParty(cookies):
         fig = px.bar(df, x = "Party", y = "Count", color = "Security", title = "Party Security Cookies")
         st.plotly_chart(fig)
 
-<<<<<<< HEAD
         return df
-=======
 def sameSite(cookies): 
     """
     Labels and counts cookies with samesite = none, lax, strict (or NA). 
@@ -196,4 +194,3 @@ def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
                     )
     st.plotly_chart(fig)
     
->>>>>>> 68dbdfb1a7a10c2015c44cfb0842a000493bce1c
