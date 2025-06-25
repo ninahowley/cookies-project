@@ -231,7 +231,7 @@ def display_description(selection: str) -> str:
 
 # cookiebot()
 
-def cookie_type(cookies):
+def your_cookie_type(cookies):
     if isinstance(cookies, pd.DataFrame):
         API_KEY = '81a5ca4827694a4e8df617bf61a6df42'
         base_url = 'https://api.spoonacular.com/food/products/search'
@@ -242,7 +242,7 @@ def cookie_type(cookies):
         print(response.text)
         cookie = response.json()['products'][0]['title']
 
-        st.write(cookie)
+        st.write(f'Your cookie is: {cookie}!')
     
 def generate_username():
     int = random.randint(100, 999)
