@@ -16,7 +16,7 @@ def persistent_cookies(cookies):
         }
         df = pd.DataFrame(data=data)
         fig = px.pie(df, values='Amount', color='Type', title='Persistent Cookies')
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, key="persistent")
         st.write(f'{(persistent/total * 100).round(2)}% of your cookies are persistent!')
        
 def convert_time(time):
@@ -34,7 +34,7 @@ def last_accessed(cookies):
         df['existing'] = df['time'].rank(method='max').astype(int)
         df = df.groupby('time')['existing'].agg('max').reset_index()
         fig = px.line(df, x='time', y='existing')
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, key="last_accessed")
 
 def is_Secure(cookie): 
     """
@@ -79,7 +79,7 @@ def securityVsParty(cookies):
             "Count": [fs, fi, ts, ti]
         })
         fig = px.bar(df, x = "Party", y = "Count", color = "Security", title = "Party Security Cookies")
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, key="security")
 
         return df
 def sameSite(cookies): 
@@ -102,7 +102,7 @@ def sameSite(cookies):
         })
 
         fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution")
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, key="samesite")
     else:
         st.write("No data yet. Input data for visualization.")
         
@@ -130,7 +130,7 @@ def pie_chart(cookies):
                      })
         fig.update_traces(textinfo = 'label+percent')
         fig.update_layout(showlegend=False)
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, key="pie_chart")
     else:
         st.write("No data yet. Input data for visualization.")
 #domain double bar chart
@@ -166,7 +166,7 @@ def double_bar(cookies):
                      }
 
         )
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, key="double_bar")
 
 #domains for secure
 def on_secure(cookies):
@@ -191,5 +191,5 @@ def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
                     title='Number of Cookies per Domain',
                     color="Number of Cookies"
                     )
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, key="domains")
     
