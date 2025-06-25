@@ -81,6 +81,7 @@ def securityVsParty(cookies):
         fig = px.bar(df, x = "Party", y = "Count", color = "Security", title = "Party Security Cookies")
         st.plotly_chart(fig)
 
+        return df
 def sameSite(cookies): 
     """
     Labels and counts cookies with samesite = none, lax, strict (or NA). 

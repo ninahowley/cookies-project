@@ -73,6 +73,19 @@ if visualization == "Cookie Security":
     st.write("\n\n**Secure cookies** are designed to **only be transmitted over HTTPS**, which means they are encrypted only when sent from the domain to server and are less vulnerable to interception. " \
     "Web browsers (or user agents) will only include the cookie in an **HTTPS request**, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
     "protect data in transit between the user's browser to server." \
+    "\n\nHowever, insecure cookies can be sent over HTTP, which transmits data in plain text, potentially exposing this information to attackers. " \
+    "\n\n In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. *is_secure* = 1 means it's secure and *is_secure* = 0 means it's insecure. ")
+    st.subheader("")
+
+if visualization == 'Persistent Cookies':
+    st.header("Persistent Cookies")
+    st.write("Add text")
+    #creating cookie security pie charts
+    col1, col2 = st.columns((1,1))
+    with col1:
+        vm.persistent_cookies(cookies)
+    with col2:
+         st.write("Add information")
     "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. ")
     vm.pie_chart(cookies)
     st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
@@ -133,6 +146,11 @@ if visualization == "Domain Exploration":
 
 # m.categorize_cookies(cookies)
 
+<<<<<<< HEAD
+vm.last_accessed(cookies)
+
+m.cookie_type(cookies)
+=======
 if visualization == "Persistent Cookies":
     vm.persistent_cookies(cookies)
 
@@ -150,3 +168,4 @@ with cookie_count:
        st.write("Paste https://www.wellesley.edu/ below to find out!")
        website = cookie_count.text_input('Enter a website:') 
        cookies_count = m.get_cookies(website)
+>>>>>>> 68dbdfb1a7a10c2015c44cfb0842a000493bce1c
