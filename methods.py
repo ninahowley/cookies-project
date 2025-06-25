@@ -7,6 +7,7 @@ import csv
 from bs4 import BeautifulSoup
 import time
 import plotly.express as px
+import random
 
 def display_windows_filepath():
     """
@@ -52,7 +53,7 @@ def display_raw_cookies(cookies):
     if isinstance(cookies, pd.DataFrame):
         st.write(cookies)
 
-def get_domain(host_key: str) -> str:
+def get_domain(host_key: str) -> tuple[str, str]:
     """
     Returns the domain associated with a cookie's host key.
     """
@@ -76,22 +77,27 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
             else:
                 domain_dict[domain] = domain_dict[domain] +1
 
-        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Count"])
-        sorted_df = df.sort_values(by=['Count'], ascending=False)
-
-        st.header("**Top 10 domains...**")
-        top_10 = sorted_df.head(10)
-        st.bar_chart(
-            data=top_10,
-            x="Domain",
-            y="Count",
-            horizontal=True,
-            )
-        
-        st.header("**Domains breakdown...**")
-        st.write(sorted_df)
+        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Number of Cookies"])
+        sorted_df = df.sort_values(by=['Number of Cookies'], ascending=False)
 
         return sorted_df
+    
+    else:
+        return
+    
+def get_num_domains(cookies: pd.DataFrame) -> int:
+    """
+    Returns something...
+    """
+    if isinstance(cookies, pd.DataFrame):
+        host_keys = cookies['host_key']
+        domain_list = []
+        for key in host_keys:
+            domain = get_domain(key)[0]
+            if domain not in domain_list:
+                domain_list.append(domain)
+
+        return len(domain_list)
     
     else:
         return
@@ -118,42 +124,6 @@ def get_cookies(website):
         except Exception as e:
             st.error(f"Failed to fetch cookies: {e}")
 
-#Cookie Security visualization
-def pie_chart(cookies):
-    if cookies is not None:
-        counts = cookies['is_secure'].value_counts().rename({1: 'Secure', 0: 'Not Secure'})
-        df = counts.reset_index()
-        df.columns = ['Security', 'Count']
-
-        fig = px.pie(df, 
-                     values='Count', 
-                     names='Security', 
-                     title='Proportion of Secure and Insecure Cookies', 
-                     color= 'Security',
-                     color_discrete_map = {
-                         'Secure': '#dc8e5e',
-                         'Not Secure': '#3f1c13',
-                     })
-        fig.update_traces(textinfo = 'label+percent')
-        fig.update_layout(showlegend=False)
-        st.plotly_chart(fig)
-    else:
-        st.write("No data yet. Input data for visualization.")
-
-#domains for secure
-def on_secure(cookies):
-    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
-        secure_cookies = cookies[cookies['is_secure'] == 1]['host_key'].unique() #NumPy array of unique domain values
-        st.write("Here are the domains with secure cookies:")
-        for domain in secure_cookies:
-            st.write(domain)
-
-def on_insecure(cookies):
-    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
-        insecure_cookies = cookies[cookies['is_secure'] == 0]['host_key'].unique() #NumPy array of unique domain values
-        st.write("Here are the domains with insecure cookies:")
-        for domain in insecure_cookies:
-            st.write(domain)
 
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))
@@ -208,9 +178,9 @@ def display_description(selection: str) -> str:
         'host_key':"Specifies the domain or subdomain that a cookie is associated with.\n\nCetermines which website(s) can access and use that cookie.\n\nFor example, a host key of .example.com allows the cookie to be used by www.example.com and sub.example.com.",
         'top_frame_site_key':"Specifies the uppermost frame in a frame hierarchy, and contains the information retrieved from the initial URL request.\n\nFor example, take the website https://example.com/something\n\nThe top frame site of this page is https://example.com",
         'name':"Specifies the identifier for a cookie.\n\nCookie names can be used to identify the purpose of a cookie.\n\nTake for example the cookie name '_ga' in row 3.\n\nWe can use websites such as cookiepedia to see what the cookie name is associated with. '_ga' is a preformance cookie.\n\nhttps://cookiepedia.co.uk/cookies/_ga", 
-        'value':"Specifies the data held within a cookie.\n\nWebsites store user information such as such as settings or preferences as a cookie value.\n\nSince Chrome version 33 launched in 2014, the encrypted_value column was released and the cookie value column is now empty, adding an extra layer of security.",
+        'value':"Specifies the data held within a cookie.\n\nWebsites store user information such as settings or preferences in a cookie's value.\n\nSince Chrome version 33 launched in 2014, the encrypted_value column was released and the value column was defunct, adding an extra layer of security.",
         'encrypted_value':"Specifies the data held within a cookie that has been transformed into a secure form to prevent unauthorized access.\n\nUsers may decrypt their own encrypted values by finding and using the 'master encryption key' stored in their computer.\n\nThe encrypted values in this example have been removed for security.", 
-        'path':"Specifies the URL path that must be present for the cookie to be sent.\n\nFor example, take the website https://example.com\n\nIf the 'path' for a cookie on this website is /something then it can be sent when the user is viewing https://example.com/something or https://example.com/something/else,\n\nbut not https://example.com/nothing", 
+        'path':"Specifies the URL path that must be present for the cookie to be sent.\n\nFor example, take the website https://example.com\n\nIf the path for a cookie on this website is /something then it can be sent when the user is viewing https://example.com/something or https://example.com/something/else,\n\nbut not https://example.com/nothing", 
         'expires_utc':"Specifies the exact time that a cookie will expire from your computer.\n\nSince August 2022, this date cannot be any later than 400 days after the cookie was set.\n\nUTC stands for 'Coordinated Universal Time'.\n\nAll timezones, such as EST, are defined by their offset from UTC.",
         'is_secure':"Specifies whether a cookie is only sent to the server over a secure (HTTPS) connection.\n\nHTTPS connections have enhanced security for sensitive data.\n\n1 means true, 0 means false.", 
         'is_httponly':"Specifies whether a cookie is inaccessible to client-side scripts such as JavaScript.\n\nSensitive cookies should have the value true for this column in order to prevent potential data theft.\n\n1 means true, 0 means false.", 
@@ -247,6 +217,7 @@ def display_description(selection: str) -> str:
 #     cookie = cookie.split('<')[0]
 #     print(cookie)
 
+<<<<<<< HEAD
 # def cookiebot():
 #     API_KEY = 'VGRYUUxmUlhsTlhzNWREMysxblpYcDNXdnp1aGlKSXRMS3BlejFiYy9qbTF4QTBqK0gydUlRPT0='
 #     serial = '19e13c45-0ef6-4b5b-b4b8-89d6c7404549'
@@ -274,3 +245,9 @@ def cookie_type(cookies):
 
         st.write(cookie)
     
+=======
+def generate_username():
+    int = random.randint(100, 999)
+    flavors = ['Vanilla', 'Chocolate', 'Cinnamon', 'Sugar', 'Mint', 'Lemon', 'Maple', 'Oatmeal', 'Butter']
+    return f"{random.choice(flavors)} Cookie {int}"
+>>>>>>> 68dbdfb1a7a10c2015c44cfb0842a000493bce1c
