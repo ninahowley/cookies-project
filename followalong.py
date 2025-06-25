@@ -112,7 +112,7 @@ if isinstance(cookies, pd.DataFrame):
     if visualization == "Third Party Cookies":
         st.subheader("Third Party Cookies")
         st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
-        st.write("What distinguishes a third party cookie from a third party cookie?")
+        st.write("What distinguishes a first party cookie from a third party cookie?")
         df = pd.DataFrame(
             {
                 "Aspect": ["Purpose", "Data Ownership", "Management"],
@@ -125,6 +125,17 @@ if isinstance(cookies, pd.DataFrame):
             }
         )
         st.table(df)
+
+        st.write("We can't access third-party cookies directly from our database, since it's not stored anywhere. However, we can inspect these in real-time on the websites we visit!")
+        with st.expander("**Instructions to investigating your third-party cookies on a website**"):
+            st.write("Here's a demonstration video of what third party cookies 'look like' on your browser:")
+            st.video("3rdparty_demo1.mov", muted = True)
+            st.write("**1.** Open any website.")
+            st.write("**2.** Double right click and select Inspect at the bottom of the bar.")
+            st.write("**3.** Don't be intimidated by the html code! Go to Applications > Cookies.")
+            st.write("Tada! You can now see both first and third party cookies on your website in real time. If you can't see any third party cookies, it's likely that you already blocked it in settings.")
+            st.video("3rdparty_demo2.mov", muted = True)
+            st.caption("You can also refresh the webpage to see the cookies pop up...")
         # st.video() eventually include a demo clip of how to check your third party cookies in real time
 
     #creating some initial visualizations
