@@ -121,7 +121,15 @@ if visualization == "Third Party Cookies":
 
 #creating some initial visualizations
 if visualization == "Domain Exploration":
-    m.sort_cookie_domains(cookies)
+    col1, col2 = st.columns((3,1))
+    with col2:
+         num = st.slider(label="Number of domains to display", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+    with col1:
+        sorted_cookies = m.sort_cookie_domains(cookies)
+        if num:
+            vm.domain_breakdown(sorted_cookies, num)
+        else:
+            vm.domain_breakdown(sorted_cookies, 10)
 
 # m.categorize_cookies(cookies)
 

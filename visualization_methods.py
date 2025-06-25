@@ -3,6 +3,8 @@ import streamlit as st
 from datetime import datetime
 import pandas as pd
 import methods as m
+import matplotlib.pyplot as plt
+
 
 def persistent_cookies(cookies):
     if isinstance(cookies, pd.DataFrame):
@@ -180,3 +182,14 @@ def on_insecure(cookies):
         st.write("Here are the domains with insecure cookies:")
         for domain in insecure_cookies:
             st.write(domain)
+
+def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
+    top_domains = sorted_cookies.head(count).sort_values(by="Number of Cookies", ascending=False)
+    fig = px.bar(top_domains, 
+                    x='Domain', 
+                    y='Number of Cookies', 
+                    title='Number of Cookies per Domain',
+                    color="Number of Cookies"
+                    )
+    st.plotly_chart(fig)
+    

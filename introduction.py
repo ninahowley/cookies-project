@@ -13,7 +13,7 @@ st.title("Introduction")
 st.header("Diclaimer")
 st.write("Cookies are stored locally on your computer." \
 "\n\nAny file you upload to this Streamlit will not be saved anywhere, unless you give explicit permission at the end of the follow along." \
-"\n\nIf you DO give permission, your data will be anony" \
+"\n\nIf you DO give permission, your data will be anonymized and all sensitive values will be removed." \
 "\n\nDuring the follow along you will be given the option to use an example cookies database if you are not comfortable uploading your own.")
 
 st.header("What Are Cookies?")
