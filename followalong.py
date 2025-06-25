@@ -85,7 +85,7 @@ if visualization == 'Persistent Cookies':
     with col1:
         vm.persistent_cookies(cookies)
     with col2:
-         st.write("Add information")
+         st.write("Add information"
     "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. ")
     vm.pie_chart(cookies)
     st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
