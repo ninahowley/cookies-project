@@ -4,7 +4,7 @@ import pandas as pd
 
 st.header("Resources")
 
-one, two, three, four, five = st.tabs(["Guide on Cookies", "Managing Cookies", "Browsing Cookies", "Tracking Pixels vs. Cookies", "Works Cited"])
+one, two, three, four, five = st.tabs(["Guide on Cookies", "Managing Cookies", "Browsing Cookies", "Tracking Pixels vs. Cookies", "Related Literature"])
 
 
 with one: 
@@ -59,3 +59,18 @@ with four:
      st.markdown("**3.** Be very mindful of what you choose to click and open.")
      st.markdown("**4.** Use browser extensions to help block tracking pixels.")
      st.link_button("Ugly Email Browser Extension", "https://uglyemail.com/")
+
+with five:
+     st.header("Research")
+     
+     st.write("**[An Empirical Study of Web Cookies](%s)**" % "https://dl.acm.org/doi/abs/10.1145/2872427.2882991#abstract")
+     st.write("**[HTTP Cookies: Standards, privacy, and politics](%s)**" %"https://dl.acm.org/doi/abs/10.1145/502152.502153#abstract")
+     st.write("**[CookieGraph: Understanding and Detecting First-Party Tracking Cookies](%s)**" %"https://dl.acm.org/doi/abs/10.1145/3576915.3616586#abstract")
+
+     st.header("Articles")
+     
+     st.write("**[This Article Is Spying on You](%s)**" %"https://www.nytimes.com/2019/09/18/opinion/data-privacy-tracking.html")
+     st.write("**[All You Need to Know About Third-Party Cookies](%s)**" %"https://cookie-script.com/all-you-need-to-know-about-third-party-cookies.html")
+
+     st.write()
+     st.write("Need to add citations")
