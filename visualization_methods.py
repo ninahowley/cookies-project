@@ -78,8 +78,3 @@ def securityVsParty(cookies):
         })
 
         return df
-    
-
-
-
-

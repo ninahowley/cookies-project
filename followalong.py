@@ -96,13 +96,22 @@ if visualization == "Cookie Security":
     "\n\nHowever, insecure cookies can be sent over HTTP, which transmits data in plain text, potentially exposing this information to attackers. " \
     "\n\n In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. *is_secure* = 1 means it's secure and *is_secure* = 0 means it's insecure. ")
     st.subheader("")
-    
+
+if visualization == 'Persistent Cookies':
+    st.header("Persistent Cookies")
+    st.write("Add text")
+    #creating cookie security pie charts
+    col1, col2 = st.columns((1,1))
+    with col1:
+        vm.persistent_cookies(cookies)
+    with col2:
+         st.write("Add information")
 
 #creating some initial visualizations
 m.sort_cookie_domains(cookies)
 
 # m.categorize_cookies(cookies)
 
-vm.persistent_cookies(cookies)
-
 vm.last_accessed(cookies)
+
+m.cookie_type(cookies)
