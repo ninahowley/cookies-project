@@ -226,15 +226,10 @@ def display_description(selection: str) -> str:
 
 def your_cookie_type(cookies):
     if isinstance(cookies, pd.DataFrame):
-        API_KEY = ''
-        base_url = 'https://api.spoonacular.com/food/products/search'
-        offset = len(cookies['host_key']) % 990
-        params = {'apiKey': API_KEY, 'query': 'cookie', 'offset': offset, 'number': 1}
-
-        response = requests.get(base_url, params=params)
-        print(response.text)
-        cookie = response.json()['products'][0]['title']
-
+        with open('tasty cookies.csv',  newline='') as f:
+            reader = csv.reader(f)
+            tasty_cookies = list(reader)
+        cookie = tasty_cookies[len(cookies['host_key']) % 100][0]
         st.write(f'Your cookie is: {cookie}!')
     
 def generate_username():
