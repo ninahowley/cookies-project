@@ -146,11 +146,9 @@ if visualization == "Domain Exploration":
 
 # m.categorize_cookies(cookies)
 
-<<<<<<< HEAD
 vm.last_accessed(cookies)
 
 m.cookie_type(cookies)
-=======
 if visualization == "Persistent Cookies":
     vm.persistent_cookies(cookies)
 
@@ -168,4 +166,3 @@ with cookie_count:
        st.write("Paste https://www.wellesley.edu/ below to find out!")
        website = cookie_count.text_input('Enter a website:') 
        cookies_count = m.get_cookies(website)
->>>>>>> 68dbdfb1a7a10c2015c44cfb0842a000493bce1c
