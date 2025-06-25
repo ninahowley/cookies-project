@@ -148,7 +148,7 @@ if visualization == "Domain Exploration":
 
 vm.last_accessed(cookies)
 
-m.cookie_type(cookies)
+m.your_cookie_type(cookies)
 if visualization == "Persistent Cookies":
     vm.persistent_cookies(cookies)
 
