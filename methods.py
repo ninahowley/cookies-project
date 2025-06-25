@@ -53,7 +53,7 @@ def display_raw_cookies(cookies):
     if isinstance(cookies, pd.DataFrame):
         st.write(cookies)
 
-def get_domain(host_key: str) -> str:
+def get_domain(host_key: str) -> tuple[str, str]:
     """
     Returns the domain associated with a cookie's host key.
     """
@@ -119,42 +119,6 @@ def get_cookies(website):
         except Exception as e:
             st.error(f"Failed to fetch cookies: {e}")
 
-#Cookie Security visualization
-def pie_chart(cookies):
-    if cookies is not None:
-        counts = cookies['is_secure'].value_counts().rename({1: 'Secure', 0: 'Not Secure'})
-        df = counts.reset_index()
-        df.columns = ['Security', 'Count']
-
-        fig = px.pie(df, 
-                     values='Count', 
-                     names='Security', 
-                     title='Proportion of Secure and Insecure Cookies', 
-                     color= 'Security',
-                     color_discrete_map = {
-                         'Secure': '#dc8e5e',
-                         'Not Secure': '#3f1c13',
-                     })
-        fig.update_traces(textinfo = 'label+percent')
-        fig.update_layout(showlegend=False)
-        st.plotly_chart(fig)
-    else:
-        st.write("No data yet. Input data for visualization.")
-
-#domains for secure
-def on_secure(cookies):
-    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
-        secure_cookies = cookies[cookies['is_secure'] == 1]['host_key'].unique() #NumPy array of unique domain values
-        st.write("Here are the domains with secure cookies:")
-        for domain in secure_cookies:
-            st.write(domain)
-
-def on_insecure(cookies):
-    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
-        insecure_cookies = cookies[cookies['is_secure'] == 0]['host_key'].unique() #NumPy array of unique domain values
-        st.write("Here are the domains with insecure cookies:")
-        for domain in insecure_cookies:
-            st.write(domain)
 
 # print(get_domain(".vote.org"))
 # print(get_domain("chat.google.com"))

@@ -11,6 +11,7 @@ with one:
      st.write("Here's the link to our comprehensive guide on cookies! If you ever want a little refresher on, for example, the different types of cookies, just revisit this guide! Also, feel free to share this with friends and family :sunglasses:")
      st.link_button("Click me!", "https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/edit?usp=sharing")
 with two: 
+     st.subheader("Want to manage your cookies directly on your browser?")
      st.markdown("**1.** Go to Settings > Privacy and security.")
      st.markdown("**2.** Delete browsing data (*Cookies and other site data* & *Cached images and files*) frequently to reduce tracking and remove outdated information.")
      st.markdown("**3.** Set your preferences for *Third-party cookies*. You can also choose to enable “send a 'Do not track' request with your browsing traffic”./" \
@@ -18,6 +19,7 @@ with two:
      "an extra protective guardrail against potential privacy violations.")
 
 with three: 
+     st.subheader("How should you navigate cookies when browsing websites?")
      st.markdown("**1.** Read cookie pop-ups and review your options before selecting your cookie preferences for each site you visit.")
      st.markdown("**2.** Only allow cookies on trusted websites.")
      st.write("**3.** Use browser extensions to manage cookies for you. These are particularly helpful for blocking third-party cookie /" \
@@ -27,7 +29,13 @@ with three:
      st.link_button("Ghostery", "https://www.ghostery.com/")
 
 with four: 
-     st.image("tracking pixel image.png", caption = "Third party cookies are bad but maybe not the worst... Be careful of tracking pixels!", width = 1000) #HOOOOWW do I center this omg
+     left, right = st.columns([1,2])
+     with left:
+         st.markdown("<br><br><br><br>", unsafe_allow_html=True)  # Adds vertical space
+         st.caption("Third party cookies are bad but maybe not the worst...")
+         st.subheader("Be careful of tracking pixels!")
+     with right:
+          st.image("tracking pixel image.png", width = 1000) #HOOOOWW do I center this omg
      
      c1, c2, c3 = st.columns(3)
      c1.subheader("WHAT?")
