@@ -3,7 +3,6 @@ import streamlit as st
 from datetime import datetime
 import pandas as pd
 import methods as m
-import matplotlib.pyplot as plt
 
 
 def persistent_cookies(cookies):
