@@ -234,7 +234,7 @@ def your_cookie_type(cookies):
             reader = csv.reader(f)
             tasty_cookies = list(reader)
         cookie = tasty_cookies[len(cookies['host_key']) % 100][0]
-        # st.write(f'Your cookie is: {cookie}!')
+        st.write(f'Your cookie is: {cookie}!')
         return cookie
     
 def generate_username():
