@@ -52,6 +52,11 @@ def display_raw_cookies(cookies):
     if isinstance(cookies, pd.DataFrame):
         st.dataframe(cookies, hide_index=True)
 
+def display_single_cookie(cookies):
+    if isinstance(cookies, pd.DataFrame):
+        cookies = cookies.head(1)
+        st.dataframe(cookies, hide_index=True)
+
 def get_domain(host_key: str) -> tuple[str, str]:
     """
     Returns the domain associated with a cookie's host key.
@@ -229,10 +234,7 @@ def your_cookie_type(cookies):
             reader = csv.reader(f)
             tasty_cookies = list(reader)
         cookie = tasty_cookies[len(cookies['host_key']) % 100][0]
+        num = random.randint(100, 999)
         # st.write(f'Your cookie is: {cookie}!')
-        return cookie
-    
-def generate_username():
-    int = random.randint(100, 999)
-    flavors = ['Vanilla', 'Chocolate', 'Cinnamon', 'Sugar', 'Mint', 'Lemon', 'Maple', 'Oatmeal', 'Butter']
-    return f"{random.choice(flavors)} Cookie {int}"
+        cookie_name = f"{cookie} {num}"
+        return cookie_name
