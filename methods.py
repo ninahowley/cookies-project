@@ -234,10 +234,7 @@ def your_cookie_type(cookies):
             reader = csv.reader(f)
             tasty_cookies = list(reader)
         cookie = tasty_cookies[len(cookies['host_key']) % 100][0]
-        st.write(f'Your cookie is: {cookie}!')
-        return cookie
-    
-def generate_username():
-    int = random.randint(100, 999)
-    flavors = ['Vanilla', 'Chocolate', 'Cinnamon', 'Sugar', 'Mint', 'Lemon', 'Maple', 'Oatmeal', 'Butter']
-    return f"{random.choice(flavors)} Cookie {int}"
+        num = random.randint(100, 999)
+        # st.write(f'Your cookie is: {cookie}!')
+        cookie_name = f"{cookie} {num}"
+        return cookie_name

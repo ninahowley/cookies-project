@@ -59,7 +59,7 @@ st.button(
 )
 
 
-if st.session_state.show_db:
+if st.session_state.show_db and isinstance(cookies, pd.DataFrame):
     col1, col2 = st.columns((2,1))
     with col1:
         m.display_raw_cookies(cookies)
