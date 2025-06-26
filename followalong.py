@@ -2,25 +2,34 @@ import streamlit as st
 import os 
 import pandas as pd
 import sqlite3
+import db_methods as db
 import methods as m
 import visualization_methods as vm
 import plotly.graph_objects as go
 from datetime import time
 
-st.header(":cookie: An Introduction to Web Cookies")
+st.header(":cookie: Cookie Exploration Follow Along")
 st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
 
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-with st.expander("**Instructions to find cookies with your operating system.**"):
-    col1, col2 = st.columns((1,1))
+with st.expander("Instructions to find cookies with your operating system"):
+    col1, col2 = st.columns((2))
     with col1:
         st.subheader("Windows")
         m.display_windows_filepath()
     with col2:
         st.subheader("Mac")
         m.display_mac_filepath()
+
+with st.expander("Error: This file is in use"):
+    st.write("This error occurs when you are currently logged into and using the account associated with that database.")
+    st.write("Each chrome profile has it's own unique cookies database.")
+    st.write("To work around this, you must have atleast 2 chrome profiles.")
+    st.write("Simply choose 'Profile 1', 'Profile 2', (or 'Profile 3', etc...) instead of 'Default' in the filepath.")
+    st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
+    st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
 #upload cookies
 cookies = m.upload_cookies()
@@ -101,13 +110,25 @@ if isinstance(cookies, pd.DataFrame):
         
     if visualization == 'Persistent Cookies':
         st.header("Persistent Cookies")
-        st.write("Add text")
+        st.write("Let's explore persistent cookies!")
         #creating cookie security pie charts
         col1, col2 = st.columns((1,1))
         with col1:
             vm.persistent_cookies(cookies)
         with col2:
-            st.write("Add information")
+            st.write("Persistent cookies are cookies that last beyong a single browsing session "
+            "Reasons for this often include saving settings, login info, preferences, etc. in order "
+            "to save time and create a more convenient web browsing experience. Additionally, these " \
+            "cookies are often used to track how long a user has been on a page, what language they are " \
+            "browsing in, and other information that can be used for marketing/analytical purposes.")
+            st.write("The web host of the cookie will set the expiration date. Once this date is "
+            "reached, they will either renew the cookie automatically, ask for permission to renew, "
+            "or simply delete itself, but this is all dependent of the initial user agreement.")
+            st.write("Cookies that are not persistent are called session cookies, and they expire once "
+            "the browser is closed.")
+            st.write("In your cookie database, you may see that the is_persistent column has values of either "
+            "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
+            "cookie.")
         
     if visualization == "Third Party Cookies":
         st.subheader("Third Party Cookies")
@@ -154,23 +175,43 @@ if isinstance(cookies, pd.DataFrame):
 
     # vm.last_accessed(cookies)
 
-    m.your_cookie_type(cookies)
-
     if visualization == "Size of Cookies":
         vm.last_accessed(cookies)
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.
     # unfortunately only fetches first party cookies...
-    st.header("How many cookies does the Wellesley College website have?")
+    # st.header("How many cookies does the Wellesley College website have?")
 
-    cookie_count = st.form("cookies_count")
+    # cookie_count = st.form("cookies_count")
 
-    with cookie_count:
-        st.write("Paste https://www.wellesley.edu/ below to find out!")
-        website = cookie_count.text_input('Enter a website:') 
-        cookies_count = m.get_cookies(website)
+    # with cookie_count:
+    #     st.write("Paste https://www.wellesley.edu/ below to find out!")
+    #     website = cookie_count.text_input('Enter a website:') 
+    #     cookies_count = m.get_cookies(website)
 
-    # st.write("No data yet. Please either upload your cookies or choose to use the example database to begin the follow along.")
+    st.divider()
+    st.subheader("Share your cookies")
+    st.write("Streamlit does not automatically save uploaded files.")
+    st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
+    st.write("Our group might want to continue working with cookies in the future. We are asking for willing volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
+    st.write("If you would like to share your cookies, click the checkbox below.")
+
+
+    consent = st.checkbox("I understand and would like to share my cookies.")
+
+    if consent:
+        
+        cookie_name = m.your_cookie_type(cookies)
+        st.write(f"Your anonymized cookie username is: {cookie_name}.")
+
+        upload = st.button("Share my cookies!")
+        if upload:
+            try:
+                db.upload_cookies(cookie_name, cookies)
+            except Exception as e:
+                st.warning("An error occured.")
+
+
 else:
     st.warning("Please upload your cookies before starting the follow along.")

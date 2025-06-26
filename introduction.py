@@ -8,15 +8,14 @@ import db_sync
 
 import methods as m
 
-st.title("Introduction")
+st.header(":cookie: An Introduction to Web Cookies")
 
 conn = sqlite3.connect("Example_Cookies.db")
 cur = conn.cursor()
 
 cookies = pd.read_sql_query(f"SELECT * FROM cookies", conn)
 
-st.header("Chrome's Cookie Database")
-st.write("Below is an example cookie database.")
+st.subheader("Chrome's Cookie Database")
 
 col1, col2 = st.columns((2,1))
 with col1:
