@@ -32,3 +32,10 @@ selection = col2.selectbox(options=columns,label="Choose a column to learn more 
 
 if selection:
     col2.write(m.display_description(selection))
+
+st.html("""<style>
+[data-testid="stSidebar"]> div:first-child{
+background-image: url("https://thumbs.dreamstime.com/b/chocolate-chip-cookies-crumbs-forming-vertical-frame-white-background-scattered-create-visually-appealing-clean-surface-352442146.jpg");
+background-size: cover;
+}
+</style>""")
