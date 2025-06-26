@@ -8,6 +8,12 @@ import db_sync
 
 import methods as m
 
+st.html("""<style>
+[data-testid="stSidebar"]> div:first-child{
+background-image: url("https://thumbs.dreamstime.com/b/chocolate-chip-cookies-crumbs-forming-vertical-frame-white-background-scattered-create-visually-appealing-clean-surface-352442146.jpg");
+background-size: cover;
+}
+</style>""")
 
 col1, col2 = st.columns((2,1))
 with col1:
@@ -64,4 +70,3 @@ st.markdown("- First Party Cookies and Cookie Security")
 st.markdown("- Third Party Cookies and Privacy")
 st.markdown("- Persistent Cookies")
 st.markdown("- Cookies over time")
-

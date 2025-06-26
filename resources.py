@@ -2,6 +2,12 @@ import streamlit as st
 import pandas as pd 
 import streamlit.components.v1
 
+st.html("""<style>
+[data-testid="stSidebar"]> div:first-child{
+background-image: url("https://thumbs.dreamstime.com/b/chocolate-chip-cookies-crumbs-forming-vertical-frame-white-background-scattered-create-visually-appealing-clean-surface-352442146.jpg");
+background-size: cover;
+}
+</style>""")
 
 st.header(":cookie: Resources")
 
@@ -87,10 +93,3 @@ with four:
 
 #      st.write()
 #      st.write("Need to add citations")
-
-st.html("""<style>
-[data-testid="stSidebar"]> div:first-child{
-background-image: url("https://thumbs.dreamstime.com/b/chocolate-chip-cookies-crumbs-forming-vertical-frame-white-background-scattered-create-visually-appealing-clean-surface-352442146.jpg");
-background-size: cover;
-}
-</style>""")

@@ -86,7 +86,7 @@ if isinstance(cookies, pd.DataFrame):
         placeholder="Select a topic to explore..."
     )
 
-    m.your_cookie_type(cookies)
+     # m.your_cookie_type(cookies)
 
     #Cookie Security selection
     if visualization == "Cookie Security":
