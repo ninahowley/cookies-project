@@ -223,6 +223,10 @@ if isinstance(cookies, pd.DataFrame):
                 db.upload_cookies(cookie_name, cookies)
             except Exception as e:
                 st.warning("An error occured.")
+    
+    st.divider()
+    st.subheader("We welcome your feedback!")
+    st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
 
 
 else:
