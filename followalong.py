@@ -78,9 +78,6 @@ if st.session_state.show_db:
 st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
 if isinstance(cookies, pd.DataFrame):
-    m.your_cookie_type(cookies)
-
-if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
@@ -88,6 +85,8 @@ if isinstance(cookies, pd.DataFrame):
         index=None,
         placeholder="Select a topic to explore..."
     )
+
+    m.your_cookie_type(cookies)
 
     #Cookie Security selection
     if visualization == "Cookie Security":
