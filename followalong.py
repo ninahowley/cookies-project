@@ -2,25 +2,34 @@ import streamlit as st
 import os 
 import pandas as pd
 import sqlite3
+import db_methods as db
 import methods as m
 import visualization_methods as vm
 import plotly.graph_objects as go
 from datetime import time
 
-st.header(":cookie: An Introduction to Web Cookies")
+st.header(":cookie: Cookie Exploration Follow Along")
 st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
 
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-with st.expander("**Instructions to find cookies with your operating system.**"):
-    col1, col2 = st.columns((1,1))
+with st.expander("Instructions to find cookies with your operating system"):
+    col1, col2 = st.columns((2))
     with col1:
         st.subheader("Windows")
         m.display_windows_filepath()
     with col2:
         st.subheader("Mac")
         m.display_mac_filepath()
+
+with st.expander("Error: This file is in use"):
+    st.write("This error occurs when you are currently logged into and using the account associated with that database.")
+    st.write("Each chrome profile has it's own unique cookies database.")
+    st.write("To work around this, you must have atleast 2 chrome profiles.")
+    st.write("Simply choose 'Profile 1', 'Profile 2', (or 'Profile 3', etc...) instead of 'Default' in the filepath.")
+    st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
+    st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
 #upload cookies
 cookies = m.upload_cookies()
@@ -43,7 +52,20 @@ st.button(
 
 
 if st.session_state.show_db:
-    m.display_raw_cookies(cookies)
+    col1, col2 = st.columns((2,1))
+    with col1:
+        m.display_raw_cookies(cookies)
+
+        columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
+                'value', 'encrypted_value', 'path', 'expires_utc',
+                'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
+                'is_persistent', 'priority', 'samesite', 'source_scheme',
+                'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
+
+        selection = col2.selectbox(options=columns,label="Choose a column to learn more about.")
+
+        if selection:
+            col2.write(m.display_description(selection))
 
 st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
@@ -54,7 +76,7 @@ if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "Cookie Security", "Third Party Cookies", "Persistent Cookies", "Size of Cookies"],
+        ["Domain Exploration", "Cookie Security", "Third Party Cookies", "Persistent Cookies", "Cookies Over Time"],
         index=None,
         placeholder="Select a topic to explore..."
     )
@@ -77,8 +99,16 @@ if isinstance(cookies, pd.DataFrame):
         "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. ")
         vm.pie_chart(cookies)
         st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
-
-        vm.double_bar(cookies)
+        
+        col1, col2 = st.columns((3,1))
+        with col2:
+            num = st.slider(label="Number of domains to display", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+        with col1:
+            sorted_cookies = m.sort_cookie_domains(cookies)
+            if num:
+                vm.double_bar(sorted_cookies, num)
+            else:
+                vm.double_bar(sorted_cookies, 10)
 
 
         st.subheader("SameSite Cookies")
@@ -142,17 +172,20 @@ if isinstance(cookies, pd.DataFrame):
         st.write("We can't access third-party cookies directly from our database, since it's not stored anywhere. However, we can inspect these in real-time on the websites we visit!")
         with st.expander("**Instructions to investigating your third-party cookies on a website**"):
             st.write("Here's a demonstration video of what third party cookies 'look like' on your browser:")
-            st.video("3rdparty_demo1.mov", muted = True)
+            st.video("3rdparty_DEMO.mov", muted = True)
+            st.caption("You can also refresh the webpage to see the cookies pop up...")
             st.write("**1.** Open any website.")
             st.write("**2.** Double right click and select Inspect at the bottom of the bar.")
             st.write("**3.** Don't be intimidated by the html code! Go to Applications > Cookies.")
             st.write("Tada! You can now see both first and third party cookies on your website in real time. If you can't see any third party cookies, it's likely that you already blocked it in settings.")
-            st.video("3rdparty_demo2.mov", muted = True)
-            st.caption("You can also refresh the webpage to see the cookies pop up...")
-        # st.video() eventually include a demo clip of how to check your third party cookies in real time
+       
 
     #creating some initial visualizations
     if visualization == "Domain Exploration":
+        st.subheader("What is a domain name?")
+        st.write("A domain name is a text that a user types into a browser window to reach a particular website. For example, Google's domain name is 'google.com'. Youtube's domain name is 'youtube.com'.")
+        st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
+
         col1, col2 = st.columns((3,1))
         with col2:
             num = st.slider(label="Number of domains to display", min_value=1, max_value=m.get_num_domains(cookies), value=10)
@@ -167,21 +200,48 @@ if isinstance(cookies, pd.DataFrame):
 
     # vm.last_accessed(cookies)
 
-    if visualization == "Size of Cookies":
+    if visualization == "Cookies Over Time":
+        st.subheader("How many cookies do you have over time?")
         vm.last_accessed(cookies)
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.
     # unfortunately only fetches first party cookies...
-    st.header("How many cookies does the Wellesley College website have?")
+    # st.header("How many cookies does the Wellesley College website have?")
 
-    cookie_count = st.form("cookies_count")
+    # cookie_count = st.form("cookies_count")
 
-    with cookie_count:
-        st.write("Paste https://www.wellesley.edu/ below to find out!")
-        website = cookie_count.text_input('Enter a website:') 
-        cookies_count = m.get_cookies(website)
+    # with cookie_count:
+    #     st.write("Paste https://www.wellesley.edu/ below to find out!")
+    #     website = cookie_count.text_input('Enter a website:') 
+    #     cookies_count = m.get_cookies(website)
 
-    # st.write("No data yet. Please either upload your cookies or choose to use the example database to begin the follow along.")
+    st.divider()
+    st.subheader("Share your cookies")
+    st.write("Streamlit does not automatically save uploaded files.")
+    st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
+    st.write("Our group would like to continue working with cookies in the future, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
+    st.write("If you would like to share your cookies, click the checkbox below.")
+
+
+    consent = st.checkbox("I understand and would like to share my cookies.")
+
+    if consent:
+        
+        cookie_name = m.your_cookie_type(cookies)
+        st.write(f"Your anonymized cookie username is: {cookie_name}.")
+
+        upload = st.button("Share my cookies!")
+        if upload:
+            try:
+                db.upload_cookies(cookie_name, cookies)
+            except Exception as e:
+                st.warning("An error occured.")
+    
+    st.divider()
+    st.subheader("We appreciate your feedback!")
+    st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
+
+
 else:
     st.warning("Please upload your cookies before starting the follow along.")
