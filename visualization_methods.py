@@ -41,6 +41,7 @@ def last_accessed(cookies):
         df['existing'] = df['time'].rank(method='max').astype(int)
         df = df.groupby('time')['existing'].agg('max').reset_index()
         fig = px.line(df, x='time', y='existing')
+        fig.update_traces(line_color = '#3f1c13')
         st.plotly_chart(fig, key="last_accessed")
 
 def is_Secure(cookie): 

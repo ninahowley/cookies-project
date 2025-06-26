@@ -177,6 +177,11 @@ if isinstance(cookies, pd.DataFrame):
         st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
         st.write("Here's a helpful visualization demonstrating how third-party cookies *retarget*.")
         st.image("3rd_retargeting.png", caption = "Source: https://www.performancemarketingworld.com/article/1800951/third-party-cookies")
+        st.write("Third-party servers can combine information from their cookies set on multiple sites, creating a profile of the users. These are called **tracking cookies**." \
+        " For example, if you were looking at a product on a site, they might set a third-party cookie on your browser. " \
+        "You might see the same product advertised to you on a another site since the cookie recognizes your user ID.")
+        st.write("As mentioned in the introduction, many browsers (aside from Google) now block third-party cookies by default. ")
+
         st.subheader("**What distinguishes a first party cookie from a third party cookie?**")
         df = pd.DataFrame(
             {
@@ -190,11 +195,7 @@ if isinstance(cookies, pd.DataFrame):
             }
         )
         st.table(df)
-        st.write("Third-party servers can combine information from their cookies set on multiple sites, creating a profile of the users. These are called **tracking cookies**." \
-        " For example, if you were looking at a product on a site, they might set a third-party cookie on your browser. " \
-        "You might see the same product advertised to you on a another site since the cookie recognizes your user ID.")
-        st.write("As mentioned in the introduction, many browsers (aside from Google) now block third-party cookies by default. ")
-
+        
         st.write("**We can't access third-party cookies directly from our database, since it's not stored anywhere**. However, we can inspect these in real-time on the websites we visit!")
         with st.expander("**Instructions for inspecting your third-party cookies on a website**"):
             st.write("Here's a demonstration video of what third party cookies 'look like' on your browser:")
@@ -228,8 +229,9 @@ if isinstance(cookies, pd.DataFrame):
     # vm.last_accessed(cookies)
 
     if visualization == "Cookies Over Time":
-        st.subheader("How many cookies do you have over time?")
+        st.subheader("How many cookies have you accumulated over time?")
         vm.last_accessed(cookies)
+        st.write("This graph shows the number of persistent cookies that accumulated over time.")
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.
