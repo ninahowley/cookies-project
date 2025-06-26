@@ -50,7 +50,7 @@ def display_raw_cookies(cookies):
     Displays the raw data from a user's Cookies.db file.
     """
     if isinstance(cookies, pd.DataFrame):
-        st.write(cookies)
+        st.dataframe(cookies, hide_index=True)
 
 def get_domain(host_key: str) -> tuple[str, str]:
     """
@@ -174,13 +174,13 @@ def categorize_cookies(cookies):
 def display_description(selection: str) -> str:
     descriptions_dict = {
         'creation_utc':"Specifies the exact time that a cookie was placed on your computer.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.",
-        'host_key':"Specifies the domain or subdomain that a cookie is associated with.\n\nCetermines which website(s) can access and use that cookie.\n\nFor example, a host key of .example.com allows the cookie to be used by www.example.com and sub.example.com.",
-        'top_frame_site_key':"Specifies the uppermost frame in a frame hierarchy, and contains the information retrieved from the initial URL request.\n\nFor example, take the website https://example.com/something\n\nThe top frame site of this page is https://example.com",
+        'host_key':"Specifies the domain or subdomain that created and sent a cookie to your device.", #\n\nDetermines which website(s) can access and use that cookie. If the host_key contains a leading dot, then it can be accessed by various subdomains.\n\nFor example, a host key of '.example.com' allows the cookie to be used by www.example.com and www.sub.example.com.
+        'top_frame_site_key':"Specifies the uppermost frame in a frame hierarchy. A 'frame' is created when a website's contents are opened within the bounds of another website using an embedding such as an iframe.\n\nFor example, if a domain 'example.com' embeds a youtube video in their website, youtube may send a cookie with the top frame site key as 'https://example.com.",
         'name':"Specifies the identifier for a cookie.\n\nCookie names can be used to identify the purpose of a cookie.\n\nTake for example the cookie name '_ga' in row 3.\n\nWe can use websites such as cookiepedia to see what the cookie name is associated with. '_ga' is a preformance cookie.\n\nhttps://cookiepedia.co.uk/cookies/_ga", 
-        'value':"Specifies the data held within a cookie.\n\nWebsites store user information such as settings or preferences in a cookie's value.\n\nSince Chrome version 33 launched in 2014, the encrypted_value column was released as an alternative, adding an extra layer of security.",
-        'encrypted_value':"Specifies the data held within a cookie that has been transformed into a secure form to prevent unauthorized access.\n\nUsers may decrypt their own encrypted values by finding and using the 'master encryption key' stored in their computer.\n\nThe encrypted values in this example have been removed for security.", 
+        'value':"Specifies the data held within a cookie.\n\nDifferent types of cookies (essential vs non-essential) store different bits of information in this column, ranging from user preferences to browsing activity.\n\nSince Chrome version 33 launched in 2014, the encrypted_value column was released as an alternative, adding an extra layer of security.",
+        'encrypted_value':"Specifies the data held within a cookie that has been transformed into a secure form to prevent unauthorized access.\n\nThe encrypted values in this example have been removed for security.", 
         'path':"Specifies the URL path that must be present for the cookie to be sent.\n\nFor example, take the website https://example.com\n\nIf the path for a cookie on this website is /something then it can be sent when the user is viewing https://example.com/something or https://example.com/something/else,\n\nbut not https://example.com/nothing", 
-        'expires_utc':"Specifies the exact time that a cookie will expire from your computer.\n\nSince August 2022, this date cannot be any later than 400 days after the cookie was set.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.",
+        'expires_utc':"Specifies the exact time that a cookie will expire from your computer. This date cannot be any later than 400 days after the cookie was set.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.",
         'is_secure':"Specifies whether a cookie is only sent to the server over a secure (HTTPS) connection.\n\nHTTPS connections have enhanced security for sensitive data.\n\n1 means true, 0 means false.", 
         'is_httponly':"Specifies whether a cookie is inaccessible to client-side scripts such as JavaScript.\n\nSensitive cookies should have the value true for this column in order to prevent potential data theft.\n\n1 means true, 0 means false.", 
         'last_access_utc':"Specifies the exact time that a cookie was last accessed.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.",
