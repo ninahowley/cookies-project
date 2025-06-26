@@ -11,7 +11,7 @@ def persistent_cookies(cookies):
         persistent = cookies['is_persistent'].sum()
         total = len(cookies['is_persistent'])
         data = {
-            'Type' : ['Persistent', 'Not Persistent'],
+            'Type' : ['Persistent', 'Session'],
             'Amount' : [persistent, total-persistent]
         }
         df = pd.DataFrame(data=data)
@@ -21,7 +21,7 @@ def persistent_cookies(cookies):
                      title='Persistent Cookies',
                      color_discrete_map = {
                          'Persistent': '#fae1b8',
-                         'Not Persistent': '#3f1c13',
+                         'Session': '#3f1c13',
                      })
         st.plotly_chart(fig, key="Persistent")
         st.write(f'{(persistent/total * 100).round(2)}% of your cookies are persistent!')
