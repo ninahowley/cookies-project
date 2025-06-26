@@ -143,15 +143,15 @@ if isinstance(cookies, pd.DataFrame):
         st.header("Persistent Cookies")
         st.write("Let's explore persistent cookies!")
         st.subheader("Persistent vs session cookies")
-        st.write("Persistent cookies are cookies that last beyong a single browsing session "
-        "Reasons for this often include saving settings, login info, preferences, etc. in order "
+        st.write("**Persistent cookies** are cookies that last beyong a single browsing session.")
+        st.write("Reasons for this often include saving settings, login info, preferences, etc. in order "
         "to save time and create a more convenient web browsing experience. Additionally, these " \
         "cookies are often used to track how long a user has been on a page, what language they are " \
         "browsing in, and other information that can be used for marketing/analytical purposes.")
         st.write("The web host of the cookie will set the expiration date. Once this date is "
         "reached, they will either renew the cookie automatically, ask for permission to renew, "
         "or simply delete itself, but this is all dependent of the initial user agreement.")
-        st.write("Cookies that are not persistent are called session cookies, and they expire once "
+        st.write("Cookies that are not persistent are called **session cookies**, and they expire once "
         "the browser is closed.")
         #creating pie chart
         vm.persistent_cookies(cookies)
@@ -160,11 +160,11 @@ if isinstance(cookies, pd.DataFrame):
         "cookie.")
         
     if visualization == "Third Party Cookies":
-        st.subheader("Third Party Cookies")
+        st.header("Third Party Cookies")
         st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
         st.write("Here's a helpful visualization demonstrating how third-party cookies *retarget*.")
         st.image("3rd_retargeting.png", caption = "Source: https://www.performancemarketingworld.com/article/1800951/third-party-cookies")
-        st.write("What distinguishes a first party cookie from a third party cookie?")
+        st.subheader("What distinguishes a first party cookie from a third party cookie?")
         df = pd.DataFrame(
             {
                 "Aspect": ["Purpose", "Data Ownership", "Management"],
@@ -179,7 +179,7 @@ if isinstance(cookies, pd.DataFrame):
         st.table(df)
 
         st.write("We can't access third-party cookies directly from our database, since it's not stored anywhere. However, we can inspect these in real-time on the websites we visit!")
-        with st.expander("**Instructions to investigating your third-party cookies on a website**"):
+        with st.expander("**Instructions for inspecting your third-party cookies on a website**"):
             st.write("Here's a demonstration video of what third party cookies 'look like' on your browser:")
             st.video("3rdparty_DEMO.mov", muted = True)
             st.caption("You can also refresh the webpage to see the cookies pop up...")
@@ -197,7 +197,8 @@ if isinstance(cookies, pd.DataFrame):
 
         col1, col2 = st.columns((3,1))
         with col2:
-            num = st.slider(label="Number of domains to display", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+            st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
+            num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
         with col1:
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
