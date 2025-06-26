@@ -8,6 +8,14 @@ import visualization_methods as vm
 import plotly.graph_objects as go
 from datetime import time
 
+
+st.html("""<style>
+[data-testid="stSidebar"]> div:first-child{
+background-image: url("https://thumbs.dreamstime.com/b/chocolate-chip-cookies-crumbs-forming-vertical-frame-white-background-scattered-create-visually-appealing-clean-surface-352442146.jpg");
+background-size: cover;
+}
+</style>""")
+
 st.header(":cookie: Cookie Exploration Follow Along")
 st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
 
@@ -68,6 +76,9 @@ if st.session_state.show_db and isinstance(cookies, pd.DataFrame):
             col2.write(m.display_description(selection))
 
 st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
+
+if isinstance(cookies, pd.DataFrame):
+    m.your_cookie_type(cookies)
 
 if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
@@ -132,24 +143,22 @@ if isinstance(cookies, pd.DataFrame):
     if visualization == 'Persistent Cookies':
         st.header("Persistent Cookies")
         st.write("Let's explore persistent cookies!")
-        #creating cookie security pie charts
-        col1, col2 = st.columns((1,1))
-        with col1:
-            vm.persistent_cookies(cookies)
-        with col2:
-            st.write("**Persistent cookies** are cookies that last beyong a single browsing session.")
-            st.write("Reasons for this often include saving settings, login info, preferences, etc. in order "
-            "to save time and create a more convenient web browsing experience. Additionally, these " \
-            "cookies are often used to track how long a user has been on a page, what language they are " \
-            "browsing in, and other information that can be used for marketing/analytical purposes.")
-            st.write("The web host of the cookie will set the expiration date. Once this date is "
-            "reached, they will either renew the cookie automatically, ask for permission to renew, "
-            "or simply delete itself, but this is all dependent of the initial user agreement.")
-            st.write("**Session cookies** are cookies that are not persistent, and they expire once "
-            "the browser is closed.")
-            st.write("In your cookie database, you may see that the is_persistent column has values of either "
-            "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
-            "cookie.")
+        st.subheader("Persistent vs session cookies")
+        st.write("Persistent cookies are cookies that last beyong a single browsing session "
+        "Reasons for this often include saving settings, login info, preferences, etc. in order "
+        "to save time and create a more convenient web browsing experience. Additionally, these " \
+        "cookies are often used to track how long a user has been on a page, what language they are " \
+        "browsing in, and other information that can be used for marketing/analytical purposes.")
+        st.write("The web host of the cookie will set the expiration date. Once this date is "
+        "reached, they will either renew the cookie automatically, ask for permission to renew, "
+        "or simply delete itself, but this is all dependent of the initial user agreement.")
+        st.write("Cookies that are not persistent are called session cookies, and they expire once "
+        "the browser is closed.")
+        #creating pie chart
+        vm.persistent_cookies(cookies)
+        st.write("In your cookie database, you may see that the is_persistent column has values of either "
+        "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
+        "cookie.")
         
     if visualization == "Third Party Cookies":
         st.subheader("Third Party Cookies")
