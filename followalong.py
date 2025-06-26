@@ -52,7 +52,20 @@ st.button(
 
 
 if st.session_state.show_db:
-    m.display_raw_cookies(cookies)
+    col1, col2 = st.columns((2,1))
+    with col1:
+        m.display_raw_cookies(cookies)
+
+        columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
+                'value', 'encrypted_value', 'path', 'expires_utc',
+                'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
+                'is_persistent', 'priority', 'samesite', 'source_scheme',
+                'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
+
+        selection = col2.selectbox(options=columns,label="Choose a column to learn more about.")
+
+        if selection:
+            col2.write(m.display_description(selection))
 
 st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
@@ -194,7 +207,7 @@ if isinstance(cookies, pd.DataFrame):
     st.subheader("Share your cookies")
     st.write("Streamlit does not automatically save uploaded files.")
     st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
-    st.write("Our group might want to continue working with cookies in the future. We are asking for willing volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
+    st.write("Our group would like to continue working with cookies in the future, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
     st.write("If you would like to share your cookies, click the checkbox below.")
 
 
