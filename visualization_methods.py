@@ -137,53 +137,34 @@ def pie_chart(cookies):
         st.write("No data yet. Input data for visualization.")
 #domain double bar chart
 
-def double_bar(cookies):
-    if cookies is not None and 'host_key' in cookies.columns and 'is_secure' in cookies.columns:
-        df = cookies.copy()
-        df['domain_short'] = cookies['host_key'].str.lstrip('.').str.split('.').str[-2:].str.join('.')
+def double_bar(sorted_cookies, count):
+    '''
+    Creates a double bar chart showing num of secure and insecure cookies per domain 
+    '''
+    top_domains = sorted_cookies.head(count).sort_values(by="Number of Cookies", ascending=False)
+    counts = top_domains.groupby(['domain_short', 'is_secure']).size().reset_index(name='count')
+    # Convert is_secure to string labels before creating df_counts and plotting
+    counts['is_secure'] = counts['is_secure'].map({1: 'Secure', 0: 'Not Secure'})
+    df_counts = pd.DataFrame(counts)
 
-        counts = df.groupby(['domain_short', 'is_secure']).size().reset_index(name='count')
-        # Convert is_secure to string labels before creating df_counts and plotting
-        counts['is_secure'] = counts['is_secure'].map({1: 'Secure', 0: 'Not Secure'})
-        df_counts = pd.DataFrame(counts)
+    df_counts = df_counts.fillna(0)
+    df_counts = df_counts.sort_values(['domain_short', 'is_secure'])
 
-        #pivot so domain is row
-        pivot_df_counts = df_counts.pivot(index= 'domain_short', columns='is_secure', values='count')
-        #st.write(pivot_df_counts)
-        df_counts = df_counts.fillna(0)
+    #make bar chart
+    fig = px.bar(df_counts, 
+                    x='domain_short', 
+                    y='count', 
+                    color='is_secure', 
+                    barmode = 'group',
+                    labels={'domain_short': 'Domain', 'count': 'Number of Cookies', 'is_secure':'Security'},
+                title='Number of Secure and Not Secure Cookies per Domain',
+                color_discrete_map = {
+                        'Secure': '#fae1b8',
+                        'Not Secure': '#3f1c13',
+                    }
 
-        df_counts = df_counts.sort_values(['domain_short', 'is_secure'])
-
-        #make bar chart
-        fig = px.bar(df_counts, 
-                     x='domain_short', 
-                     y='count', 
-                     color='is_secure', 
-                     barmode = 'group',
-                     labels={'domain_short': 'Domain', 'count': 'Number of Cookies', 'is_secure':'Security'},
-                    title='Number of Secure and Not Secure Cookies per Domain',
-                    color_discrete_map = {
-                         'Secure': '#fae1b8',
-                         'Not Secure': '#3f1c13',
-                     }
-
-        )
-        st.plotly_chart(fig, key="double_bar")
-
-#domains for secure
-def on_secure(cookies):
-    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
-        secure_cookies = cookies[cookies['is_secure'] == 1]['host_key'].unique() #NumPy array of unique domain values
-        st.write("Here are the domains with secure cookies:")
-        for domain in secure_cookies:
-            st.write(domain)
-
-def on_insecure(cookies):
-    if cookies is not None and 'is_secure' in cookies.columns and 'host_key' in cookies.columns:
-        insecure_cookies = cookies[cookies['is_secure'] == 0]['host_key'].unique() #NumPy array of unique domain values
-        st.write("Here are the domains with insecure cookies:")
-        for domain in insecure_cookies:
-            st.write(domain)
+    )
+    st.plotly_chart(fig, key="double_bar")
 
 def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
     top_domains = sorted_cookies.head(count).sort_values(by="Number of Cookies", ascending=False)

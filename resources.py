@@ -67,6 +67,7 @@ with four:
 
      st.subheader("So...what should we do?")
      st.markdown("**1.** Disable automatic image loading on your email.")
+     st.image("blocktracking.png", caption="Only click 'show images' if it's necessary, or if you trust the sender!")
      st.markdown("**2.** Browse in incognito  mode when you can.")
      st.markdown("**3.** Be very mindful of what you choose to click and open.")
      st.markdown("**4.** Use browser extensions to help block tracking pixels.")
