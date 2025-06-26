@@ -150,17 +150,20 @@ if isinstance(cookies, pd.DataFrame):
         st.write("We can't access third-party cookies directly from our database, since it's not stored anywhere. However, we can inspect these in real-time on the websites we visit!")
         with st.expander("**Instructions to investigating your third-party cookies on a website**"):
             st.write("Here's a demonstration video of what third party cookies 'look like' on your browser:")
-            st.video("3rdparty_demo1.mov", muted = True)
+            st.video("3rdparty_DEMO.mov", muted = True)
+            st.caption("You can also refresh the webpage to see the cookies pop up...")
             st.write("**1.** Open any website.")
             st.write("**2.** Double right click and select Inspect at the bottom of the bar.")
             st.write("**3.** Don't be intimidated by the html code! Go to Applications > Cookies.")
             st.write("Tada! You can now see both first and third party cookies on your website in real time. If you can't see any third party cookies, it's likely that you already blocked it in settings.")
-            st.video("3rdparty_demo2.mov", muted = True)
-            st.caption("You can also refresh the webpage to see the cookies pop up...")
-        # st.video() eventually include a demo clip of how to check your third party cookies in real time
+       
 
     #creating some initial visualizations
     if visualization == "Domain Exploration":
+        st.subheader("What is a domain name?")
+        st.write("A domain name is a text that a user types into a browser window to reach a particular website. For example, Google's domain name is 'google.com'. Youtube's domain name is 'youtube.com'.")
+        st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
+
         col1, col2 = st.columns((3,1))
         with col2:
             num = st.slider(label="Number of domains to display", min_value=1, max_value=m.get_num_domains(cookies), value=10)
