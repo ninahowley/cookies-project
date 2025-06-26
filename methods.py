@@ -52,6 +52,11 @@ def display_raw_cookies(cookies):
     if isinstance(cookies, pd.DataFrame):
         st.dataframe(cookies, hide_index=True)
 
+def display_single_cookie(cookies):
+    if isinstance(cookies, pd.DataFrame):
+        cookies = cookies.head(1)
+        st.dataframe(cookies, hide_index=True)
+
 def get_domain(host_key: str) -> tuple[str, str]:
     """
     Returns the domain associated with a cookie's host key.
