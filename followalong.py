@@ -101,6 +101,7 @@ if isinstance(cookies, pd.DataFrame):
         
     if visualization == 'Persistent Cookies':
         st.header("Persistent Cookies")
+        st.write("Let's explore persistent cookies!")
         #creating cookie security pie charts
         col1, col2 = st.columns((1,1))
         with col1:

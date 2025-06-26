@@ -59,7 +59,7 @@ with four:
           }
      )
 
-     st.table(df)
+     st.dataframe(df, hide_index=True)
 
      st.subheader("So...what should we do?")
      st.markdown("**1.** Disable automatic image loading on your email.")
