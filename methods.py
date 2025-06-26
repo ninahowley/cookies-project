@@ -13,7 +13,7 @@ def display_windows_filepath():
     """
     Displays instructions to find Cookies.db on a Windows machine.
     """
-    st.write("Follow this filepath, replacing '🍪' with your windows login username...")
+    st.write("Copy this filepath, replacing '🍪' with your windows login username...")
     st.write(rf"C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Default\Network")
     st.write("\n**Drag and Drop:** Cookies.db")
 
@@ -21,9 +21,9 @@ def display_mac_filepath():
     """
     Displays instructions to find Cookies.db on a Mac machine.
     """
-    st.write("1. Open Finder")
-    st.write("2. Command + Shift + G")
-    st.write("3. Type: ~/Library/Application Support/Google/Chrome/Default/")
+    st.write("Open Finder")
+    st.write("Command + Shift + G")
+    st.write("Type: ~/Library/Application Support/Google/Chrome/Default/")
     st.write("\n**Drag and Drop:** Cookies.db")
 
 def upload_cookies() -> pd.DataFrame:
@@ -50,7 +50,7 @@ def display_raw_cookies(cookies):
     Displays the raw data from a user's Cookies.db file.
     """
     if isinstance(cookies, pd.DataFrame):
-        st.write(cookies)
+        st.dataframe(cookies, hide_index=True)
 
 def get_domain(host_key: str) -> tuple[str, str]:
     """
@@ -173,24 +173,24 @@ def categorize_cookies(cookies):
 
 def display_description(selection: str) -> str:
     descriptions_dict = {
-        'creation_utc':"Specifies the exact time that a cookie was placed on your computer.\n\nUTC stands for 'Coordinated Universal Time'.\n\nAll timezones, such as EST, are defined by their offset from UTC.",
-        'host_key':"Specifies the domain or subdomain that a cookie is associated with.\n\nCetermines which website(s) can access and use that cookie.\n\nFor example, a host key of .example.com allows the cookie to be used by www.example.com and sub.example.com.",
-        'top_frame_site_key':"Specifies the uppermost frame in a frame hierarchy, and contains the information retrieved from the initial URL request.\n\nFor example, take the website https://example.com/something\n\nThe top frame site of this page is https://example.com",
+        'creation_utc':"Specifies the exact time that a cookie was placed on your computer.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.",
+        'host_key':"Specifies the domain or subdomain that created and sent a cookie to your device.", #\n\nDetermines which website(s) can access and use that cookie. If the host_key contains a leading dot, then it can be accessed by various subdomains.\n\nFor example, a host key of '.example.com' allows the cookie to be used by www.example.com and www.sub.example.com.
+        'top_frame_site_key':"Specifies the uppermost frame in a frame hierarchy. A 'frame' is created when a website's contents are opened within the bounds of another website using an embedding such as an iframe.\n\nFor example, if a domain 'example.com' embeds a youtube video in their website, youtube may send a cookie with the top frame site key as 'https://example.com.",
         'name':"Specifies the identifier for a cookie.\n\nCookie names can be used to identify the purpose of a cookie.\n\nTake for example the cookie name '_ga' in row 3.\n\nWe can use websites such as cookiepedia to see what the cookie name is associated with. '_ga' is a preformance cookie.\n\nhttps://cookiepedia.co.uk/cookies/_ga", 
-        'value':"Specifies the data held within a cookie.\n\nWebsites store user information such as settings or preferences in a cookie's value.\n\nSince Chrome version 33 launched in 2014, the encrypted_value column was released and the value column was defunct, adding an extra layer of security.",
-        'encrypted_value':"Specifies the data held within a cookie that has been transformed into a secure form to prevent unauthorized access.\n\nUsers may decrypt their own encrypted values by finding and using the 'master encryption key' stored in their computer.\n\nThe encrypted values in this example have been removed for security.", 
+        'value':"Specifies the data held within a cookie.\n\nDifferent types of cookies (essential vs non-essential) store different bits of information in this column, ranging from user preferences to browsing activity.\n\nSince Chrome version 33 launched in 2014, the encrypted_value column was released as an alternative, adding an extra layer of security.",
+        'encrypted_value':"Specifies the data held within a cookie that has been transformed into a secure form to prevent unauthorized access.\n\nThe encrypted values in this example have been removed for security.", 
         'path':"Specifies the URL path that must be present for the cookie to be sent.\n\nFor example, take the website https://example.com\n\nIf the path for a cookie on this website is /something then it can be sent when the user is viewing https://example.com/something or https://example.com/something/else,\n\nbut not https://example.com/nothing", 
-        'expires_utc':"Specifies the exact time that a cookie will expire from your computer.\n\nSince August 2022, this date cannot be any later than 400 days after the cookie was set.\n\nUTC stands for 'Coordinated Universal Time'.\n\nAll timezones, such as EST, are defined by their offset from UTC.",
+        'expires_utc':"Specifies the exact time that a cookie will expire from your computer. This date cannot be any later than 400 days after the cookie was set.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.",
         'is_secure':"Specifies whether a cookie is only sent to the server over a secure (HTTPS) connection.\n\nHTTPS connections have enhanced security for sensitive data.\n\n1 means true, 0 means false.", 
         'is_httponly':"Specifies whether a cookie is inaccessible to client-side scripts such as JavaScript.\n\nSensitive cookies should have the value true for this column in order to prevent potential data theft.\n\n1 means true, 0 means false.", 
-        'last_access_utc':"Specifies the exact time that a cookie was last accessed.\n\nUTC stands for 'Coordinated Universal Time'.\n\nAll timezones, such as EST, are defined by their offset from UTC.", 
+        'last_access_utc':"Specifies the exact time that a cookie was last accessed.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.",
         'has_expires':"Specifies whether a cookie will expire or not.\n\nIf this column is true, the exact expiration time will be specified under 'expires_utc'.\n\n1 means true, 0 means false.",
         'is_persistent':"Specifies whether a cookie is persistent or a session cookie.\n\n If a cookie is persistent, it is saved for a period of time.\n\nIf a cookie is a session cookie, it expires when the browser is closed.\n\n1 means true (persistent), 0 means false (session).", 
         'priority':"Specifies the priority level assigned to a cookie.\n\n Priority level influences how likely the browser is to retain that cookie under memory pressure.\n\n2 corresponds to 'high', 1 corresponds to 'medium'", 
         'samesite':"Specifies if a cookie can be sent to another URL.\n\n0 means 'None'. The cookie can be sent anywhere.\n\n1 means 'lax'. The cookie can be sent to URLs with the same domain on which it is hosted, and safe external URLs.\n\n2 means 'strict'. The cookie can only be sent to URLs with the same domain on which it is hosted.", 
         'source_scheme':"Specifies the security protocol of the site that originally placed the cookie.\n\n0 means unset or unknown protocol.\n\n1 means HTTP (unencrypted, insecure).\n\n2 means HTTPS (encrypted, secure).\n\n3 means URL (local file).\n\n4 means FTP URL (unencrypted file transfer, very rare).",
         'source_port':"Specifies the TCP port that was used when a cookie was placed.\n\nA TCP port is a method of virtual endpoint used by online applications and services to 'communicate'.\n\n433 indicates HTTPS port (encrypted, secure).\n\n80 indicates HTTP port (unencrypted, insecure).\n\n0 or -1 indicates that the port was not recorded.\n\nAny other numbers may refer to a custom port.", 
-        'last_update_utc':"Specifies the exact time that a cookie was last modified.\n\nUTC stands for 'Coordinated Universal Time'.\n\nAll timezones, such as EST, are defined by their offset from UTC.", 
+        'last_update_utc':"Specifies the exact time that a cookie was last modified.\n\nThe number values in this column represent an exact second in time, in the form of a 'Unix timestamp'.\n\nThe Unix timestamp specifies the number of seconds that have elapsed since January 1, 1970.", 
         'source_type':"Specifies how a cookie was set or accessed.\n\nSimilar to samesite.\n\n1 means originating from a HTTP website.\n\n2 means originating from a HTTPS website.\n\n3 means originating from a nonstandard website.", 
         'has_cross_site_ancestor':"Specifies whether a cookie has a cross-site ancestor.\n\nWhen a cookie has a cross-site ancesor, it is being accessed by an external domain.\n\n1 means true, 0 means false."
         }
@@ -229,7 +229,8 @@ def your_cookie_type(cookies):
             reader = csv.reader(f)
             tasty_cookies = list(reader)
         cookie = tasty_cookies[len(cookies['host_key']) % 100][0]
-        st.write(f'Your cookie is: {cookie}!')
+        # st.write(f'Your cookie is: {cookie}!')
+        return cookie
     
 def generate_username():
     int = random.randint(100, 999)

@@ -1,15 +1,19 @@
 import streamlit as st
 import pandas as pd 
+import streamlit.components.v1
 
 
-st.header("Resources")
+st.header(":cookie: Resources")
 
-one, two, three, four, five = st.tabs(["Guide on Cookies", "Managing Cookies", "Browsing Cookies", "Tracking Pixels vs. Cookies", "Related Literature"])
+one, two, three, four = st.tabs(["Guide on Cookies", "Managing Cookies", "Browsing Cookies", "Tracking Pixels vs. Cookies"])
 
 
 with one: 
      st.write("Here's the link to our comprehensive guide on cookies! If you ever want a little refresher on, for example, the different types of cookies, just revisit this guide! Also, feel free to share this with friends and family :sunglasses:")
-     st.link_button("Click me!", "https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/edit?usp=sharing")
+     st.link_button("Click me!", "https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/present?slide=id.g148f9c0646e_0_0")
+     # streamlit.components.v1.iframe(src="https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/edit?slide=id.g148f9c0646e_0_0", height=1000)
+
+
 with two: 
      st.subheader("Want to manage your cookies directly on your browser?")
      st.markdown("**1.** Go to Settings > Privacy and security.")
@@ -31,7 +35,7 @@ with three:
 with four: 
      left, right = st.columns([1,2])
      with left:
-         st.markdown("<br><br><br><br>", unsafe_allow_html=True)  # Adds vertical space
+         st.markdown("<br><br><br><br><br>", unsafe_allow_html=True)  # Adds vertical space
          st.caption("Third party cookies are bad but maybe not the worst...")
          st.subheader("Be careful of tracking pixels!")
      with right:
@@ -59,7 +63,7 @@ with four:
           }
      )
 
-     st.table(df)
+     st.dataframe(df, hide_index=True)
 
      st.subheader("So...what should we do?")
      st.markdown("**1.** Disable automatic image loading on your email.")
@@ -68,17 +72,17 @@ with four:
      st.markdown("**4.** Use browser extensions to help block tracking pixels.")
      st.link_button("Ugly Email Browser Extension", "https://uglyemail.com/")
 
-with five:
-     st.header("Research")
+# with five:
+#      st.header("Research")
      
-     st.write("**[An Empirical Study of Web Cookies](%s)**" % "https://dl.acm.org/doi/abs/10.1145/2872427.2882991#abstract")
-     st.write("**[HTTP Cookies: Standards, privacy, and politics](%s)**" %"https://dl.acm.org/doi/abs/10.1145/502152.502153#abstract")
-     st.write("**[CookieGraph: Understanding and Detecting First-Party Tracking Cookies](%s)**" %"https://dl.acm.org/doi/abs/10.1145/3576915.3616586#abstract")
+#      st.write("**[An Empirical Study of Web Cookies](%s)**" % "https://dl.acm.org/doi/abs/10.1145/2872427.2882991#abstract")
+#      st.write("**[HTTP Cookies: Standards, privacy, and politics](%s)**" %"https://dl.acm.org/doi/abs/10.1145/502152.502153#abstract")
+#      st.write("**[CookieGraph: Understanding and Detecting First-Party Tracking Cookies](%s)**" %"https://dl.acm.org/doi/abs/10.1145/3576915.3616586#abstract")
 
-     st.header("Articles")
+#      st.header("Articles")
      
-     st.write("**[This Article Is Spying on You](%s)**" %"https://www.nytimes.com/2019/09/18/opinion/data-privacy-tracking.html")
-     st.write("**[All You Need to Know About Third-Party Cookies](%s)**" %"https://cookie-script.com/all-you-need-to-know-about-third-party-cookies.html")
+#      st.write("**[This Article Is Spying on You](%s)**" %"https://www.nytimes.com/2019/09/18/opinion/data-privacy-tracking.html")
+#      st.write("**[All You Need to Know About Third-Party Cookies](%s)**" %"https://cookie-script.com/all-you-need-to-know-about-third-party-cookies.html")
 
-     st.write()
-     st.write("Need to add citations")
+#      st.write()
+#      st.write("Need to add citations")

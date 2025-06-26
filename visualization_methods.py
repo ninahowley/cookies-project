@@ -11,12 +11,19 @@ def persistent_cookies(cookies):
         persistent = cookies['is_persistent'].sum()
         total = len(cookies['is_persistent'])
         data = {
-            'Type' : ['persistent', 'not persistent'],
+            'Type' : ['Persistent', 'Not Persistent'],
             'Amount' : [persistent, total-persistent]
         }
         df = pd.DataFrame(data=data)
-        fig = px.pie(df, values='Amount', color='Type', title='Persistent Cookies')
-        st.plotly_chart(fig, key="persistent")
+        fig = px.pie(df, 
+                     values='Amount', 
+                     color='Type', 
+                     title='Persistent Cookies',
+                     color_discrete_map = {
+                         'Persistent': '#fae1b8',
+                         'Not Persistent': '#3f1c13',
+                     })
+        st.plotly_chart(fig, key="Persistent")
         st.write(f'{(persistent/total * 100).round(2)}% of your cookies are persistent!')
        
 def convert_time(time):
@@ -107,11 +114,6 @@ def sameSite(cookies):
         st.write("No data yet. Input data for visualization.")
         
 
-
-
-
-
-
 #Cookie Security visualization
 def pie_chart(cookies):
     if cookies is not None:
@@ -170,7 +172,8 @@ def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
                     x='Domain', 
                     y='Number of Cookies', 
                     title='Number of Cookies per Domain',
-                    color="Number of Cookies"
+                    color="Number of Cookies",
+                    color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13'])
                     )
     st.plotly_chart(fig, key="domains")
     
