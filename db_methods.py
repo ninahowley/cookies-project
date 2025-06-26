@@ -66,8 +66,11 @@ def clean_cookies(cookies: pd.DataFrame):
         df = cookies.drop(["value", "encrypted_value"], axis=1)
         return df
     except Exception as e:
-        print(e)
-        return None
+        try:
+            df = cookies.drop(["value"], axis=1)
+            return df
+        except Exception as e:
+            return None
 
 def check_existing(cookies: pd.DataFrame):
     """

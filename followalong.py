@@ -201,11 +201,8 @@ if isinstance(cookies, pd.DataFrame):
     if upload:
         try:
             db.upload_cookies(cookie_name, cookies)
-            st.rerun()
         except Exception as e:
             st.warning("An error occured.")
-            st.write(cookies)
-            st.write(e)
 
 
 else:
