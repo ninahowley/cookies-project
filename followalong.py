@@ -225,7 +225,7 @@ if isinstance(cookies, pd.DataFrame):
                 st.warning("An error occured.")
     
     st.divider()
-    st.subheader("We welcome your feedback!")
+    st.subheader("We appreciate your feedback!")
     st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
 
 
