@@ -2,6 +2,7 @@ import streamlit as st
 import os 
 import pandas as pd
 import sqlite3
+import db_methods as db
 import methods as m
 import visualization_methods as vm
 import plotly.graph_objects as go
@@ -13,14 +14,22 @@ st.subheader("Let's explore this interactive website to learn about cookies and 
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-with st.expander("**Instructions to find cookies with your operating system.**"):
-    col1, col2 = st.columns((1,1))
+with st.expander("Instructions to find cookies with your operating system"):
+    col1, col2 = st.columns((2))
     with col1:
         st.subheader("Windows")
         m.display_windows_filepath()
     with col2:
         st.subheader("Mac")
         m.display_mac_filepath()
+
+with st.expander("Error: This file is in use"):
+    st.write("This error occurs when you are currently logged into and using the account associated with that database.")
+    st.write("Each chrome profile has it's own unique cookies database.")
+    st.write("To work around this, you must have atleast 2 chrome profiles.")
+    st.write("Simply choose 'Profile 1', 'Profile 2', (or 'Profile 3', etc...) instead of 'Default' in the filepath.")
+    st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
+    st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
 #upload cookies
 cookies = m.upload_cookies()
@@ -154,23 +163,36 @@ if isinstance(cookies, pd.DataFrame):
 
     # vm.last_accessed(cookies)
 
-    m.your_cookie_type(cookies)
-
     if visualization == "Size of Cookies":
         vm.last_accessed(cookies)
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.
     # unfortunately only fetches first party cookies...
-    st.header("How many cookies does the Wellesley College website have?")
+    # st.header("How many cookies does the Wellesley College website have?")
 
-    cookie_count = st.form("cookies_count")
+    # cookie_count = st.form("cookies_count")
 
-    with cookie_count:
-        st.write("Paste https://www.wellesley.edu/ below to find out!")
-        website = cookie_count.text_input('Enter a website:') 
-        cookies_count = m.get_cookies(website)
+    # with cookie_count:
+    #     st.write("Paste https://www.wellesley.edu/ below to find out!")
+    #     website = cookie_count.text_input('Enter a website:') 
+    #     cookies_count = m.get_cookies(website)
 
-    # st.write("No data yet. Please either upload your cookies or choose to use the example database to begin the follow along.")
+    st.divider()
+    st.subheader("Share your cookies")
+    st.write("Disclaimer here.")
+
+    cookie_name = m.your_cookie_type(cookies)
+    st.write(f"Your anonymized cookie username is: {cookie_name}.")
+
+    upload = st.button("Share my cookies!")
+    if upload:
+        try:
+            db.upload_cookies(cookie_name, cookies)
+            st.rerun()
+        except Exception:
+            st.warning("An error occured.")
+
+
 else:
     st.warning("Please upload your cookies before starting the follow along.")

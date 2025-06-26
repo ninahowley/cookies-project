@@ -13,7 +13,7 @@ def display_windows_filepath():
     """
     Displays instructions to find Cookies.db on a Windows machine.
     """
-    st.write("Follow this filepath, replacing '🍪' with your windows login username...")
+    st.write("Copy this filepath, replacing '🍪' with your windows login username...")
     st.write(rf"C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Default\Network")
     st.write("\n**Drag and Drop:** Cookies.db")
 
@@ -21,9 +21,9 @@ def display_mac_filepath():
     """
     Displays instructions to find Cookies.db on a Mac machine.
     """
-    st.write("1. Open Finder")
-    st.write("2. Command + Shift + G")
-    st.write("3. Type: ~/Library/Application Support/Google/Chrome/Default/")
+    st.write("Open Finder")
+    st.write("Command + Shift + G")
+    st.write("Type: ~/Library/Application Support/Google/Chrome/Default/")
     st.write("\n**Drag and Drop:** Cookies.db")
 
 def upload_cookies() -> pd.DataFrame:
@@ -229,7 +229,8 @@ def your_cookie_type(cookies):
             reader = csv.reader(f)
             tasty_cookies = list(reader)
         cookie = tasty_cookies[len(cookies['host_key']) % 100][0]
-        st.write(f'Your cookie is: {cookie}!')
+        # st.write(f'Your cookie is: {cookie}!')
+        return cookie
     
 def generate_username():
     int = random.randint(100, 999)
