@@ -3,7 +3,7 @@ import pandas as pd
 import streamlit.components.v1
 
 
-st.header("Resources")
+st.header(":cookie: Resources")
 
 one, two, three, four = st.tabs(["Guide on Cookies", "Managing Cookies", "Browsing Cookies", "Tracking Pixels vs. Cookies"])
 

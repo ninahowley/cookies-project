@@ -8,7 +8,7 @@ import visualization_methods as vm
 import plotly.graph_objects as go
 from datetime import time
 
-st.header(":cookie: An Introduction to Web Cookies")
+st.header(":cookie: Cookie Exploration Follow Along")
 st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
 
 # user = os.getlogin()
@@ -192,17 +192,25 @@ if isinstance(cookies, pd.DataFrame):
 
     st.divider()
     st.subheader("Share your cookies")
-    st.write("Disclaimer here.")
+    st.write("Streamlit does not automatically save uploaded files.")
+    st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
+    st.write("Our group might want to continue working with cookies in the future. We are asking for willing volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
+    st.write("If you would like to share your cookies, click the checkbox below.")
 
-    cookie_name = m.your_cookie_type(cookies)
-    st.write(f"Your anonymized cookie username is: {cookie_name}.")
 
-    upload = st.button("Share my cookies!")
-    if upload:
-        try:
-            db.upload_cookies(cookie_name, cookies)
-        except Exception as e:
-            st.warning("An error occured.")
+    consent = st.checkbox("I understand and would like to share my cookies.")
+
+    if consent:
+        
+        cookie_name = m.your_cookie_type(cookies)
+        st.write(f"Your anonymized cookie username is: {cookie_name}.")
+
+        upload = st.button("Share my cookies!")
+        if upload:
+            try:
+                db.upload_cookies(cookie_name, cookies)
+            except Exception as e:
+                st.warning("An error occured.")
 
 
 else:
