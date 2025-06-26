@@ -236,7 +236,7 @@ if isinstance(cookies, pd.DataFrame):
     if consent:
         
         cookie_name = m.your_cookie_type(cookies)
-        st.write(f"Your anonymized cookie username is: {cookie_name}.")
+        st.write(f"Your anonymized cookie username is: *{cookie_name}*.")
 
         upload = st.button("Share my cookies!")
         if upload:

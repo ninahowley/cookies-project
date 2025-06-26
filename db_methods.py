@@ -104,7 +104,6 @@ def upload_cookies(username: str, cookies: pd.DataFrame):
     cur = conn.cursor()
     
     if not check_existing(cookies_cleaned):
-        st.write(cookies_cleaned)
         for index, _ in cookies_cleaned.iterrows():
             row = cookies_cleaned.loc[index].values.tolist()
             r = [str(r) for r in row]
