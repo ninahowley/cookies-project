@@ -83,8 +83,16 @@ if isinstance(cookies, pd.DataFrame):
         "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. ")
         vm.pie_chart(cookies)
         st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
-
-        vm.double_bar(cookies)
+        
+        col1, col2 = st.columns((3,1))
+        with col2:
+            num = st.slider(label="Number of domains to display", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+        with col1:
+            sorted_cookies = m.sort_cookie_domains(cookies)
+            if num:
+                vm.double_bar(sorted_cookies, num)
+            else:
+                vm.double_bar(sorted_cookies, 10)
 
 
         st.subheader("SameSite Cookies")
