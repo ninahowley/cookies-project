@@ -251,7 +251,11 @@ if isinstance(cookies, pd.DataFrame):
     if visualization == "Cookies Over Time":
         st.subheader("How many cookies have you accumulated over time?")
         vm.last_accessed(cookies)
-        st.write("This graph shows the number of persistent cookies that accumulated over time.")
+        st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
+        "Right now, all of these cookies exist in your cookies database and you can see on what date " \
+        "they were created. You can see these values in the \"creation_utc\" column of your database, "
+        "but these values need to be converted to standard datetimes, which we have done for you in " \
+        "the graph.")
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.
