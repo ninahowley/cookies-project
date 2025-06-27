@@ -173,7 +173,7 @@ def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
                     y='Number of Cookies', 
                     title='Number of Cookies per Domain',
                     color="Number of Cookies",
-                    color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13'])
+                    color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13']),
                     )
     st.plotly_chart(fig, key="domains")
     
