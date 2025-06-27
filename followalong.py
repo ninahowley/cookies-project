@@ -111,7 +111,7 @@ if isinstance(cookies, pd.DataFrame):
         st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
         vm.pie_chart(cookies)
         st.write("The graph above shows the total number of domains that only have secure cookies, insecure cookies, and both secure and insecure." \
-                "As you can see, most domains have both secure and insecure cookies. This may be the case because we aggregated all subdomains together.")
+                " As you can see, most domains have both secure and insecure cookies. This may be the case because we aggregated all subdomains together.")
         
         col1, col2 = st.columns((3,1))
         with col2:
@@ -194,7 +194,8 @@ if isinstance(cookies, pd.DataFrame):
                             "Supported by all browsers but increasingly blocked by default"]
             }
         )
-        st.table(df)
+        st.dataframe(df, hide_index=True)
+
         
         st.write("**We can't access third-party cookies directly from our database, since it's not stored anywhere**. However, we can inspect these in real-time on the websites we visit!")
         with st.expander("**Instructions for inspecting your third-party cookies on a website**"):
