@@ -209,20 +209,25 @@ if isinstance(cookies, pd.DataFrame):
 
     #creating some initial visualizations
     if visualization == "Domain Exploration":
-        st.subheader("What is a domain name?")
-        st.write("A domain name is a text that a user types into a browser window to reach a particular website. For example, Google's domain name is 'google.com'. Youtube's domain name is 'youtube.com'.")
-        st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
-
         col1, col2 = st.columns((3,1))
         with col2:
-            st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
+            st.write("")
+            st.write("**What is a domain name?**")
+            st.write("A domain name is the text that a user types into a browser window to reach a website. For example, Google's domain name is 'google.com'.")
+            st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
+            st.write("The domain that a cookie belongs to can be found as the value for the 'host_key' column.")
+            st.write("")
             num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+
         with col1:
+            st.subheader("Domains")
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
                 vm.domain_breakdown(sorted_cookies, num)
             else:
                 vm.domain_breakdown(sorted_cookies, 10)
+
+        st.subheader("Top Frame Site Key")
 
     # m.categorize_cookies(cookies)
 
