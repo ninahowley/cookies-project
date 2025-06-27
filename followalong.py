@@ -220,14 +220,29 @@ if isinstance(cookies, pd.DataFrame):
             num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
 
         with col1:
-            st.subheader("Domains")
+            st.subheader(":cookie: Domains Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
                 vm.domain_breakdown(sorted_cookies, num)
             else:
                 vm.domain_breakdown(sorted_cookies, 10)
 
-        st.subheader("Top Frame Site Key")
+        st.subheader(":cookie: Top Frame Site Key")
+        col1, col2 = st.columns((1,3))
+        with col1:
+            with st.expander("Show top frame site keys"):
+                boo = vm.tfsk_breakdown(cookies)
+                if not boo:
+                    st.write("None of your cookies contain a value for top frame site key!")
+        with col2:
+            st.write("**What is a top frame site key?**")
+            st.write("A cookie's value in the 'top_frame_site_key' column specifies the domain of the uppermost frame in a frame hierarchy.")
+            st.write("A 'frame' is created when a website's contents are opened within the bounds of another website using an embedding such as an iframe.\n\nFor example, if a domain 'example.com' embeds a youtube video in their website, youtube may send a cookie with the top frame site key as 'https://example.com'.")
+            if boo:
+                m.tfsk_example(cookies)
+
+            
+
 
     # m.categorize_cookies(cookies)
 
@@ -275,7 +290,6 @@ if isinstance(cookies, pd.DataFrame):
     st.divider()
     st.subheader("We appreciate your feedback!")
     st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
-
 
 else:
     st.warning("Please upload your cookies before starting the follow along.")

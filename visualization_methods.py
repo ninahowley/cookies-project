@@ -192,4 +192,27 @@ def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
                     color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13']),
                     )
     st.plotly_chart(fig, key="domains")
+
+
+def tfsk_breakdown(cookies:pd.DataFrame):
+    tfsk_dict = m.get_tfsk_domains(cookies)
+    if tfsk_dict:
+        count = 0
+        for tfsk in tfsk_dict:
+            st.write(f"**{tfsk}**")
+            count2 = 0
+            for hk in tfsk_dict[tfsk]:
+                st.markdown(f":primary[{hk}: {tfsk_dict[tfsk][hk]}]")
+                count2+=1
+                if count2 > 2:
+                    break
+            count+=1
+            if count>=5:
+                st.write("This expander only shows the first 5 domains.")
+                st.write("To see more, expand your database above and sort by top_frame_site_key.")
+                break
+        return True
+    else:
+        return False
+
     
