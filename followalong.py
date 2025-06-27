@@ -81,7 +81,7 @@ if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "Cookie Security", "Third Party Cookies", "Persistent Cookies", "Cookies Over Time"],
+        ["Domain Exploration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy", "Persistent Cookies", "Cookies Over Time"],
         index=None,
         placeholder="Select a topic to explore..."
     )
@@ -89,14 +89,18 @@ if isinstance(cookies, pd.DataFrame):
      # m.your_cookie_type(cookies)
 
     #Cookie Security selection
-    if visualization == "Cookie Security":
-        st.header("Cookie Security")
-        st.write("Let's explore the secure and samesite cookies! :cookie: ")
-        #creating cookie security pie charts
-        #col1, col2 = st.columns((1,1))
-        #with col1:
+    if visualization == "First Party Cookies & Cookie Security":
+        st.write("Let's explore first party cookies and cookie security! :cookie: ")
 
-        #with col2:
+        st.subheader("What are First-Party Cookies?")
+        st.write("First-party cookies are cookies **set by the domain** and are only used within the domain (ie youtube.com). They are typically used to save **login information and UI settings**.")
+        st.write("These cookies can also be used to track users as they move between intra-domain pages. With this information, a profile of a users behavior can be built within the site "
+        "and tailored information or targeted ads can be presented to a user.")
+
+        st.write("For first-party cookies, the biggest concern is **security**, since session IDs (stored in cookies) are used to provide user functionality (ie login credentials)" \
+                 ", which would be problematic if intercepted by an attacker.")
+        st.write("Below you will learn more about cookie security!")
+
         st.subheader("Secure vs. insecure cookies")
         st.write("Let's learn about cookie security! Below is a pie chart showing the proportions of your secure and insecure cookies.")
 
@@ -104,20 +108,23 @@ if isinstance(cookies, pd.DataFrame):
         "Web browsers (or user agents) will only include the cookie in an **HTTPS request**, only if it is transmitted over a secure channel (likely HTTPS). HTTPS is secure because it uses encryption to " \
         "protect data in transit between the user's browser to server." \
         "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. ")
-        vm.pie_chart(cookies)
         st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
+        vm.pie_chart(cookies)
+        st.write("The graph above shows the total number of domains that only have secure cookies, insecure cookies, and both secure and insecure." \
+                "As you can see, most domains have both secure and insecure cookies. This may be the case because we aggregated all subdomains together.")
         
         col1, col2 = st.columns((3,1))
         with col2:
             num = st.slider(label="Number of domains to display", min_value=1, max_value=m.get_num_domains(cookies), value=10)
         with col1:
-            sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
-                vm.double_bar(sorted_cookies, num)
+                vm.double_bar(cookies, num)
             else:
-                vm.double_bar(sorted_cookies, 10)
-
-
+                vm.double_bar(cookies, 10)
+                
+        st.write("This stacked bar graph breaks down the previous bar chart by domains. **Having insecure cookies today are not as " \
+                "dangerous as before** because most browsers (ie Chrome) default to HTTPS. Still, these cookies are less secure than those with the Secure flag. ")
+        
         st.subheader("SameSite Cookies")
         st.write("The SameSite attribute is set in place to protect against Cross-Site Request Forgery (CSRF) attacks, where a malicious website tricks the browser into performing unwanted actions." \
         "For example, hackers can inherit the user's cookies and send unauthorized commands to another website, appearing as a 'trusted user'." \
@@ -139,19 +146,25 @@ if isinstance(cookies, pd.DataFrame):
             else:
                 st.write("Cookies will only be sent if the request originates from the same site. Examples of websites that use SameSite = Strict are financial service websites, where privacy of personal information is incredibly crucial.")
         
+        st.subheader("You (or websites) can enhance cookie security using:")
+        st.markdown("- Secure: Only send over HTTPS")
+        st.markdown("- HttpOnly: JavaScript can’t access it (helps prevent XSS-based theft)")
+        st.markdown("- SameSite=Strict or Lax: Limits cross-site access")
+        st.markdown("- Domain/Path: Limits where cookies are valid")
+
     if visualization == 'Persistent Cookies':
         st.header("Persistent Cookies")
         st.write("Let's explore persistent cookies!")
         st.subheader("Persistent vs session cookies")
-        st.write("Persistent cookies are cookies that last beyong a single browsing session "
-        "Reasons for this often include saving settings, login info, preferences, etc. in order "
+        st.write("**Persistent cookies** are cookies that last beyong a single browsing session.")
+        st.write("Reasons for this often include saving settings, login info, preferences, etc. in order "
         "to save time and create a more convenient web browsing experience. Additionally, these " \
         "cookies are often used to track how long a user has been on a page, what language they are " \
         "browsing in, and other information that can be used for marketing/analytical purposes.")
         st.write("The web host of the cookie will set the expiration date. Once this date is "
         "reached, they will either renew the cookie automatically, ask for permission to renew, "
         "or simply delete itself, but this is all dependent of the initial user agreement.")
-        st.write("Cookies that are not persistent are called session cookies, and they expire once "
+        st.write("Cookies that are not persistent are called **session cookies**, and they expire once "
         "the browser is closed.")
         #creating pie chart
         vm.persistent_cookies(cookies)
@@ -159,10 +172,17 @@ if isinstance(cookies, pd.DataFrame):
         "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         "cookie.")
         
-    if visualization == "Third Party Cookies":
-        st.subheader("Third Party Cookies")
+    if visualization == "Third Party Cookies & Privacy":
+        st.header("Third Party Cookies")
         st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
-        st.write("What distinguishes a first party cookie from a third party cookie?")
+        st.write("Here's a helpful visualization demonstrating how third-party cookies *retarget*.")
+        st.image("3rd_retargeting.png", caption = "Source: https://www.performancemarketingworld.com/article/1800951/third-party-cookies")
+        st.write("Third-party servers can combine information from their cookies set on multiple sites, creating a profile of the users. These are called **tracking cookies**." \
+        " For example, if you were looking at a product on a site, they might set a third-party cookie on your browser. " \
+        "You might see the same product advertised to you on a another site since the cookie recognizes your user ID.")
+        st.write("As mentioned in the introduction, many browsers (aside from Google) now block third-party cookies by default. ")
+
+        st.subheader("**What distinguishes a first party cookie from a third party cookie?**")
         df = pd.DataFrame(
             {
                 "Aspect": ["Purpose", "Data Ownership", "Management"],
@@ -175,9 +195,9 @@ if isinstance(cookies, pd.DataFrame):
             }
         )
         st.table(df)
-
-        st.write("We can't access third-party cookies directly from our database, since it's not stored anywhere. However, we can inspect these in real-time on the websites we visit!")
-        with st.expander("**Instructions to investigating your third-party cookies on a website**"):
+        
+        st.write("**We can't access third-party cookies directly from our database, since it's not stored anywhere**. However, we can inspect these in real-time on the websites we visit!")
+        with st.expander("**Instructions for inspecting your third-party cookies on a website**"):
             st.write("Here's a demonstration video of what third party cookies 'look like' on your browser:")
             st.video("3rdparty_DEMO.mov", muted = True)
             st.caption("You can also refresh the webpage to see the cookies pop up...")
@@ -214,8 +234,9 @@ if isinstance(cookies, pd.DataFrame):
     # vm.last_accessed(cookies)
 
     if visualization == "Cookies Over Time":
-        st.subheader("How many cookies do you have over time?")
+        st.subheader("How many cookies have you accumulated over time?")
         vm.last_accessed(cookies)
+        st.write("This graph shows the number of persistent cookies that accumulated over time.")
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.
