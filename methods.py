@@ -322,4 +322,5 @@ def tfsk_example(cookies:pd.DataFrame):
     keys2 = list(tfsk_dict[tfsk].keys())
     host_key = keys2[0]
     st.write("An example from your database:")
-    st.markdown(f"The domain {tfsk} contained a frame which left a cookie from :primary[{host_key}].")
+    st.markdown(f"The domain **{tfsk}** contained a frame which left a cookie from :primary[{host_key}].")
+    st.markdown(f"This means you have a cookie with the host_key value :primary[{host_key}] and the top_frame_site_key value **{tfsk}**.")

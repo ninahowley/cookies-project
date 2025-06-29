@@ -78,6 +78,7 @@ if st.session_state.show_db and isinstance(cookies, pd.DataFrame):
         if selection:
             col2.write(m.display_description(selection))
 
+st.divider()
 st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
 if isinstance(cookies, pd.DataFrame):
@@ -247,11 +248,14 @@ if isinstance(cookies, pd.DataFrame):
                     st.write("None of your cookies contain a value for top frame site key!")
         with col2:
             st.write("**What is a top frame site key?**")
-            st.write("A cookie's value in the 'top_frame_site_key' column specifies the domain of the uppermost frame in a frame hierarchy.")
-            st.write("A 'frame' is created when a website's contents are opened within the bounds of another website using an embedding such as an iframe.\n\nFor example, if a domain 'example.com' embeds a youtube video in their website, youtube may send a cookie with the top frame site key as 'https://example.com'.")
+            st.write("A cookie has a value in the column 'top_frame_site_key' if it was placed while the user was browsing a seperate domain. " \
+            "This happens when a website's contents are embedded on another website, usually through an element such as an iframe.")
+            st.write("The value in this column contains the domain of the website the user was browsing when the cookie was placed."
+            " Most cookies do not have a value for this column.")
             if boo:
                 m.tfsk_example(cookies)
-                st.write("This expander only shows the first 3 domains, to see more expand your database above and sort by top_frame_site_key.")
+            st.write("*ADDING PHOTO HERE*")
+            # st.write("This expander only shows the first 3 domains, to see more you can  expand your database above and sort by top_frame_site_key.")
 
             
 
