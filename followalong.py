@@ -16,8 +16,10 @@ background-size: cover;
 }
 </style>""")
 
-st.header(":cookie: Cookie Exploration Follow Along")
-st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
+st.header(":cookie: Follow Along")
+st.subheader("Explore your cookies and learn about data privacy!")
+
+st.header("Part 1: Upload your data")
 
 # user = os.getlogin()
 # st.write("Hello, ", user)
@@ -45,40 +47,25 @@ with st.expander("Error: This file is in use"):
     st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
     st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
-# if isinstance(cookies, pd.DataFrame):
-#Button to show raw cookies db
-if "show_db" not in st.session_state:
-    st.session_state.show_db = False
-
-def toggle_db():
-    st.session_state.show_db = not st.session_state.show_db
-
-button_label = "Collapse database" if st.session_state.show_db else "Click to see cookies database"
-
-# Use the button to toggle
-st.button(
-    button_label,
-    on_click=toggle_db
-)
-
-
-if st.session_state.show_db and isinstance(cookies, pd.DataFrame):
-    col1, col2 = st.columns((2,1))
+st.header("Part 2: View your raw data")
+if isinstance(cookies, pd.DataFrame):
+    col1, col2 = st.columns((2.5,1))
     with col1:
         m.display_raw_cookies(cookies)
 
-        columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
-                'value', 'encrypted_value', 'path', 'expires_utc',
-                'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
-                'is_persistent', 'priority', 'samesite', 'source_scheme',
-                'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
+columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
+        'value', 'encrypted_value', 'path', 'expires_utc',
+        'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
+        'is_persistent', 'priority', 'samesite', 'source_scheme',
+        'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
 
-        selection = col2.selectbox(options=columns,label="Choose a column to learn more about.")
+selection = col2.selectbox(options=columns,label="Choose a column to learn more about.")
 
-        if selection:
-            col2.write(m.display_description(selection))
+if selection:
+    col2.write(m.display_description(selection))
 
 st.divider()
+st.header("Part 3: Visualize your data")
 st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
 if isinstance(cookies, pd.DataFrame):
@@ -258,7 +245,7 @@ if isinstance(cookies, pd.DataFrame):
             # st.write("This expander only shows the first 3 domains, to see more you can  expand your database above and sort by top_frame_site_key.")
 
             
-
+    # st.write(m.sort_cookie_domains(cookies))
 
     # m.categorize_cookies(cookies)
 
@@ -284,32 +271,6 @@ if isinstance(cookies, pd.DataFrame):
     #     st.write("Paste https://www.wellesley.edu/ below to find out!")
     #     website = cookie_count.text_input('Enter a website:') 
     #     cookies_count = m.get_cookies(website)
-
-    st.divider()
-    st.subheader("Share your cookies")
-    st.write("Streamlit does not automatically save uploaded files.")
-    st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
-    st.write("Our group would like to continue working with cookies in the future, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
-    st.write("If you would like to share your cookies, click the checkbox below.")
-
-
-    consent = st.checkbox("I understand and would like to share my cookies.")
-
-    if consent:
-        
-        cookie_name = m.your_cookie_type(cookies)
-        st.write(f"Your anonymized cookie username is: *{cookie_name}*.")
-
-        upload = st.button("Share my cookies!")
-        if upload:
-            try:
-                db.upload_cookies(cookie_name, cookies)
-            except Exception as e:
-                st.warning("An error occured.")
-    
-    st.divider()
-    st.subheader("We appreciate your feedback!")
-    st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
 
 else:
     st.warning("Please upload your cookies before starting the follow along.")
