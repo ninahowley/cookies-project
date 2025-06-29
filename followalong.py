@@ -254,7 +254,7 @@ if isinstance(cookies, pd.DataFrame):
             " Most cookies do not have a value for this column.")
             if boo:
                 # m.tfsk_example(cookies)
-            st.write("*ADDING PHOTO HERE*")
+            # st.write("*ADDING PHOTO HERE*")
             # st.write("This expander only shows the first 3 domains, to see more you can  expand your database above and sort by top_frame_site_key.")
 
             
