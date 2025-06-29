@@ -47,6 +47,7 @@ with st.expander("Error: This file is in use"):
     st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
     st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
+st.divider()
 st.header("Part 2: View your raw data")
 if isinstance(cookies, pd.DataFrame):
     col1, col2 = st.columns((2.5,1))
@@ -59,16 +60,19 @@ if isinstance(cookies, pd.DataFrame):
             'is_persistent', 'priority', 'samesite', 'source_scheme',
             'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
 
-    selection = col2.selectbox(options=columns,label="**Choose a column to learn more about.**")
+    selection = col2.selectbox(options=columns,label="**Choose a column to learn more about**")
 
     if selection:
         col2.write(m.display_description(selection))
-st.caption("Source: https://medium.com/@tushar_rs_/a-comprehensive-guide-to-cookie-attributes-3893787c4747")
+    st.caption("Source: https://medium.com/@tushar_rs_/a-comprehensive-guide-to-cookie-attributes-3893787c4747")
+else:
+    st.warning("Please upload your cookies.")
+
 st.divider()
 st.header("Part 3: Visualize your data")
-st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
 if isinstance(cookies, pd.DataFrame):
+    st.subheader("Toggle through these topics to visualize your own cookies!")
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
@@ -81,7 +85,6 @@ if isinstance(cookies, pd.DataFrame):
 
     #Cookie Security selection
     if visualization == "First Party Cookies & Cookie Security":
-        st.write("Let's explore first party cookies and cookie security! :cookie: ")
 
         st.subheader("What are First-Party Cookies?")
         st.write("First-party cookies are cookies **set by the domain** and are only used within the domain (ie youtube.com). They are typically used to save **login information and UI settings**.")
@@ -219,7 +222,7 @@ if isinstance(cookies, pd.DataFrame):
             num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
 
         with col1:
-            st.subheader(":cookie: Domains Breakdown")
+            st.header("Domains Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
                 vm.domain_breakdown(sorted_cookies, num)
@@ -273,4 +276,4 @@ if isinstance(cookies, pd.DataFrame):
     #     cookies_count = m.get_cookies(website)
 
 else:
-    st.warning("Please upload your cookies before starting the follow along.")
+    st.warning("Please upload your cookies.")
