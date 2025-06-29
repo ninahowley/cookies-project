@@ -239,7 +239,7 @@ if isinstance(cookies, pd.DataFrame):
             else:
                 vm.domain_breakdown(sorted_cookies, 10)
 
-        st.subheader(":cookie: Top Frame Site Key")
+        st.subheader(":cookie: Top Frame Site Key --> Changing to Name Breakdown")
         col1, col2 = st.columns((1,3))
         with col1:
             with st.expander("Show top frame site keys"):
@@ -253,7 +253,7 @@ if isinstance(cookies, pd.DataFrame):
             st.write("The value in this column contains the domain of the website the user was browsing when the cookie was placed."
             " Most cookies do not have a value for this column.")
             if boo:
-                m.tfsk_example(cookies)
+                # m.tfsk_example(cookies)
             st.write("*ADDING PHOTO HERE*")
             # st.write("This expander only shows the first 3 domains, to see more you can  expand your database above and sort by top_frame_site_key.")
 
