@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd 
 import streamlit.components.v1
+import base64
 
 st.html("""<style>
 [data-testid="stSidebar"]> div:first-child{
@@ -15,8 +16,20 @@ one, two, three, four = st.tabs(["Guide on Cookies", "Managing Cookies", "Browsi
 
 
 with one: 
-     st.write("Here's the link to our comprehensive guide on cookies! If you ever want a little refresher on, for example, the different types of cookies, just revisit this guide! Also, feel free to share this with friends and family :sunglasses:")
-     st.link_button("Click me!", "https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/present?slide=id.g148f9c0646e_0_0")
+     left, right = st.columns((1,2))
+     with left:
+          with open('cookiegif.gif', 'rb') as f:
+               waving = f.read()
+          data_url = base64.b64encode(waving).decode("utf-8")
+          st.markdown(
+          f'''
+          <img src="data:image/gif;base64,{data_url}" alt="cat gif" style="display:block; margin:auto; height:200px;">
+          ''',
+          unsafe_allow_html=True,
+          )
+     with right:
+          st.write("Here's the link to our comprehensive guide on cookies! If you ever want a little refresher on, for example, the different types of cookies, just revisit this guide! Also, feel free to share this with friends and family :sunglasses:")
+          st.link_button("Click me!", "https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/present?slide=id.g148f9c0646e_0_0")
      # streamlit.components.v1.iframe(src="https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/edit?slide=id.g148f9c0646e_0_0", height=1000)
 
 

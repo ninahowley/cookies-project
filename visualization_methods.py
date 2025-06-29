@@ -197,7 +197,28 @@ def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
                     y='Number of Cookies', 
                     title='Number of Cookies per Domain',
                     color="Number of Cookies",
-                    color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13'])
+                    color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13']),
                     )
     st.plotly_chart(fig, key="domains")
+
+
+def tfsk_breakdown(cookies:pd.DataFrame):
+    tfsk_dict = m.get_tfsk_domains(cookies)
+    if tfsk_dict:
+        count = 0
+        for tfsk in tfsk_dict:
+            st.write(f"**{tfsk}**")
+            count2 = 0
+            for hk in tfsk_dict[tfsk]:
+                st.markdown(f":primary[{hk}: {tfsk_dict[tfsk][hk]}]")
+                count2+=1
+                if count2 > 2:
+                    break
+            count+=1
+            if count>=3:
+                break
+        return True
+    else:
+        return False
+
     

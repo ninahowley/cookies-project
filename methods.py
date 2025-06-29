@@ -66,6 +66,39 @@ def get_domain(host_key: str) -> tuple[str, str]:
         return (parts[-2], f".{parts[-1]}")
     except IndexError:
         return str(host_key)
+    
+def get_domain_long(host_key: str) -> tuple[str, str]:
+    """
+    Returns the domain associated with a cookie's host key.
+    """
+    try:
+        parts = str(host_key).split(".")
+        if parts[0].split("/")[-1]:
+            return (parts[0].split("/")[-1], f".{parts[-1]}")
+        else:
+            return (f"{parts[0].strip('/:')}*", f".{parts[-1]}")
+    except IndexError:
+        return str(host_key)
+    
+def get_domain_noindex(host_key: str) -> tuple[str, str]:
+    """
+    Returns the domain associated with a cookie's host key.
+    """
+    try:
+        parts = str(host_key).split(".")
+        return parts[-2]
+    except IndexError:
+        return str(host_key)
+    
+def get_domain_long_noindex(host_key: str) -> tuple[str, str]:
+    """
+    Returns the domain associated with a cookie's host key.
+    """
+    try:
+        parts = str(host_key).split(".")
+        return parts[0].split("/")[-1]
+    except IndexError:
+        return str(host_key)
 
 def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     """
@@ -88,6 +121,7 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     
     else:
         return
+    
     
 def get_num_domains(cookies: pd.DataFrame) -> int:
     """
@@ -238,3 +272,54 @@ def your_cookie_type(cookies):
         # st.write(f'Your cookie is: {cookie}!')
         cookie_name = f"{cookie} {num}"
         return cookie_name
+    
+def get_tfsk_rows(cookies: pd.DataFrame) -> pd.DataFrame:
+    """
+    Returns something...
+    """
+    if isinstance(cookies, pd.DataFrame):
+        cookies_filtered = cookies[cookies['top_frame_site_key'].notna() & (cookies['top_frame_site_key'] != '')]
+        if cookies.empty:
+            return None
+        else:
+            return cookies_filtered
+    else:
+        return None
+    
+def get_tfsk_rows_cleaned(cookies:pd.DataFrame):
+    cookies_filtered = get_tfsk_rows(cookies)
+    if isinstance(cookies_filtered,pd.DataFrame):
+        cookies_filtered['host_key'] = cookies_filtered['host_key'].apply(get_domain_noindex)
+        cookies_filtered['top_frame_site_key'] = cookies_filtered['top_frame_site_key'].apply(get_domain_long_noindex)
+        selected = cookies_filtered[['host_key', 'top_frame_site_key']]
+        return selected
+    else:
+        return None
+    
+def get_tfsk_domains(cookies:pd.DataFrame):
+    cookies_filtered = get_tfsk_rows(cookies)
+    if isinstance(cookies_filtered,pd.DataFrame):
+        tfsk_dict = {}
+        for _,cookie in cookies_filtered.iterrows():
+                tfsk = get_domain_long(cookie['top_frame_site_key'])[0]
+                hk = get_domain(cookie['host_key'])[0]
+                if tfsk not in tfsk_dict:
+                    tfsk_dict[tfsk] = {}
+                
+                if hk not in tfsk_dict[tfsk]:
+                    tfsk_dict[tfsk][hk] = 1
+                else:
+                    tfsk_dict[tfsk][hk] = tfsk_dict[tfsk][hk] + 1
+        return tfsk_dict
+
+    else:
+        return None
+    
+def tfsk_example(cookies:pd.DataFrame):
+    tfsk_dict = get_tfsk_domains(cookies)
+    keys = list(tfsk_dict.keys())
+    tfsk = keys[0] if "*" not in keys[0] else keys[1]
+    keys2 = list(tfsk_dict[tfsk].keys())
+    host_key = keys2[0]
+    st.write("An example from your database:")
+    st.markdown(f"The domain {tfsk} contained a frame which left a cookie from :primary[{host_key}].")

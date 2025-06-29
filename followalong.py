@@ -31,6 +31,12 @@ with st.expander("Instructions to find cookies with your operating system"):
         st.subheader("Mac")
         m.display_mac_filepath()
 
+with st.expander("I want to use the example cookies instead of my own"):
+    st.write("If you want to use the example cookies database, download it from the following link and upload it to the streamlit below.")
+    st.write("[Example Cookie Database](%s)" % "https://drive.google.com/file/d/1VIJxjrw6dsAGH5toMLRULxOVTVXDKreW/view?usp=sharing")
+
+#upload cookies
+cookies = m.upload_cookies()
 with st.expander("Error: This file is in use"):
     st.write("This error occurs when you are currently logged into and using the account associated with that database.")
     st.write("Each chrome profile has it's own unique cookies database.")
@@ -38,9 +44,6 @@ with st.expander("Error: This file is in use"):
     st.write("Simply choose 'Profile 1', 'Profile 2', (or 'Profile 3', etc...) instead of 'Default' in the filepath.")
     st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
     st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
-
-#upload cookies
-cookies = m.upload_cookies()
 
 # if isinstance(cookies, pd.DataFrame):
 #Button to show raw cookies db
@@ -81,7 +84,7 @@ if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy", "Persistent Cookies", "Cookies Over Time"],
+        ["Domain Exploration", "Persistent Cookies", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
         index=None,
         placeholder="Select a topic to explore..."
     )
@@ -111,7 +114,7 @@ if isinstance(cookies, pd.DataFrame):
         st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
         vm.pie_chart(cookies)
         st.write("The graph above shows the total number of domains that only have secure cookies, insecure cookies, and both secure and insecure." \
-                "As you can see, most domains have both secure and insecure cookies. This may be the case because we aggregated all subdomains together.")
+                " As you can see, most domains have both secure and insecure cookies. This may be the case because we aggregated all subdomains together.")
         
         col1, col2 = st.columns((3,1))
         with col2:
@@ -171,6 +174,13 @@ if isinstance(cookies, pd.DataFrame):
         st.write("In your cookie database, you may see that the is_persistent column has values of either "
         "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         "cookie.")
+        st.subheader("How many cookies have you accumulated over time?")
+        vm.last_accessed(cookies)
+        st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
+        "Right now, all of these cookies exist in your cookies database and you can see on what date " \
+        "they were created. You can see these values in the \"creation_utc\" column of your database, "
+        "but these values need to be converted to standard datetimes, which we have done for you in " \
+        "the graph.")
         
     if visualization == "Third Party Cookies & Privacy":
         st.header("Third Party Cookies")
@@ -194,7 +204,8 @@ if isinstance(cookies, pd.DataFrame):
                             "Supported by all browsers but increasingly blocked by default"]
             }
         )
-        st.table(df)
+        st.dataframe(df, hide_index=True)
+
         
         st.write("**We can't access third-party cookies directly from our database, since it's not stored anywhere**. However, we can inspect these in real-time on the websites we visit!")
         with st.expander("**Instructions for inspecting your third-party cookies on a website**"):
@@ -209,29 +220,54 @@ if isinstance(cookies, pd.DataFrame):
 
     #creating some initial visualizations
     if visualization == "Domain Exploration":
-        st.subheader("What is a domain name?")
-        st.write("A domain name is a text that a user types into a browser window to reach a particular website. For example, Google's domain name is 'google.com'. Youtube's domain name is 'youtube.com'.")
-        st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
-
         col1, col2 = st.columns((3,1))
         with col2:
-            st.markdown("<br><br><br><br><br><br><br>", unsafe_allow_html=True)
+            st.write("")
+            st.write("**What is a domain name?**")
+            st.write("A domain name is the text that a user types into a browser window to reach a website. For example, Google's domain name is 'google.com'.")
+            st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
+            st.write("The domain that a cookie belongs to can be found as the value for the 'host_key' column.")
+            st.write("")
             num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+
         with col1:
+            st.subheader(":cookie: Domains Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
                 vm.domain_breakdown(sorted_cookies, num)
             else:
                 vm.domain_breakdown(sorted_cookies, 10)
 
+        st.subheader(":cookie: Top Frame Site Key")
+        col1, col2 = st.columns((1,3))
+        with col1:
+            with st.expander("Show top frame site keys"):
+                boo = vm.tfsk_breakdown(cookies)
+                if not boo:
+                    st.write("None of your cookies contain a value for top frame site key!")
+        with col2:
+            st.write("**What is a top frame site key?**")
+            st.write("A cookie's value in the 'top_frame_site_key' column specifies the domain of the uppermost frame in a frame hierarchy.")
+            st.write("A 'frame' is created when a website's contents are opened within the bounds of another website using an embedding such as an iframe.\n\nFor example, if a domain 'example.com' embeds a youtube video in their website, youtube may send a cookie with the top frame site key as 'https://example.com'.")
+            if boo:
+                m.tfsk_example(cookies)
+                st.write("This expander only shows the first 3 domains, to see more expand your database above and sort by top_frame_site_key.")
+
+            
+
+
     # m.categorize_cookies(cookies)
 
     # vm.last_accessed(cookies)
 
-    if visualization == "Cookies Over Time":
-        st.subheader("How many cookies have you accumulated over time?")
-        vm.last_accessed(cookies)
-        st.write("This graph shows the number of persistent cookies that accumulated over time.")
+    # if visualization == "Cookies Over Time":
+    #     st.subheader("How many cookies have you accumulated over time?")
+    #     vm.last_accessed(cookies)
+    #     st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
+    #     "Right now, all of these cookies exist in your cookies database and you can see on what date " \
+    #     "they were created. You can see these values in the \"creation_utc\" column of your database, "
+    #     "but these values need to be converted to standard datetimes, which we have done for you in " \
+    #     "the graph.")
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.
@@ -270,7 +306,6 @@ if isinstance(cookies, pd.DataFrame):
     st.divider()
     st.subheader("We appreciate your feedback!")
     st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
-
 
 else:
     st.warning("Please upload your cookies before starting the follow along.")
