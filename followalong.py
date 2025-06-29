@@ -85,7 +85,7 @@ if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "Cookie Duration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
+        ["Cookie Duration", "Domain Exploration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
         index=None,
         placeholder="Select a topic to explore..."
     )

@@ -202,10 +202,11 @@ def tfsk_breakdown(cookies:pd.DataFrame):
             st.write(f"**{tfsk}**")
             count2 = 0
             for hk in tfsk_dict[tfsk]:
-                st.markdown(f":primary[{hk}: {tfsk_dict[tfsk][hk]}]")
-                count2+=1
-                if count2 > 2:
-                    break
+                if hk != tfsk:
+                    st.markdown(f":primary[{hk}: {tfsk_dict[tfsk][hk]}]")
+                    count2+=1
+                    if count2 > 2:
+                        break
             count+=1
             if count>=3:
                 break
