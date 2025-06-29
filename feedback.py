@@ -10,8 +10,7 @@ background-size: cover;
 }
 </style>""")
 
-st.header(":cookie: Feedback")
+st.header(":cookie: Share Your Thoughts")
 
-st.header("Part 5: Share your thoughts")
 st.subheader("We appreciate your feedback!")
 st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
