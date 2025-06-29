@@ -64,12 +64,14 @@ if isinstance(cookies, pd.DataFrame):
     if selection:
         col2.write(m.display_description(selection))
     st.caption("Source: https://medium.com/@tushar_rs_/a-comprehensive-guide-to-cookie-attributes-3893787c4747")
+else:
+    st.warning("Please upload your cookies.")
 
 st.divider()
 st.header("Part 3: Visualize your data")
-st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
 
 if isinstance(cookies, pd.DataFrame):
+    st.subheader("Toggle through these topics to visualize your own cookies!")
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
@@ -273,4 +275,4 @@ if isinstance(cookies, pd.DataFrame):
     #     cookies_count = m.get_cookies(website)
 
 else:
-    st.warning("Please upload your cookies before starting the follow along.")
+    st.warning("Please upload your cookies.")
