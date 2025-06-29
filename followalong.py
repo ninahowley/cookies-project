@@ -47,6 +47,7 @@ with st.expander("Error: This file is in use"):
     st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
     st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
+st.divider()
 st.header("Part 2: View your raw data")
 if isinstance(cookies, pd.DataFrame):
     col1, col2 = st.columns((2.5,1))
