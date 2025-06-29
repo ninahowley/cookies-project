@@ -59,7 +59,7 @@ if isinstance(cookies, pd.DataFrame):
             'is_persistent', 'priority', 'samesite', 'source_scheme',
             'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
 
-    selection = col2.selectbox(options=columns,label="**Choose a column to learn more about.**")
+    selection = col2.selectbox(options=columns,label="**Choose a column to learn more about**")
 
     if selection:
         col2.write(m.display_description(selection))
@@ -83,7 +83,6 @@ if isinstance(cookies, pd.DataFrame):
 
     #Cookie Security selection
     if visualization == "First Party Cookies & Cookie Security":
-        st.write("Let's explore first party cookies and cookie security! :cookie: ")
 
         st.subheader("What are First-Party Cookies?")
         st.write("First-party cookies are cookies **set by the domain** and are only used within the domain (ie youtube.com). They are typically used to save **login information and UI settings**.")
@@ -221,7 +220,7 @@ if isinstance(cookies, pd.DataFrame):
             num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
 
         with col1:
-            st.subheader(":cookie: Domains Breakdown")
+            st.header("Domains Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
                 vm.domain_breakdown(sorted_cookies, num)
