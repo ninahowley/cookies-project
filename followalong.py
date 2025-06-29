@@ -172,7 +172,7 @@ if isinstance(cookies, pd.DataFrame):
         
     if visualization == "Third Party Cookies & Privacy":
         st.header("Third Party Cookies")
-        st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
+        st.write("A **third party cookie** is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
         st.write("Here's a helpful visualization demonstrating how third-party cookies *retarget*.")
         st.image("3rd_retargeting.png", caption = "Source: https://www.performancemarketingworld.com/article/1800951/third-party-cookies")
         st.write("Third-party servers can combine information from their cookies set on multiple sites, creating a profile of the users. These are called **tracking cookies**." \
