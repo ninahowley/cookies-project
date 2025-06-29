@@ -63,7 +63,7 @@ selection = col2.selectbox(options=columns,label="Choose a column to learn more 
 
 if selection:
     col2.write(m.display_description(selection))
-
+st.caption("Source: https://medium.com/@tushar_rs_/a-comprehensive-guide-to-cookie-attributes-3893787c4747")
 st.divider()
 st.header("Part 3: Visualize your data")
 st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
