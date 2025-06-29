@@ -31,6 +31,12 @@ with st.expander("Instructions to find cookies with your operating system"):
         st.subheader("Mac")
         m.display_mac_filepath()
 
+with st.expander("I want to use the example cookies instead of my own"):
+    st.write("If you want to use the example cookies database, download it from the following link and upload it to the streamlit below.")
+    st.write("[Example Cookie Database](%s)" % "https://drive.google.com/file/d/1VIJxjrw6dsAGH5toMLRULxOVTVXDKreW/view?usp=sharing")
+
+#upload cookies
+cookies = m.upload_cookies()
 with st.expander("Error: This file is in use"):
     st.write("This error occurs when you are currently logged into and using the account associated with that database.")
     st.write("Each chrome profile has it's own unique cookies database.")
@@ -38,9 +44,6 @@ with st.expander("Error: This file is in use"):
     st.write("Simply choose 'Profile 1', 'Profile 2', (or 'Profile 3', etc...) instead of 'Default' in the filepath.")
     st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
     st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
-
-#upload cookies
-cookies = m.upload_cookies()
 
 # if isinstance(cookies, pd.DataFrame):
 #Button to show raw cookies db
@@ -81,7 +84,7 @@ if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy", "Persistent Cookies", "Cookies Over Time"],
+        ["Domain Exploration", "Persistent Cookies", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
         index=None,
         placeholder="Select a topic to explore..."
     )
@@ -171,6 +174,13 @@ if isinstance(cookies, pd.DataFrame):
         st.write("In your cookie database, you may see that the is_persistent column has values of either "
         "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         "cookie.")
+        st.subheader("How many cookies have you accumulated over time?")
+        vm.last_accessed(cookies)
+        st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
+        "Right now, all of these cookies exist in your cookies database and you can see on what date " \
+        "they were created. You can see these values in the \"creation_utc\" column of your database, "
+        "but these values need to be converted to standard datetimes, which we have done for you in " \
+        "the graph.")
         
     if visualization == "Third Party Cookies & Privacy":
         st.header("Third Party Cookies")
@@ -241,6 +251,7 @@ if isinstance(cookies, pd.DataFrame):
             st.write("A 'frame' is created when a website's contents are opened within the bounds of another website using an embedding such as an iframe.\n\nFor example, if a domain 'example.com' embeds a youtube video in their website, youtube may send a cookie with the top frame site key as 'https://example.com'.")
             if boo:
                 m.tfsk_example(cookies)
+                st.write("This expander only shows the first 3 domains, to see more expand your database above and sort by top_frame_site_key.")
 
             
 
@@ -249,14 +260,14 @@ if isinstance(cookies, pd.DataFrame):
 
     # vm.last_accessed(cookies)
 
-    if visualization == "Cookies Over Time":
-        st.subheader("How many cookies have you accumulated over time?")
-        vm.last_accessed(cookies)
-        st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
-        "Right now, all of these cookies exist in your cookies database and you can see on what date " \
-        "they were created. You can see these values in the \"creation_utc\" column of your database, "
-        "but these values need to be converted to standard datetimes, which we have done for you in " \
-        "the graph.")
+    # if visualization == "Cookies Over Time":
+    #     st.subheader("How many cookies have you accumulated over time?")
+    #     vm.last_accessed(cookies)
+    #     st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
+    #     "Right now, all of these cookies exist in your cookies database and you can see on what date " \
+    #     "they were created. You can see these values in the \"creation_utc\" column of your database, "
+    #     "but these values need to be converted to standard datetimes, which we have done for you in " \
+    #     "the graph.")
 
     # Creating a form submission to count the number of cookies on a single website. 
     # We can use it for our wellesley college website demo.

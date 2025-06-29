@@ -207,9 +207,7 @@ def tfsk_breakdown(cookies:pd.DataFrame):
                 if count2 > 2:
                     break
             count+=1
-            if count>=5:
-                st.write("This expander only shows the first 5 domains.")
-                st.write("To see more, expand your database above and sort by top_frame_site_key.")
+            if count>=3:
                 break
         return True
     else:
