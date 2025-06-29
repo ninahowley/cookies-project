@@ -252,7 +252,7 @@ if isinstance(cookies, pd.DataFrame):
             "This happens when a website's contents are embedded on another website, usually through an element such as an iframe.")
             st.write("The value in this column contains the domain of the website the user was browsing when the cookie was placed."
             " Most cookies do not have a value for this column.")
-            if boo:
+            # if boo:
                 # m.tfsk_example(cookies)
             # st.write("*ADDING PHOTO HERE*")
             # st.write("This expander only shows the first 3 domains, to see more you can  expand your database above and sort by top_frame_site_key.")
