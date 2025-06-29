@@ -85,7 +85,7 @@ if isinstance(cookies, pd.DataFrame):
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "Persistent Cookies", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
+        ["Domain Exploration", "Cookie Duration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
         index=None,
         placeholder="Select a topic to explore..."
     )
@@ -156,9 +156,9 @@ if isinstance(cookies, pd.DataFrame):
         st.markdown("- SameSite=Strict or Lax: Limits cross-site access")
         st.markdown("- Domain/Path: Limits where cookies are valid")
 
-    if visualization == 'Persistent Cookies':
-        st.header("Persistent Cookies")
-        st.write("Let's explore persistent cookies!")
+    if visualization == 'Cookie Duration':
+        st.header("Cookie Duration")
+        st.write("Let's explore cookie durations!")
         st.subheader("Persistent vs session cookies")
         st.write("**Persistent cookies** are cookies that last beyong a single browsing session.")
         st.write("Reasons for this often include saving settings, login info, preferences, etc. in order "
