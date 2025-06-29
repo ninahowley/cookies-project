@@ -109,7 +109,14 @@ def sameSite(cookies):
             "Count": [none, lax, strict]
         })
 
-        fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution")
+        fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution", 
+                     color = "SameSite",
+                     color_discrete_map = {
+                    'None': '#fae1b8',
+                    'Strict': '#3f1c13',
+                    'Lax*': '#dc8e5e',
+                }
+                     )
         st.plotly_chart(fig, key="samesite")
     else:
         st.write("No data yet. Input data for visualization.")
@@ -141,9 +148,9 @@ def pie_chart(cookies):
     }
     df_counts = pd.DataFrame(data)
 
-    fig = px.bar(df_counts, 
-                x = "Security Status", 
-                y = "Count",
+    fig = px.pie(df_counts, 
+                names = "Security Status", 
+                values = "Count",
                 title='Number of Domains by Cookie Security', 
                 color = "Security Status",
                 color_discrete_map = {
@@ -151,7 +158,7 @@ def pie_chart(cookies):
                     'Only Not Secure': '#3f1c13',
                     'Both': '#dc8e5e',
                 })
-    fig.update_layout(showlegend=False)
+    fig.update_layout(showlegend=True)
     st.plotly_chart(fig, key="pie_chart")
    
 #domain double bar chart
@@ -162,6 +169,7 @@ def double_bar(cookies, num):
         df['domain'] = df['host_key'].str.lstrip('.').str.split('.').str[-2:].str.join('.')
 
         counts = df.groupby(['domain', 'is_secure']).size().reset_index(name='count').sort_values(by='count', ascending = False)
+        #st.write(counts)
         # Convert is_secure to string labels before plotting
         counts['is_secure'] = counts['is_secure'].map({1: 'Secure', 0: 'Not Secure'})
 

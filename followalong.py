@@ -146,12 +146,12 @@ if isinstance(cookies, pd.DataFrame):
             else:
                 st.write("Cookies will only be sent if the request originates from the same site. Examples of websites that use SameSite = Strict are financial service websites, where privacy of personal information is incredibly crucial.")
         
-        st.subheader("You (or websites) can enhance cookie security using:")
+        st.subheader("Most Secure cookies:")
         st.markdown("- Secure: Only send over HTTPS")
         st.markdown("- HttpOnly: JavaScript can’t access it (helps prevent XSS-based theft)")
         st.markdown("- SameSite=Strict or Lax: Limits cross-site access")
         st.markdown("- Domain/Path: Limits where cookies are valid")
-
+        
     if visualization == 'Persistent Cookies':
         st.header("Persistent Cookies")
         st.write("Let's explore persistent cookies!")
