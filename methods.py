@@ -329,3 +329,21 @@ def tfsk_example(cookies:pd.DataFrame):
     st.markdown(f"This means you have a cookie with the host_key value :primary[{host_key}] and the top_frame_site_key value **{tfsk}**.")
 
     
+def sort_cookie_names(cookies: pd.DataFrame) -> dict:
+    if isinstance(cookies, pd.DataFrame):
+        names = cookies['name']
+        name_dict = {}
+        for key in names:
+            domain = get_domain(key)
+            if domain not in name_dict:
+                name_dict[domain] = 1
+            else:
+                name_dict[domain] = name_dict[domain] +1
+
+        df = pd.DataFrame(name_dict.items(), columns=["Name", "Number of Cookies"])
+        sorted_df = df.sort_values(by=['Number of Cookies'], ascending=False)
+
+        return sorted_df
+    
+    else:
+        return

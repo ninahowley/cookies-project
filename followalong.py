@@ -213,43 +213,56 @@ if isinstance(cookies, pd.DataFrame):
 
     #creating some initial visualizations
     if visualization == "Domain Exploration":
+        st.header("Domain Exploration")
         col1, col2 = st.columns((3,1))
         with col2:
-            st.write("")
             st.write("**What is a domain name?**")
             st.write("A domain name is the text that a user types into a browser window to reach a website. For example, Google's domain name is 'google.com'.")
             st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
             st.write("The domain that a cookie belongs to can be found as the value for the 'host_key' column.")
             st.write("")
-            num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+            num1 = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
 
         with col1:
-            st.header("Domains Breakdown")
+            st.subheader(":cookie: Domain Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
-            if num:
-                vm.domain_breakdown(sorted_cookies, num, "Number of Cookies per Domain", "1")
+            if num1:
+                vm.domain_breakdown(sorted_cookies, num1, "Number of Cookies per Domain", "1")
             else:
                 vm.domain_breakdown(sorted_cookies, 10, "Number of Cookies per Domain", "2")
         
         st.write("If you don't recognize some of these domain names, don't worry! Many of the cookies on your device will be 'third party' cookies. You will learn more about what this means later, and you can exlpore these cookies in the 'First vs Third Party Cookies' tab.")
 
-        st.subheader(":cookie: Top Frame Site Key --> Changing to Name Breakdown")
-        col1, col2 = st.columns((1,3))
-        with col1:
-            with st.expander("Show top frame site keys"):
-                boo = vm.tfsk_breakdown(cookies)
-                if not boo:
-                    st.write("None of your cookies contain a value for top frame site key!")
+        st.subheader(":cookie: Name Breakdown")
+        col1, col2 = st.columns((3,1))
         with col2:
-            st.write("**What is a top frame site key?**")
-            st.write("A cookie has a value in the column 'top_frame_site_key' if it was placed while the user was browsing a seperate domain. " \
-            "This happens when a website's contents are embedded on another website, usually through an element such as an iframe.")
-            st.write("The value in this column contains the domain of the website the user was browsing when the cookie was placed."
-            " Most cookies do not have a value for this column.")
-            # if boo:
-                # m.tfsk_example(cookies)
-            # st.write("*ADDING PHOTO HERE*")
-            # st.write("This expander only shows the first 3 domains, to see more you can  expand your database above and sort by top_frame_site_key.")
+            st.write("**What is a cookie name?**")
+            st.write("A cookie's name is the unique identifier for a cookie.")
+            st.write("This identifier helps websites and browsers track the purpose of a cookie.")
+            st.write("Some cookie names are very common, such as '_ga', which you likely see in your graph.")
+            st.write("")
+            num2 = st.slider(label="**Number of names to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10, key="slide2")
+
+        with col1:
+            sorted_cookies = m.sort_cookie_names(cookies)
+            if num2:
+                vm.name_breakdown(sorted_cookies, num2, "Number of Cookies per Name", "3")
+            else:
+                vm.name_breakdown(sorted_cookies, 10, "Number of Cookies per Name", "4")
+        
+        col1, col2 = st.columns((2))
+        with col1:
+            st.dataframe(sorted_cookies, hide_index=True, )
+        with col2:
+            st.write("To the left are all of the cookie names in your database, sorted by how often they appear.")
+            st.write("There are many online resources that can help us identify the purpose of a cookie, including one called 'cookiepedia'.")
+            st.write("If you know the name of a cookie, you can use this website to learn more about it.")
+            st.write("For example, below is cookiepedia's page on the cookie name '_ga', showing that it is associated with Google Analytics.")
+            st.write("**[https://cookiepedia.co.uk/cookies/_ga](%s)**" %"https://cookiepedia.co.uk/cookies/_ga")
+            st.write("Not all cookies will have such a complete description, or even a description at all. There so many cookie names out there, with many being untracked.")
+            st.write("Does your database have 'uid' or 'OTZ'? Try looking these up!")
+
+
 
             
     # st.write(m.sort_cookie_domains(cookies))
