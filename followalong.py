@@ -255,17 +255,28 @@ if isinstance(cookies, pd.DataFrame):
             else:
                 vm.name_breakdown(sorted_cookies, 10, "Number of Cookies per Name", "4")
         
-        col1, col2 = st.columns((2))
+        names = sorted_cookies['Name'].tolist()
+
+        st.write("There are many online resources that can help us identify the purpose of a cookie, including sites such as 'cookiepedia' and 'cookiesearch'. If you know the name of a cookie, you can use this website to learn more about it.")
+        st.write("For example, below is cookiepedia's page on the cookie name '_ga', showing that it is associated with Google Analytics.")
+        st.write("**[https://cookiepedia.co.uk/cookies/_ga](%s)**" %"https://cookiepedia.co.uk/cookies/_ga")
+        st.write("Not all cookies will have such a complete description, or even a description at all. There so many cookie names out there, with many being untracked.")
+        st.write(f"Your database alone includes {m.get_num_names(cookies)} unique cookie names!")
+        
+        col1, col2 = st.columns((1,2))
         with col1:
-            st.dataframe(sorted_cookies, hide_index=True, )
+            st.dataframe(sorted_cookies["Name"], hide_index=True, height=280)
         with col2:
             st.write("To the left are all of the cookie names in your database, sorted by how often they appear.")
-            st.write("There are many online resources that can help us identify the purpose of a cookie, including one called 'cookiepedia'. If you know the name of a cookie, you can use this website to learn more about it.")
-            st.write("For example, below is cookiepedia's page on the cookie name '_ga', showing that it is associated with Google Analytics.")
-            st.write("**[https://cookiepedia.co.uk/cookies/_ga](%s)**" %"https://cookiepedia.co.uk/cookies/_ga")
-            st.write("Not all cookies will have such a complete description, or even a description at all. There so many cookie names out there, with many being untracked.")
-            st.write(f"Your database includes {m.get_num_names(cookies)} unique cookie names!")
+            st.write("Choose a cookie name from the menu below to check if there is any info about it online!")
             st.write("Does your database have 'uid' or 'OTZ'? Try looking these up!")
+            selection = st.selectbox("Select a name to search", names)
+            if selection:
+                url1 = f"https://cookiepedia.co.uk/cookies/{selection}"
+                url2 = f"https://cookiesearch.org/cookies/?search-term={selection}&filter-type=cookie-name&sort=asc&cookie-id={selection}"
+                st.write(f":cookie: **[Cookiepedia: {selection}](%s)**" %url1)
+                st.write(f":cookie: **[Cookiesearch: {selection}](%s)**" %url2)
+
 
 
 
