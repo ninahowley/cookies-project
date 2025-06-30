@@ -72,7 +72,7 @@ def clean_cookies(cookies: pd.DataFrame):
         except Exception as e:
             return None
 
-def check_existing(cookies: pd.DataFrame):
+def check_existing(cookies: pd.DataFrame) -> bool:
     """
     WIP.
     Checks if a user has already uploaded their cookies.
@@ -81,7 +81,7 @@ def check_existing(cookies: pd.DataFrame):
     conn = connect_db()
     cur = conn.cursor()
 
-    rows = cookies.head(10)
+    rows = cookies.head(100)
     num = 0
     for index, _ in rows.iterrows():
         row = rows.loc[index].values.tolist()
@@ -124,7 +124,7 @@ def upload_cookies(username: str, cookies: pd.DataFrame):
         conn.close()
         db_sync.push_db_to_github()
 
-def get_db():
+def get_db() -> pd.DataFrame:
     db_sync.download_db_from_github()
     conn = connect_db()
 
