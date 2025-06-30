@@ -76,7 +76,7 @@ if isinstance(cookies, pd.DataFrame):
                         mime="text/plain"
                     )
                 with col2:
-                    vm.domain_breakdown(visited_df, num1, "Number of Cookies per First Party Domain", "3")
+                    vm.domain_breakdown(visited_df, num1, "Number of Cookies per Known Domain", "3")
             else:
                 st.markdown("*No websites marked as visited.*")
 
@@ -95,7 +95,7 @@ if isinstance(cookies, pd.DataFrame):
                         mime="text/plain"
                     )
                 with col2:
-                    vm.domain_breakdown(unvisited_df, num2, "Number of Cookies per Third Party Domain", "4")
+                    vm.domain_breakdown(unvisited_df, num2, "Number of Cookies per Unknown Domain", "4")
             else:
                 st.markdown("*No websites marked as unknown.*")
             
