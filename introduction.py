@@ -58,9 +58,3 @@ st.write("However, cookies can be harmful when they turn into **tracking cookies
 "Many browsers—such as Firefox, Brave, and Safari—have completely banned third-party cookies. " \
 "Google has yet to ban them, but has enforced an opt-in system.")
 
-st.subheader("Go to the Follow Along tab to learn more! ")
-st.write("In this interactive website, you will learn about...")
-st.markdown("- First Party Cookies and Cookie Security")
-st.markdown("- Third Party Cookies and Privacy")
-st.markdown("- Persistent Cookies")
-st.markdown("- Cookies over time")
