@@ -73,7 +73,10 @@ def get_domain_tld(host_key: str) -> tuple[str, str]:
     """
     try:
         parts = str(host_key).split(".")
-        return (f"{parts[-2]}.{parts[-1]}")
+        if parts[-2] != "co" and parts[-2] != "com":
+            return (f"{parts[-2]}.{parts[-1]}")
+        else:
+            return (f"{parts[-3]}.{parts[-2]}.{parts[-1]}")
     except IndexError:
         return str(host_key)
     
@@ -329,3 +332,34 @@ def tfsk_example(cookies:pd.DataFrame):
     st.markdown(f"This means you have a cookie with the host_key value :primary[{host_key}] and the top_frame_site_key value **{tfsk}**.")
 
     
+def sort_cookie_names(cookies: pd.DataFrame) -> dict:
+    if isinstance(cookies, pd.DataFrame):
+        names = cookies['name']
+        name_dict = {}
+        for key in names:
+            domain = get_domain(key)
+            if domain not in name_dict:
+                name_dict[domain] = 1
+            else:
+                name_dict[domain] = name_dict[domain] +1
+
+        df = pd.DataFrame(name_dict.items(), columns=["Name", "Number of Cookies"])
+        sorted_df = df.sort_values(by=['Number of Cookies'], ascending=False)
+
+        return sorted_df
+    
+    else:
+        return
+    
+def get_num_names(cookies: pd.DataFrame) -> int:
+    if isinstance(cookies, pd.DataFrame):
+        names = cookies['name']
+        names_list = []
+        for name in names:
+            if name not in names_list:
+                names_list.append(name)
+
+        return len(names_list)
+    
+    else:
+        return

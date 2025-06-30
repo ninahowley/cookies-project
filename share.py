@@ -12,12 +12,13 @@ background-size: cover;
 
 st.header(":cookie: Share Your Data")
 
+st.write("Our group would like to continue working with cookies to investigate the lack of transparency behind the deployment of third-party cookies, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
+
 cookies = m.upload_cookies()
 
 if isinstance(cookies, pd.DataFrame):
     st.write("Streamlit does not automatically save uploaded files.")
     st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
-    st.write("Our group would like to continue working with cookies in the future, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
     st.write("If you would like to share your cookies, click the checkbox below.")
 
     consent = st.checkbox("I understand and would like to share my cookies.")
