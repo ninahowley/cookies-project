@@ -41,6 +41,8 @@ with two:
      "While this does not guarantee that your information will not be tracked, since the exact response depends on how the website interprets this request, it is still /" \
      "an extra protective guardrail against potential privacy violations.")
 
+
+
 with three: 
      st.subheader("How should you navigate cookies when browsing websites?")
      st.markdown("**1.** Read cookie pop-ups and review your options before selecting your cookie preferences for each site you visit.")
