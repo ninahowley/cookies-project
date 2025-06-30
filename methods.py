@@ -174,39 +174,41 @@ def categorize_cookies(cookies):
         reader = csv.DictReader(f)
         all_cookies = list(reader)
 
-    domains = [row["Domain"] for row in all_cookies]
+    all_names = [row["Cookie / Data Key name"] for row in all_cookies]
     category = [row["Category"] for row in all_cookies]
-    dom_cat = dict(zip(domains, category))
+    dom_cat = dict(zip(all_names, category))
     if isinstance(cookies, pd.DataFrame):
-        host_keys = cookies['host_key'].unique()
+        names = cookies['name'].unique()
         domain_dict = {}
-        for key in host_keys:
-            if key.lstrip('.') in dom_cat.keys() and key not in domain_dict.keys():
-                key_stripped = key.lstrip('.')
-                print(f"{key_stripped} in database")
-                domain_dict[key] = dom_cat[key_stripped]
+        for name in names:
+            if name in dom_cat.keys() and name not in domain_dict.keys():
+                domain_dict[name] = dom_cat[name]
+            # else:
+            #     base_url = f'https://cookiepedia.co.uk/website/{key_stripped}'
+            #     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
+            #     response = requests.get("http://httpbin.io/user-agent", headers=headers)
+            #     response = requests.get(base_url, headers=headers)
+            #     if response.status_code == 200:
+            #         try:
+            #             soup = BeautifulSoup(response.text, 'html.parser')
+            #             cookie_type = soup.find(class_='cookie-details clearfix')
+            #             cookie_type = cookie_type.find_all('li')
+            #             cookie_type = str(cookie_type[0]).split(' ')[-1]
+            #             cookie_type = cookie_type.split('<')[0]
+            #             domain_dict[key] = cookie_type
+            #             time.sleep(2)
+            #             print(f'{key} retrieved')
+            #         except:
+            #             domain_dict[key] = 'Unknown'
+            elif "_ga" in name or "_pk" in name:
+                domain_dict[name] = "Analytics"
+            elif "_uin" in name or "_uir" in name or "KRTB" in name:
+                domain_dict[name] = "Marketing"
             else:
-                base_url = f'https://cookiepedia.co.uk/website/{key_stripped}'
-                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
-                response = requests.get("http://httpbin.io/user-agent", headers=headers)
-                response = requests.get(base_url, headers=headers)
-                if response.status_code == 200:
-                    try:
-                        soup = BeautifulSoup(response.text, 'html.parser')
-                        cookie_type = soup.find(class_='cookie-details clearfix')
-                        cookie_type = cookie_type.find_all('li')
-                        cookie_type = str(cookie_type[0]).split(' ')[-1]
-                        cookie_type = cookie_type.split('<')[0]
-                        domain_dict[key] = cookie_type
-                        time.sleep(2)
-                        print(f'{key} retrieved')
-                    except:
-                        domain_dict[key] = 'Unknown'
-                else:
-                    domain_dict[key] = 'Unknown'
-                    print(f'{key} not found')
+                print(f'{name} not found')
+                #domain_dict[name] = "Unknown"
 
-        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
+        df = pd.DataFrame(domain_dict.items(), columns=["Name", "Type"])
         st.header("Categorization of your cookies")
         st.dataframe(df)
 

@@ -213,4 +213,9 @@ def tfsk_breakdown(cookies:pd.DataFrame):
     else:
         return False
 
-    
+def average_expiration_date(cookies):
+    if isinstance(cookies, pd.DataFrame):
+        df = cookies.copy()
+        average = df['expires_utc'].mean()
+        average = convert_time(average)
+        return average

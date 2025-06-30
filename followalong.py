@@ -160,21 +160,24 @@ if isinstance(cookies, pd.DataFrame):
         st.header("Cookie Duration")
         st.write("Let's explore cookie durations!")
         st.subheader("Persistent vs session cookies")
-        st.write("**Persistent cookies** are cookies that last beyong a single browsing session.")
+        st.write("**Persistent cookies** are cookies that last beyond a single browsing session.")
         st.write("Reasons for this often include saving settings, login info, preferences, etc. in order "
-        "to save time and create a more convenient web browsing experience. Additionally, these " \
-        "cookies are often used to track how long a user has been on a page, what language they are " \
-        "browsing in, and other information that can be used for marketing/analytical purposes.")
+        "to save time and create a more convenient web browsing experience. They can also be used "
+        "for marketing/analytical purposes.")
         st.write("The web host of the cookie will set the expiration date. Once this date is "
         "reached, they will either renew the cookie automatically, ask for permission to renew, "
         "or simply delete itself, but this is all dependent of the initial user agreement.")
         st.write("Cookies that are not persistent are called **session cookies**, and they expire once "
         "the browser is closed.")
         #creating pie chart
-        vm.persistent_cookies(cookies)
-        st.write("In your cookie database, you may see that the is_persistent column has values of either "
-        "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
-        "cookie.")
+        # vm.persistent_cookies(cookies)
+        # st.write("In your cookie database, you may see that the is_persistent column has values of either "
+        # "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
+        # "cookie.")
+        st.subheader("Average Expiration Date")
+        st.write("Let's see the average expiration date for your persistent cookies!")
+        exp = vm.average_expiration_date(cookies).strftime("%m/%d/%Y")
+        st.write(f"On average, your cookies will expire on {exp}")
         st.subheader("How many cookies have you accumulated over time?")
         vm.last_accessed(cookies)
         st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
@@ -260,7 +263,7 @@ if isinstance(cookies, pd.DataFrame):
             
 
 
-    # m.categorize_cookies(cookies)
+    #m.categorize_cookies(cookies)
 
     # vm.last_accessed(cookies)
 
