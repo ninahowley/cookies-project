@@ -164,7 +164,7 @@ if isinstance(cookies, pd.DataFrame):
         # st.write("In your cookie database, you may see that the is_persistent column has values of either "
         # "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         # "cookie.")
-        st.subheader("Average Expiration Date")
+        st.subheader("Expiration Dates")
         st.write("Let's see the expiration dates for your persistent cookies!")
         st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
         "Hover over the graph to see specific details.")
@@ -218,8 +218,8 @@ if isinstance(cookies, pd.DataFrame):
         with col2:
             st.write("**What is a domain name?**")
             st.write("A domain name is the text that a user types into a browser window to reach a website. For example, Google's domain name is 'google.com'.")
-            st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
             st.write("The domain that a cookie belongs to can be found as the value for the 'host_key' column.")
+            st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
             st.write("")
             num1 = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
 
