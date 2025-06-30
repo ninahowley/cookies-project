@@ -219,4 +219,11 @@ def average_expiration_date(cookies):
         df = cookies.copy()
         average = df['expires_utc'].mean()
         average = convert_time(average)
+        df['time'] = df['expires_utc'].apply(convert_time)
+        df = df[['host_key', 'time']]
+        df['expired'] = df['time'].rank(method='max').astype(int)
+        df = df.groupby('time')['expired'].agg('max').reset_index()
+        fig = px.line(df, x='time', y='expired')
+        fig.update_traces(line_color = '#3f1c13')
+        st.plotly_chart(fig, key="expiration of cookies")
         return average
