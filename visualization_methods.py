@@ -182,16 +182,16 @@ def double_bar(cookies, num):
         fig.update_layout(xaxis= {'categoryorder':'total descending'})
         st.plotly_chart(fig, key="double_bar")
     
-def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
+def domain_breakdown(sorted_cookies: pd.DataFrame, count: int, title:str,  key:str):
     top_domains = sorted_cookies.head(count).sort_values(by="Number of Cookies", ascending=False)
     fig = px.bar(top_domains, 
                     x='Domain', 
                     y='Number of Cookies', 
-                    title='Number of Cookies per Domain',
+                    title=title,
                     color="Number of Cookies",
                     color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13']),
                     )
-    st.plotly_chart(fig, key="domains")
+    st.plotly_chart(fig, key=key)
 
 
 def tfsk_breakdown(cookies:pd.DataFrame):
