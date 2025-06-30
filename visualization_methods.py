@@ -109,7 +109,12 @@ def sameSite(cookies):
             "Count": [none, lax, strict]
         })
 
-        fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution")
+        fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution",
+                     color_discrete_map = {
+                         'None': '#fae1b8',
+                         'Lax*': '#3f1c13',
+                         'Strict': '#dc8e5e'
+                     })
         st.plotly_chart(fig, key="samesite")
     else:
         st.write("No data yet. Input data for visualization.")
