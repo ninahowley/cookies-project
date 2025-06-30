@@ -239,7 +239,7 @@ if isinstance(cookies, pd.DataFrame):
             st.write("**What is a cookie name?**")
             st.write("A cookie's name is the unique identifier for a cookie.")
             st.write("This identifier helps websites and browsers track the purpose of a cookie.")
-            st.write("Some cookie names are very common, such as '_ga', which you likely see in your graph.")
+            st.write("Some cookie names are very common, such as '_ga' or 'OTZ', one of which you likely see in your graph.")
             st.write("")
             num2 = st.slider(label="**Number of names to display**", min_value=1, max_value=m.get_num_names(cookies), value=10, key="slide2")
 
