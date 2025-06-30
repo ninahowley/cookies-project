@@ -12,7 +12,8 @@ background-size: cover;
 
 st.header(":cookie: Share Your Data")
 
-st.write("Our group would like to continue working with cookies to investigate the lack of transparency behind the deployment of third-party cookies, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
+st.write("Our group would like to continue working with cookies to investigate how/when/where third-party cookies are deployed.")
+st.write("We are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
 
 cookies = m.upload_cookies()
 

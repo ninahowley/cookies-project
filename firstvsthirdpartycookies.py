@@ -3,6 +3,13 @@ import pandas as pd
 import methods as m
 import visualization_methods as vm
 
+st.html("""<style>
+[data-testid="stSidebar"]> div:first-child{
+background-image: url("https://thumbs.dreamstime.com/b/chocolate-chip-cookies-crumbs-forming-vertical-frame-white-background-scattered-create-visually-appealing-clean-surface-352442146.jpg");
+background-size: cover;
+}
+</style>""")
+
 st.header(":cookie: First vs. Third Party Cookies")
 st.write("While it is difficult to identify cookies as first or third party based only on their attributes, if you have some time to look through all of the domains manually, you can identify which cookies are first vs third party!")
 
