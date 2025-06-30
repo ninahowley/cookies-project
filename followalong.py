@@ -263,9 +263,9 @@ if isinstance(cookies, pd.DataFrame):
         st.write("Not all cookies will have such a complete description, or even a description at all. There so many cookie names out there, with many being untracked.")
         st.write(f"Your database alone includes {m.get_num_names(cookies)} unique cookie names!")
         
-        col1, col2 = st.columns((2))
+        col1, col2 = st.columns((1,2))
         with col1:
-            st.dataframe(sorted_cookies, hide_index=True, )
+            st.dataframe(sorted_cookies["Name"], hide_index=True, height=280)
         with col2:
             st.write("To the left are all of the cookie names in your database, sorted by how often they appear.")
             st.write("Choose a cookie name from the menu below to check if there is any info about it online!")
