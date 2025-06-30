@@ -165,16 +165,15 @@ if isinstance(cookies, pd.DataFrame):
         # "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         # "cookie.")
         st.subheader("Average Expiration Date")
-        st.write("Let's see the average expiration date for your persistent cookies!")
+        st.write("Let's see the expiration dates for your persistent cookies!")
+        st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
+        "Hover over the graph to see specific details.")
         exp = vm.average_expiration_date(cookies).strftime("%m/%d/%Y")
         st.write(f"On average, your cookies will expire on {exp}")
         st.subheader("How many cookies have you accumulated over time?")
+        st.write("Below you will see a graph that shows how your cookies have accumulated in your " \
+        "Chrome database over time. Hover over the graph to see more details on their creation dates.")
         vm.last_accessed(cookies)
-        st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
-        "Right now, all of these cookies exist in your cookies database and you can see on what date " \
-        "they were created. You can see these values in the \"creation_utc\" column of your database, "
-        "but these values need to be converted to standard datetimes, which we have done for you in " \
-        "the graph.")
         
     if visualization == "Third Party Cookies & Privacy":
         st.header("Third Party Cookies")
