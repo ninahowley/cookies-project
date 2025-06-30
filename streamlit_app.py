@@ -9,8 +9,9 @@ pages = {
     "Menu": [
         st.Page("introduction.py", title="Introduction"), #intro to cookies --> example db
         st.Page("followalong.py", title="Follow Along"),
-        st.Page("resources.py", title="Resources"),
-        # st.Page("test.py", title="Test"),
+        st.Page("share.py", title="Share Your Data"),
+        st.Page("feedback.py", title="Share Your Thoughts"),
+        st.Page("resources.py", title="Resources")
     ]
 }
 

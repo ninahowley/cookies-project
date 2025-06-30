@@ -16,8 +16,10 @@ background-size: cover;
 }
 </style>""")
 
-st.header(":cookie: Cookie Exploration Follow Along")
-st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
+st.header(":cookie: Follow Along")
+st.subheader("Explore your cookies and learn about data privacy!")
+
+st.header("Part 1: Upload your data")
 
 # user = os.getlogin()
 # st.write("Hello, ", user)
@@ -45,47 +47,36 @@ with st.expander("Error: This file is in use"):
     st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
     st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
-# if isinstance(cookies, pd.DataFrame):
-#Button to show raw cookies db
-if "show_db" not in st.session_state:
-    st.session_state.show_db = False
-
-def toggle_db():
-    st.session_state.show_db = not st.session_state.show_db
-
-button_label = "Collapse database" if st.session_state.show_db else "Click to see cookies database"
-
-# Use the button to toggle
-st.button(
-    button_label,
-    on_click=toggle_db
-)
-
-
-if st.session_state.show_db and isinstance(cookies, pd.DataFrame):
-    col1, col2 = st.columns((2,1))
+st.divider()
+st.header("Part 2: View your raw data")
+if isinstance(cookies, pd.DataFrame):
+    col1, col2 = st.columns((2.5,1))
     with col1:
         m.display_raw_cookies(cookies)
 
-        columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
-                'value', 'encrypted_value', 'path', 'expires_utc',
-                'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
-                'is_persistent', 'priority', 'samesite', 'source_scheme',
-                'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
+    columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
+            'value', 'encrypted_value', 'path', 'expires_utc',
+            'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
+            'is_persistent', 'priority', 'samesite', 'source_scheme',
+            'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
 
-        selection = col2.selectbox(options=columns,label="Choose a column to learn more about.")
+    selection = col2.selectbox(options=columns,label="**Choose a column to learn more about**")
 
-        if selection:
-            col2.write(m.display_description(selection))
+    if selection:
+        col2.write(m.display_description(selection))
+    st.caption("Source: https://medium.com/@tushar_rs_/a-comprehensive-guide-to-cookie-attributes-3893787c4747")
+else:
+    st.warning("Please upload your cookies.")
 
 st.divider()
-st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
+st.header("Part 3: Visualize your data")
 
 if isinstance(cookies, pd.DataFrame):
+    st.subheader("Toggle through these topics to visualize your own cookies!")
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "Cookie Duration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
+        ["Cookie Duration", "Domain Exploration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
         index=None,
         placeholder="Select a topic to explore..."
     )
@@ -94,7 +85,6 @@ if isinstance(cookies, pd.DataFrame):
 
     #Cookie Security selection
     if visualization == "First Party Cookies & Cookie Security":
-        st.write("Let's explore first party cookies and cookie security! :cookie: ")
 
         st.subheader("What are First-Party Cookies?")
         st.write("First-party cookies are cookies **set by the domain** and are only used within the domain (ie youtube.com). They are typically used to save **login information and UI settings**.")
@@ -188,7 +178,7 @@ if isinstance(cookies, pd.DataFrame):
         
     if visualization == "Third Party Cookies & Privacy":
         st.header("Third Party Cookies")
-        st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
+        st.write("A **third party cookie** is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
         st.write("Here's a helpful visualization demonstrating how third-party cookies *retarget*.")
         st.image("3rd_retargeting.png", caption = "Source: https://www.performancemarketingworld.com/article/1800951/third-party-cookies")
         st.write("Third-party servers can combine information from their cookies set on multiple sites, creating a profile of the users. These are called **tracking cookies**." \
@@ -235,14 +225,14 @@ if isinstance(cookies, pd.DataFrame):
             num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
 
         with col1:
-            st.subheader(":cookie: Domains Breakdown")
+            st.header("Domains Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
                 vm.domain_breakdown(sorted_cookies, num)
             else:
                 vm.domain_breakdown(sorted_cookies, 10)
 
-        st.subheader(":cookie: Top Frame Site Key")
+        st.subheader(":cookie: Top Frame Site Key --> Changing to Name Breakdown")
         col1, col2 = st.columns((1,3))
         with col1:
             with st.expander("Show top frame site keys"):
@@ -255,13 +245,13 @@ if isinstance(cookies, pd.DataFrame):
             "This happens when a website's contents are embedded on another website, usually through an element such as an iframe.")
             st.write("The value in this column contains the domain of the website the user was browsing when the cookie was placed."
             " Most cookies do not have a value for this column.")
-            if boo:
-                m.tfsk_example(cookies)
-            st.write("*ADDING PHOTO HERE*")
+            # if boo:
+                # m.tfsk_example(cookies)
+            # st.write("*ADDING PHOTO HERE*")
             # st.write("This expander only shows the first 3 domains, to see more you can  expand your database above and sort by top_frame_site_key.")
 
             
-
+    # st.write(m.sort_cookie_domains(cookies))
 
     #m.categorize_cookies(cookies)
 
@@ -288,31 +278,5 @@ if isinstance(cookies, pd.DataFrame):
     #     website = cookie_count.text_input('Enter a website:') 
     #     cookies_count = m.get_cookies(website)
 
-    st.divider()
-    st.subheader("Share your cookies")
-    st.write("Streamlit does not automatically save uploaded files.")
-    st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
-    st.write("Our group would like to continue working with cookies in the future, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
-    st.write("If you would like to share your cookies, click the checkbox below.")
-
-
-    consent = st.checkbox("I understand and would like to share my cookies.")
-
-    if consent:
-        
-        cookie_name = m.your_cookie_type(cookies)
-        st.write(f"Your anonymized cookie username is: *{cookie_name}*.")
-
-        upload = st.button("Share my cookies!")
-        if upload:
-            try:
-                db.upload_cookies(cookie_name, cookies)
-            except Exception as e:
-                st.warning("An error occured.")
-    
-    st.divider()
-    st.subheader("We appreciate your feedback!")
-    st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
-
 else:
-    st.warning("Please upload your cookies before starting the follow along.")
+    st.warning("Please upload your cookies.")
