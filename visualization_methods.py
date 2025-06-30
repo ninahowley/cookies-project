@@ -1,6 +1,6 @@
 import plotly.express as px
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 import methods as m
 
@@ -109,12 +109,14 @@ def sameSite(cookies):
             "Count": [none, lax, strict]
         })
 
-        fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution",
+        fig = px.pie(df, names = "SameSite", values = "Count", title = "SameSite Attribute Distribution", 
+                     color = "SameSite",
                      color_discrete_map = {
-                         "None": '#fae1b8',
-                         "Lax*": '#3f1c13',
-                         "Strict": '#dc8e5e'
-                     })
+                    'None': '#fae1b8',
+                    'Strict': '#3f1c13',
+                    'Lax*': '#dc8e5e',
+                }
+                     )
         st.plotly_chart(fig, key="samesite")
     else:
         st.write("No data yet. Input data for visualization.")
@@ -146,9 +148,9 @@ def pie_chart(cookies):
     }
     df_counts = pd.DataFrame(data)
 
-    fig = px.bar(df_counts, 
-                x = "Security Status", 
-                y = "Count",
+    fig = px.pie(df_counts, 
+                names = "Security Status", 
+                values = "Count",
                 title='Number of Domains by Cookie Security', 
                 color = "Security Status",
                 color_discrete_map = {
@@ -156,7 +158,7 @@ def pie_chart(cookies):
                     'Only Not Secure': '#3f1c13',
                     'Both': '#dc8e5e',
                 })
-    fig.update_layout(showlegend=False)
+    fig.update_layout(showlegend=True)
     st.plotly_chart(fig, key="pie_chart")
    
 #domain double bar chart
@@ -166,12 +168,25 @@ def double_bar(cookies, num):
         #turning host_key to domain (other function didn't work)
         df['domain'] = df['host_key'].str.lstrip('.').str.split('.').str[-2:].str.join('.')
 
-        counts = df.groupby(['domain', 'is_secure']).size().reset_index(name='count').sort_values(by='count', ascending = False)
+        #counts = df.groupby(['domain', 'is_secure']).size().reset_index(name='count').sort_values(by='count', ascending = False)
+        #st.write(counts)
         # Convert is_secure to string labels before plotting
-        counts['is_secure'] = counts['is_secure'].map({1: 'Secure', 0: 'Not Secure'})
+        # Group and pivot so each domain has separate columns for Secure and Not Secure
+        grouped = df.groupby(['domain', 'is_secure']).size().unstack(fill_value=0)
+        grouped.columns = ['Not Secure', 'Secure']  # Make column names readable
+        grouped = grouped.reset_index()
+
+        # Add total column to sort and limit to top `num` domains
+        grouped['Total'] = grouped['Not Secure'] + grouped['Secure']
+        grouped = grouped.sort_values(by='Total', ascending=False).head(num)
+
+        #long data
+        counts = grouped.melt(id_vars='domain', value_vars=['Not Secure', 'Secure'],
+                      var_name='is_secure', value_name='count')
+        #counts['is_secure'] = counts['is_secure'].map({1: 'Secure', 0: 'Not Secure'})
 
         #make bar chart
-        fig = px.bar(counts.head(num), 
+        fig = px.bar(counts, 
                      x='domain', 
                      y='count', 
                      color='is_secure', 
@@ -230,12 +245,18 @@ def tfsk_breakdown(cookies:pd.DataFrame):
     else:
         return False
 
+def chrome_time_to_datetime(chrome_time):
+    """Convert Chrome/WebKit time to datetime (UTC)"""
+    # Chrome/WebKit epoch starts on 1601-01-01
+    epoch_start = datetime(1601, 1, 1)
+    return epoch_start + timedelta(microseconds=chrome_time)
+
 def average_expiration_date(cookies):
     if isinstance(cookies, pd.DataFrame):
         df = cookies.copy()
         average = df['expires_utc'].mean()
         average = convert_time(average)
-        df['time'] = df['expires_utc'].apply(convert_time)
+        df['time'] = df['expires_utc'].apply(chrome_time_to_datetime)
         df = df[['host_key', 'time']]
         df['expired'] = df['time'].rank(method='max').astype(int)
         df = df.groupby('time')['expired'].agg('max').reset_index()
