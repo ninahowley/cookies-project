@@ -15,7 +15,8 @@ if isinstance(cookies, pd.DataFrame):
     domains = sorted(domains_dict.items())
     sorted_domains = dict(domains)
 
-    domain_list = list(sorted_domains.keys())
+    domain_l = list(sorted_domains.keys())
+    domain_list = [d for d in domain_l if "." in d]
 
     st.session_state.domain_list = domain_list
     # Also reset prior results if uploading a new file
