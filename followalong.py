@@ -255,11 +255,11 @@ if isinstance(cookies, pd.DataFrame):
             st.dataframe(sorted_cookies, hide_index=True, )
         with col2:
             st.write("To the left are all of the cookie names in your database, sorted by how often they appear.")
-            st.write("There are many online resources that can help us identify the purpose of a cookie, including one called 'cookiepedia'.")
-            st.write("If you know the name of a cookie, you can use this website to learn more about it.")
+            st.write("There are many online resources that can help us identify the purpose of a cookie, including one called 'cookiepedia'. If you know the name of a cookie, you can use this website to learn more about it.")
             st.write("For example, below is cookiepedia's page on the cookie name '_ga', showing that it is associated with Google Analytics.")
             st.write("**[https://cookiepedia.co.uk/cookies/_ga](%s)**" %"https://cookiepedia.co.uk/cookies/_ga")
             st.write("Not all cookies will have such a complete description, or even a description at all. There so many cookie names out there, with many being untracked.")
+            st.write(f"Your database includes {m.get_num_names(cookies)} unique cookie names!")
             st.write("Does your database have 'uid' or 'OTZ'? Try looking these up!")
 
 
