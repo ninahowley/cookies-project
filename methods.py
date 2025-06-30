@@ -67,6 +67,16 @@ def get_domain(host_key: str) -> tuple[str, str]:
     except IndexError:
         return str(host_key)
     
+def get_domain_tld(host_key: str) -> tuple[str, str]:
+    """
+    Returns the domain associated with a cookie's host key.
+    """
+    try:
+        parts = str(host_key).split(".")
+        return (f"{parts[-2]}.{parts[-1]}")
+    except IndexError:
+        return str(host_key)
+    
 def get_domain_long(host_key: str) -> tuple[str, str]:
     """
     Returns the domain associated with a cookie's host key.
@@ -80,26 +90,6 @@ def get_domain_long(host_key: str) -> tuple[str, str]:
     except IndexError:
         return str(host_key)
     
-def get_domain_noindex(host_key: str) -> tuple[str, str]:
-    """
-    Returns the domain associated with a cookie's host key.
-    """
-    try:
-        parts = str(host_key).split(".")
-        return parts[-2]
-    except IndexError:
-        return str(host_key)
-    
-def get_domain_long_noindex(host_key: str) -> tuple[str, str]:
-    """
-    Returns the domain associated with a cookie's host key.
-    """
-    try:
-        parts = str(host_key).split(".")
-        return parts[0].split("/")[-1]
-    except IndexError:
-        return str(host_key)
-
 def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     """
     Returns something...
@@ -122,7 +112,28 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     else:
         return
     
+def sort_cookie_domains_tld(cookies: pd.DataFrame) -> dict:
+    """
+    Returns something...
+    """
+    if isinstance(cookies, pd.DataFrame):
+        host_keys = cookies['host_key']
+        domain_dict = {}
+        for key in host_keys:
+            domain = get_domain_tld(key)
+            if domain not in domain_dict:
+                domain_dict[domain] = 1
+            else:
+                domain_dict[domain] = domain_dict[domain] +1
+
+        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Number of Cookies"])
+        sorted_df = df.sort_values(by=['Number of Cookies'], ascending=False)
+
+        return domain_dict
     
+    else:
+        return
+
 def get_num_domains(cookies: pd.DataFrame) -> int:
     """
     Returns something...
@@ -285,16 +296,6 @@ def get_tfsk_rows(cookies: pd.DataFrame) -> pd.DataFrame:
             return None
         else:
             return cookies_filtered
-    else:
-        return None
-    
-def get_tfsk_rows_cleaned(cookies:pd.DataFrame):
-    cookies_filtered = get_tfsk_rows(cookies)
-    if isinstance(cookies_filtered,pd.DataFrame):
-        cookies_filtered['host_key'] = cookies_filtered['host_key'].apply(get_domain_noindex)
-        cookies_filtered['top_frame_site_key'] = cookies_filtered['top_frame_site_key'].apply(get_domain_long_noindex)
-        selected = cookies_filtered[['host_key', 'top_frame_site_key']]
-        return selected
     else:
         return None
     

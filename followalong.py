@@ -228,9 +228,9 @@ if isinstance(cookies, pd.DataFrame):
             st.header("Domains Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
             if num:
-                vm.domain_breakdown(sorted_cookies, num)
+                vm.domain_breakdown(sorted_cookies, num, "Number of Cookies per Domain", "1")
             else:
-                vm.domain_breakdown(sorted_cookies, 10)
+                vm.domain_breakdown(sorted_cookies, 10, "Number of Cookies per Domain", "2")
 
         st.subheader(":cookie: Top Frame Site Key --> Changing to Name Breakdown")
         col1, col2 = st.columns((1,3))
