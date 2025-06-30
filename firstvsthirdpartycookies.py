@@ -39,66 +39,75 @@ if isinstance(cookies, pd.DataFrame):
                     domain = domain_list[i + j]
                     if cols[j].checkbox(domain, key=f"ck_{domain}"):
                         visited_domains.append(domain)
-
-        if st.button(":cookie: Submit", type="primary"):
-            st.session_state.visited_domains = visited_domains
-            st.session_state.not_visited = [d for d in domain_list if d not in visited_domains]
-            st.session_state.submitted = True
-
-    if st.session_state.get("submitted", False):
-        visited_domains = st.session_state.visited_domains
-        not_visited = st.session_state.not_visited
-
-        visited_d = {}
-        unvisited_d = {}
-        for key in domain_list:
-            if key in visited_domains:
-                visited_d[key] = domains_dict[key]
-                df = pd.DataFrame(visited_d.items(), columns=["Domain", "Number of Cookies"])
-                visited_df = df.sort_values(by=['Number of Cookies'], ascending=False)
-            else:
-                unvisited_d[key] = domains_dict[key]
-                df = pd.DataFrame(unvisited_d.items(), columns=["Domain", "Number of Cookies"])
-                unvisited_df = df.sort_values(by=['Number of Cookies'], ascending=False)
-
         
-        col1, col2 = st.columns((1, 2))
-        with col1:
-            st.subheader(f"First-party cookies ({len(visited_domains)})")
-            if visited_domains:
-                num1 = st.slider(label="**Number of domains to display**", min_value=1, max_value=len(visited_domains), value=10)
-                with st.expander("Show domains"):
-                    st.markdown("\n".join(f"- {d}" for d in visited_domains))
-                    st.download_button(
-                        label="Download First-party list",
-                        data="\n".join(visited_domains),
-                        file_name="first_party_domains.txt",
-                        mime="text/plain"
-                    )
-                with col2:
-                    vm.domain_breakdown(visited_df, num1, "Number of Cookies per Known Domain", "3")
-            else:
-                st.markdown("*No websites marked as visited.*")
+        not_visited = [d for d in domain_list if d not in visited_domains]
+
+        # if st.button(":cookie: Submit", type="primary"):
+        #     st.session_state.visited_domains = visited_domains
+        #     st.session_state.not_visited = [d for d in domain_list if d not in visited_domains]
+        #     st.session_state.submitted = True
+
+    # if st.session_state.get("submitted", False):
+        # visited_domains = st.session_state.visited_domains
+        # not_visited = st.session_state.not_visited
+
+    st.divider()
+    visited_d = {}
+    unvisited_d = {}
+    for key in domain_list:
+        if key in visited_domains:
+            visited_d[key] = domains_dict[key]
+            df = pd.DataFrame(visited_d.items(), columns=["Domain", "Number of Cookies"])
+            visited_df = df.sort_values(by=['Number of Cookies'], ascending=False)
+        else:
+            unvisited_d[key] = domains_dict[key]
+            df = pd.DataFrame(unvisited_d.items(), columns=["Domain", "Number of Cookies"])
+            unvisited_df = df.sort_values(by=['Number of Cookies'], ascending=False)
+
+    
+    col1, col2 = st.columns((1, 2))
+    with col1:
+        st.subheader(f"First-party domains ({len(visited_domains)})")
+        if visited_domains:
+            value = 10
+            if len(visited_domains) < 10:
+                value = len(visited_domains)
+            num1 = st.slider(label="**Number of domains to display**", min_value=1, max_value=len(visited_domains), value=value)
+            with st.expander("Show domains"):
+                st.markdown("\n".join(f"- {d}" for d in visited_domains))
+                st.download_button(
+                    label="Download First-party list",
+                    data="\n".join(visited_domains),
+                    file_name="first_party_domains.txt",
+                    mime="text/plain"
+                )
+            with col2:
+                vm.domain_breakdown(visited_df, num1, "Number of Cookies per Known Domain", "3")
+        else:
+            st.markdown("*No websites marked as visited.*")
 
 
-        col1, col2 = st.columns((1, 2))
-        with col1:
-            st.subheader(f"Third-party cookies ({len(not_visited)})")
-            if not_visited:
-                num2 = st.slider(label="**Number of domains to display**", min_value=1, max_value=len(not_visited), value=10)
-                with st.expander("Show domains"):
-                    st.markdown("\n".join(f"- {d}" for d in not_visited))
-                    st.download_button(
-                        label="Download Third-party list",
-                        data="\n".join(not_visited),
-                        file_name="third_party_domains.txt",
-                        mime="text/plain"
-                    )
-                with col2:
-                    vm.domain_breakdown(unvisited_df, num2, "Number of Cookies per Unknown Domain", "4")
-            else:
-                st.markdown("*No websites marked as unknown.*")
-            
+    col1, col2 = st.columns((1, 2))
+    with col1:
+        st.subheader(f"Third-party domains ({len(not_visited)})")
+        if not_visited:
+            value = 10
+            if len(not_visited) < 10:
+                value = len(not_visited)
+            num2 = st.slider(label="**Number of domains to display**", min_value=1, max_value=len(not_visited), value=value)
+            with st.expander("Show domains"):
+                st.markdown("\n".join(f"- {d}" for d in not_visited))
+                st.download_button(
+                    label="Download Third-party list",
+                    data="\n".join(not_visited),
+                    file_name="third_party_domains.txt",
+                    mime="text/plain"
+                )
+            with col2:
+                vm.domain_breakdown(unvisited_df, num2, "Number of Cookies per Unknown Domain", "4")
+        else:
+            st.markdown("*No websites marked as unknown.*")
+        
 
 
 
