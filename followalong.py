@@ -164,7 +164,7 @@ if isinstance(cookies, pd.DataFrame):
         # st.write("In your cookie database, you may see that the is_persistent column has values of either "
         # "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         # "cookie.")
-        st.subheader("Average Expiration Date")
+        st.subheader("Expiration Dates")
         st.write("Let's see the expiration dates for your persistent cookies!")
         st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
         "Hover over the graph to see specific details.")
