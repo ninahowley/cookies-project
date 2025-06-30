@@ -95,6 +95,8 @@ if isinstance(cookies, pd.DataFrame):
                  ", which would be problematic if intercepted by an attacker.")
         st.write("Below you will learn more about cookie security!")
 
+        st.caption("Source: https://doi.org/10.1145/2872427.2882991")
+
         st.subheader("Secure vs. insecure cookies")
         st.write("Let's learn about cookie security! Below is a pie chart showing the proportions of your secure and insecure cookies.")
 
@@ -103,6 +105,7 @@ if isinstance(cookies, pd.DataFrame):
         "protect data in transit between the user's browser to server." \
         "\n\nHowever, **insecure cookies** can be sent over **HTTP**, which transmits data in **plain text**, potentially exposing this information to attackers. ")
         st.write("In the database, to see if cookies are secure or insecure, look at the *is_secure* attribute. ***is_secure* = 1** means it's secure and ***is_secure* = 0** means it's not secure. ")
+        st.caption("Source: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies")
         vm.pie_chart(cookies)
         st.write("The graph above shows the total number of domains that only have secure cookies, insecure cookies, and both secure and insecure." \
                 " As you can see, most domains have both secure and insecure cookies. This may be the case because we aggregated all subdomains together.")
@@ -118,6 +121,8 @@ if isinstance(cookies, pd.DataFrame):
                 
         st.write("This stacked bar graph breaks down the previous bar chart by domains. **Having insecure cookies today are not as " \
                 "dangerous as before** because most browsers (ie Chrome) default to HTTPS. Still, these cookies are less secure than those with the Secure flag. ")
+        
+        st.caption("Source: https://blog.chromium.org/2023/08/towards-https-by-default.html")
         
         st.subheader("SameSite Cookies")
         st.write("The SameSite attribute is set in place to protect against Cross-Site Request Forgery (CSRF) attacks, where a malicious website tricks the browser into performing unwanted actions." \
@@ -164,12 +169,12 @@ if isinstance(cookies, pd.DataFrame):
         # st.write("In your cookie database, you may see that the is_persistent column has values of either "
         # "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         # "cookie.")
-        st.subheader("Expiration Dates")
-        st.write("Let's see the expiration dates for your persistent cookies!")
-        st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
-        "Hover over the graph to see specific details.")
-        exp = vm.average_expiration_date(cookies).strftime("%m/%d/%Y")
-        st.write(f"On average, your cookies will expire on {exp}")
+        # st.subheader("Expiration Dates")
+        # st.write("Let's see the expiration dates for your persistent cookies!")
+        # st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
+        # "Hover over the graph to see specific details.")
+        # exp = vm.average_expiration_date(cookies).strftime("%m/%d/%Y")
+        # st.write(f"On average, your cookies will expire on {exp}")
         st.subheader("How many cookies have you accumulated over time?")
         st.write("Below you will see a graph that shows how your cookies have accumulated in your " \
         "Chrome database over time. Hover over the graph to see more details on their creation dates.")
