@@ -1,6 +1,6 @@
 import plotly.express as px
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 import methods as m
 
@@ -245,12 +245,18 @@ def tfsk_breakdown(cookies:pd.DataFrame):
     else:
         return False
 
+def chrome_time_to_datetime(chrome_time):
+    """Convert Chrome/WebKit time to datetime (UTC)"""
+    # Chrome/WebKit epoch starts on 1601-01-01
+    epoch_start = datetime(1601, 1, 1)
+    return epoch_start + timedelta(microseconds=chrome_time)
+
 def average_expiration_date(cookies):
     if isinstance(cookies, pd.DataFrame):
         df = cookies.copy()
         average = df['expires_utc'].mean()
         average = convert_time(average)
-        df['time'] = df['expires_utc'].apply(convert_time)
+        df['time'] = df['expires_utc'].apply(chrome_time_to_datetime)
         df = df[['host_key', 'time']]
         df['expired'] = df['time'].rank(method='max').astype(int)
         df = df.groupby('time')['expired'].agg('max').reset_index()

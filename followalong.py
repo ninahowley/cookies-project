@@ -169,12 +169,12 @@ if isinstance(cookies, pd.DataFrame):
         # st.write("In your cookie database, you may see that the is_persistent column has values of either "
         # "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
         # "cookie.")
-        st.subheader("Expiration Dates")
-        st.write("Let's see the expiration dates for your persistent cookies!")
-        st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
-        "Hover over the graph to see specific details.")
-        exp = vm.average_expiration_date(cookies).strftime("%m/%d/%Y")
-        st.write(f"On average, your cookies will expire on {exp}")
+        # st.subheader("Expiration Dates")
+        # st.write("Let's see the expiration dates for your persistent cookies!")
+        # st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
+        # "Hover over the graph to see specific details.")
+        # exp = vm.average_expiration_date(cookies).strftime("%m/%d/%Y")
+        # st.write(f"On average, your cookies will expire on {exp}")
         st.subheader("How many cookies have you accumulated over time?")
         st.write("Below you will see a graph that shows how your cookies have accumulated in your " \
         "Chrome database over time. Hover over the graph to see more details on their creation dates.")
@@ -244,7 +244,7 @@ if isinstance(cookies, pd.DataFrame):
             st.write("**What is a cookie name?**")
             st.write("A cookie's name is the unique identifier for a cookie.")
             st.write("This identifier helps websites and browsers track the purpose of a cookie.")
-            st.write("Some cookie names are very common, such as '_ga', which you likely see in your graph.")
+            st.write("Some cookie names are very common, such as '_ga' or 'OTZ', one of which you likely see in your graph.")
             st.write("")
             num2 = st.slider(label="**Number of names to display**", min_value=1, max_value=m.get_num_names(cookies), value=10, key="slide2")
 
