@@ -231,7 +231,7 @@ if isinstance(cookies, pd.DataFrame):
             else:
                 vm.domain_breakdown(sorted_cookies, 10, "Number of Cookies per Domain", "2")
         
-        st.write("If you don't recognize some of these domain names, don't worry! Many of the cookies on your device will be 'third party' cookies. You will learn more about what this means later, and you can exlpore these cookies in the 'First vs Third Party Cookies' tab.")
+        st.write("If you don't recognize some of these domain names, don't worry! Many of the cookies on your device will be 'third party' cookies. You will learn more about what this means later, and you can explore these cookies in the 'First vs Third Party Cookies' tab.")
 
         st.subheader(":cookie: Name Breakdown")
         col1, col2 = st.columns((3,1))
