@@ -67,7 +67,7 @@ if isinstance(cookies, pd.DataFrame):
             st.subheader(f"First-party cookies ({len(visited_domains)})")
             if visited_domains:
                 num1 = st.slider(label="**Number of domains to display**", min_value=1, max_value=len(visited_domains), value=10)
-                with st.expander("Show cookies"):
+                with st.expander("Show domains"):
                     st.markdown("\n".join(f"- {d}" for d in visited_domains))
                     st.download_button(
                         label="Download First-party list",
@@ -86,7 +86,7 @@ if isinstance(cookies, pd.DataFrame):
             st.subheader(f"Third-party cookies ({len(not_visited)})")
             if not_visited:
                 num2 = st.slider(label="**Number of domains to display**", min_value=1, max_value=len(not_visited), value=10)
-                with st.expander("Show cookies"):
+                with st.expander("Show domains"):
                     st.markdown("\n".join(f"- {d}" for d in not_visited))
                     st.download_button(
                         label="Download Third-party list",

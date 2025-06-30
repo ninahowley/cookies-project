@@ -73,7 +73,10 @@ def get_domain_tld(host_key: str) -> tuple[str, str]:
     """
     try:
         parts = str(host_key).split(".")
-        return (f"{parts[-2]}.{parts[-1]}")
+        if parts[-2] != "co" and parts[-2] != "com":
+            return (f"{parts[-2]}.{parts[-1]}")
+        else:
+            return (f"{parts[-3]}.{parts[-2]}.{parts[-1]}")
     except IndexError:
         return str(host_key)
     
