@@ -202,16 +202,27 @@ def double_bar(cookies, num):
         fig.update_layout(xaxis= {'categoryorder':'total descending'})
         st.plotly_chart(fig, key="double_bar")
     
-def domain_breakdown(sorted_cookies: pd.DataFrame, count: int):
+def domain_breakdown(sorted_cookies: pd.DataFrame, count: int, title:str,  key:str):
     top_domains = sorted_cookies.head(count).sort_values(by="Number of Cookies", ascending=False)
     fig = px.bar(top_domains, 
                     x='Domain', 
                     y='Number of Cookies', 
-                    title='Number of Cookies per Domain',
+                    title=title,
                     color="Number of Cookies",
                     color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13']),
                     )
-    st.plotly_chart(fig, key="domains")
+    st.plotly_chart(fig, key=key)
+
+def name_breakdown(sorted_cookies: pd.DataFrame, count: int, title:str,  key:str):
+    top_domains = sorted_cookies.head(count).sort_values(by="Number of Cookies", ascending=False)
+    fig = px.bar(top_domains, 
+                    x='Name', 
+                    y='Number of Cookies', 
+                    title=title,
+                    color="Number of Cookies",
+                    color_continuous_scale=px.colors.make_colorscale(['#fae1b8', '#3f1c13']),
+                    )
+    st.plotly_chart(fig, key=key)
 
 
 def tfsk_breakdown(cookies:pd.DataFrame):
@@ -222,10 +233,11 @@ def tfsk_breakdown(cookies:pd.DataFrame):
             st.write(f"**{tfsk}**")
             count2 = 0
             for hk in tfsk_dict[tfsk]:
-                st.markdown(f":primary[{hk}: {tfsk_dict[tfsk][hk]}]")
-                count2+=1
-                if count2 > 2:
-                    break
+                if hk != tfsk:
+                    st.markdown(f":primary[{hk}: {tfsk_dict[tfsk][hk]}]")
+                    count2+=1
+                    if count2 > 2:
+                        break
             count+=1
             if count>=3:
                 break
@@ -233,4 +245,16 @@ def tfsk_breakdown(cookies:pd.DataFrame):
     else:
         return False
 
-    
+def average_expiration_date(cookies):
+    if isinstance(cookies, pd.DataFrame):
+        df = cookies.copy()
+        average = df['expires_utc'].mean()
+        average = convert_time(average)
+        df['time'] = df['expires_utc'].apply(convert_time)
+        df = df[['host_key', 'time']]
+        df['expired'] = df['time'].rank(method='max').astype(int)
+        df = df.groupby('time')['expired'].agg('max').reset_index()
+        fig = px.line(df, x='time', y='expired')
+        fig.update_traces(line_color = '#3f1c13')
+        st.plotly_chart(fig, key="expiration of cookies")
+        return average

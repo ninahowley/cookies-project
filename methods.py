@@ -67,6 +67,19 @@ def get_domain(host_key: str) -> tuple[str, str]:
     except IndexError:
         return str(host_key)
     
+def get_domain_tld(host_key: str) -> tuple[str, str]:
+    """
+    Returns the domain associated with a cookie's host key.
+    """
+    try:
+        parts = str(host_key).split(".")
+        if parts[-2] != "co" and parts[-2] != "com":
+            return (f"{parts[-2]}.{parts[-1]}")
+        else:
+            return (f"{parts[-3]}.{parts[-2]}.{parts[-1]}")
+    except IndexError:
+        return str(host_key)
+    
 def get_domain_long(host_key: str) -> tuple[str, str]:
     """
     Returns the domain associated with a cookie's host key.
@@ -80,26 +93,6 @@ def get_domain_long(host_key: str) -> tuple[str, str]:
     except IndexError:
         return str(host_key)
     
-def get_domain_noindex(host_key: str) -> tuple[str, str]:
-    """
-    Returns the domain associated with a cookie's host key.
-    """
-    try:
-        parts = str(host_key).split(".")
-        return parts[-2]
-    except IndexError:
-        return str(host_key)
-    
-def get_domain_long_noindex(host_key: str) -> tuple[str, str]:
-    """
-    Returns the domain associated with a cookie's host key.
-    """
-    try:
-        parts = str(host_key).split(".")
-        return parts[0].split("/")[-1]
-    except IndexError:
-        return str(host_key)
-
 def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     """
     Returns something...
@@ -122,7 +115,28 @@ def sort_cookie_domains(cookies: pd.DataFrame) -> dict:
     else:
         return
     
+def sort_cookie_domains_tld(cookies: pd.DataFrame) -> dict:
+    """
+    Returns something...
+    """
+    if isinstance(cookies, pd.DataFrame):
+        host_keys = cookies['host_key']
+        domain_dict = {}
+        for key in host_keys:
+            domain = get_domain_tld(key)
+            if domain not in domain_dict:
+                domain_dict[domain] = 1
+            else:
+                domain_dict[domain] = domain_dict[domain] +1
+
+        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Number of Cookies"])
+        sorted_df = df.sort_values(by=['Number of Cookies'], ascending=False)
+
+        return domain_dict
     
+    else:
+        return
+
 def get_num_domains(cookies: pd.DataFrame) -> int:
     """
     Returns something...
@@ -174,39 +188,41 @@ def categorize_cookies(cookies):
         reader = csv.DictReader(f)
         all_cookies = list(reader)
 
-    domains = [row["Domain"] for row in all_cookies]
+    all_names = [row["Cookie / Data Key name"] for row in all_cookies]
     category = [row["Category"] for row in all_cookies]
-    dom_cat = dict(zip(domains, category))
+    dom_cat = dict(zip(all_names, category))
     if isinstance(cookies, pd.DataFrame):
-        host_keys = cookies['host_key'].unique()
+        names = cookies['name'].unique()
         domain_dict = {}
-        for key in host_keys:
-            if key.lstrip('.') in dom_cat.keys() and key not in domain_dict.keys():
-                key_stripped = key.lstrip('.')
-                print(f"{key_stripped} in database")
-                domain_dict[key] = dom_cat[key_stripped]
+        for name in names:
+            if name in dom_cat.keys() and name not in domain_dict.keys():
+                domain_dict[name] = dom_cat[name]
+            # else:
+            #     base_url = f'https://cookiepedia.co.uk/website/{key_stripped}'
+            #     headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
+            #     response = requests.get("http://httpbin.io/user-agent", headers=headers)
+            #     response = requests.get(base_url, headers=headers)
+            #     if response.status_code == 200:
+            #         try:
+            #             soup = BeautifulSoup(response.text, 'html.parser')
+            #             cookie_type = soup.find(class_='cookie-details clearfix')
+            #             cookie_type = cookie_type.find_all('li')
+            #             cookie_type = str(cookie_type[0]).split(' ')[-1]
+            #             cookie_type = cookie_type.split('<')[0]
+            #             domain_dict[key] = cookie_type
+            #             time.sleep(2)
+            #             print(f'{key} retrieved')
+            #         except:
+            #             domain_dict[key] = 'Unknown'
+            elif "_ga" in name or "_pk" in name:
+                domain_dict[name] = "Analytics"
+            elif "_uin" in name or "_uir" in name or "KRTB" in name:
+                domain_dict[name] = "Marketing"
             else:
-                base_url = f'https://cookiepedia.co.uk/website/{key_stripped}'
-                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36"}
-                response = requests.get("http://httpbin.io/user-agent", headers=headers)
-                response = requests.get(base_url, headers=headers)
-                if response.status_code == 200:
-                    try:
-                        soup = BeautifulSoup(response.text, 'html.parser')
-                        cookie_type = soup.find(class_='cookie-details clearfix')
-                        cookie_type = cookie_type.find_all('li')
-                        cookie_type = str(cookie_type[0]).split(' ')[-1]
-                        cookie_type = cookie_type.split('<')[0]
-                        domain_dict[key] = cookie_type
-                        time.sleep(2)
-                        print(f'{key} retrieved')
-                    except:
-                        domain_dict[key] = 'Unknown'
-                else:
-                    domain_dict[key] = 'Unknown'
-                    print(f'{key} not found')
+                print(f'{name} not found')
+                #domain_dict[name] = "Unknown"
 
-        df = pd.DataFrame(domain_dict.items(), columns=["Domain", "Type"])
+        df = pd.DataFrame(domain_dict.items(), columns=["Name", "Type"])
         st.header("Categorization of your cookies")
         st.dataframe(df)
 
@@ -286,16 +302,6 @@ def get_tfsk_rows(cookies: pd.DataFrame) -> pd.DataFrame:
     else:
         return None
     
-def get_tfsk_rows_cleaned(cookies:pd.DataFrame):
-    cookies_filtered = get_tfsk_rows(cookies)
-    if isinstance(cookies_filtered,pd.DataFrame):
-        cookies_filtered['host_key'] = cookies_filtered['host_key'].apply(get_domain_noindex)
-        cookies_filtered['top_frame_site_key'] = cookies_filtered['top_frame_site_key'].apply(get_domain_long_noindex)
-        selected = cookies_filtered[['host_key', 'top_frame_site_key']]
-        return selected
-    else:
-        return None
-    
 def get_tfsk_domains(cookies:pd.DataFrame):
     cookies_filtered = get_tfsk_rows(cookies)
     if isinstance(cookies_filtered,pd.DataFrame):
@@ -322,4 +328,38 @@ def tfsk_example(cookies:pd.DataFrame):
     keys2 = list(tfsk_dict[tfsk].keys())
     host_key = keys2[0]
     st.write("An example from your database:")
-    st.markdown(f"The domain {tfsk} contained a frame which left a cookie from :primary[{host_key}].")
+    st.markdown(f"The domain **{tfsk}** contained a frame which left a cookie from :primary[{host_key}].")
+    st.markdown(f"This means you have a cookie with the host_key value :primary[{host_key}] and the top_frame_site_key value **{tfsk}**.")
+
+    
+def sort_cookie_names(cookies: pd.DataFrame) -> dict:
+    if isinstance(cookies, pd.DataFrame):
+        names = cookies['name']
+        name_dict = {}
+        for key in names:
+            domain = get_domain(key)
+            if domain not in name_dict:
+                name_dict[domain] = 1
+            else:
+                name_dict[domain] = name_dict[domain] +1
+
+        df = pd.DataFrame(name_dict.items(), columns=["Name", "Number of Cookies"])
+        sorted_df = df.sort_values(by=['Number of Cookies'], ascending=False)
+
+        return sorted_df
+    
+    else:
+        return
+    
+def get_num_names(cookies: pd.DataFrame) -> int:
+    if isinstance(cookies, pd.DataFrame):
+        names = cookies['name']
+        names_list = []
+        for name in names:
+            if name not in names_list:
+                names_list.append(name)
+
+        return len(names_list)
+    
+    else:
+        return

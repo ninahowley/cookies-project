@@ -16,8 +16,10 @@ background-size: cover;
 }
 </style>""")
 
-st.header(":cookie: Cookie Exploration Follow Along")
-st.subheader("Let's explore this interactive website to learn about cookies and data privacy!")
+st.header(":cookie: Follow Along")
+st.subheader("Explore your cookies and learn about data privacy!")
+
+st.header("Part 1: Upload your data")
 
 # user = os.getlogin()
 # st.write("Hello, ", user)
@@ -45,46 +47,36 @@ with st.expander("Error: This file is in use"):
     st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
     st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
 
-# if isinstance(cookies, pd.DataFrame):
-#Button to show raw cookies db
-if "show_db" not in st.session_state:
-    st.session_state.show_db = False
-
-def toggle_db():
-    st.session_state.show_db = not st.session_state.show_db
-
-button_label = "Collapse database" if st.session_state.show_db else "Click to see cookies database"
-
-# Use the button to toggle
-st.button(
-    button_label,
-    on_click=toggle_db
-)
-
-
-if st.session_state.show_db and isinstance(cookies, pd.DataFrame):
-    col1, col2 = st.columns((2,1))
+st.divider()
+st.header("Part 2: View your raw data")
+if isinstance(cookies, pd.DataFrame):
+    col1, col2 = st.columns((2.5,1))
     with col1:
         m.display_raw_cookies(cookies)
 
-        columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
-                'value', 'encrypted_value', 'path', 'expires_utc',
-                'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
-                'is_persistent', 'priority', 'samesite', 'source_scheme',
-                'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
+    columns = ['creation_utc', 'host_key', 'top_frame_site_key', 'name', 
+            'value', 'encrypted_value', 'path', 'expires_utc',
+            'is_secure', 'is_httponly', 'last_access_utc', 'has_expires',
+            'is_persistent', 'priority', 'samesite', 'source_scheme',
+            'source_port', 'last_update_utc', 'source_type', 'has_cross_site_ancestor']
 
-        selection = col2.selectbox(options=columns,label="Choose a column to learn more about.")
+    selection = col2.selectbox(options=columns,label="**Choose a column to learn more about**")
 
-        if selection:
-            col2.write(m.display_description(selection))
+    if selection:
+        col2.write(m.display_description(selection))
+    st.caption("Source: https://medium.com/@tushar_rs_/a-comprehensive-guide-to-cookie-attributes-3893787c4747")
+else:
+    st.warning("Please upload your cookies.")
 
-st.subheader("After you upload, toggle through these topics to visualize your own cookies!")
+st.divider()
+st.header("Part 3: Visualize your data")
 
 if isinstance(cookies, pd.DataFrame):
+    st.subheader("Toggle through these topics to visualize your own cookies!")
     #creating selectbox for visualizations
     visualization = st.selectbox(
         "Click here to learn about each topic",
-        ["Domain Exploration", "Persistent Cookies", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
+        ["Cookie Duration", "Domain Exploration", "First Party Cookies & Cookie Security", "Third Party Cookies & Privacy"],
         index=None,
         placeholder="Select a topic to explore..."
     )
@@ -93,7 +85,6 @@ if isinstance(cookies, pd.DataFrame):
 
     #Cookie Security selection
     if visualization == "First Party Cookies & Cookie Security":
-        st.write("Let's explore first party cookies and cookie security! :cookie: ")
 
         st.subheader("What are First-Party Cookies?")
         st.write("First-party cookies are cookies **set by the domain** and are only used within the domain (ie youtube.com). They are typically used to save **login information and UI settings**.")
@@ -154,37 +145,39 @@ if isinstance(cookies, pd.DataFrame):
         st.markdown("- HttpOnly: JavaScript can’t access it (helps prevent XSS-based theft)")
         st.markdown("- SameSite=Strict or Lax: Limits cross-site access")
         st.markdown("- Domain/Path: Limits where cookies are valid")
-        
-    if visualization == 'Persistent Cookies':
-        st.header("Persistent Cookies")
-        st.write("Let's explore persistent cookies!")
+
+    if visualization == 'Cookie Duration':
+        st.header("Cookie Duration")
+        st.write("Let's explore cookie durations!")
         st.subheader("Persistent vs session cookies")
-        st.write("**Persistent cookies** are cookies that last beyong a single browsing session.")
+        st.write("**Persistent cookies** are cookies that last beyond a single browsing session.")
         st.write("Reasons for this often include saving settings, login info, preferences, etc. in order "
-        "to save time and create a more convenient web browsing experience. Additionally, these " \
-        "cookies are often used to track how long a user has been on a page, what language they are " \
-        "browsing in, and other information that can be used for marketing/analytical purposes.")
+        "to save time and create a more convenient web browsing experience. They can also be used "
+        "for marketing/analytical purposes.")
         st.write("The web host of the cookie will set the expiration date. Once this date is "
         "reached, they will either renew the cookie automatically, ask for permission to renew, "
         "or simply delete itself, but this is all dependent of the initial user agreement.")
         st.write("Cookies that are not persistent are called **session cookies**, and they expire once "
         "the browser is closed.")
         #creating pie chart
-        vm.persistent_cookies(cookies)
-        st.write("In your cookie database, you may see that the is_persistent column has values of either "
-        "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
-        "cookie.")
+        # vm.persistent_cookies(cookies)
+        # st.write("In your cookie database, you may see that the is_persistent column has values of either "
+        # "1 or 0. A score of one signifies a persistent cookie while a score of 0 means it is a session "
+        # "cookie.")
+        st.subheader("Expiration Dates")
+        st.write("Let's see the expiration dates for your persistent cookies!")
+        st.write("Below, you will see a graph that shows a timeline of when your cookies will expire. " \
+        "Hover over the graph to see specific details.")
+        exp = vm.average_expiration_date(cookies).strftime("%m/%d/%Y")
+        st.write(f"On average, your cookies will expire on {exp}")
         st.subheader("How many cookies have you accumulated over time?")
+        st.write("Below you will see a graph that shows how your cookies have accumulated in your " \
+        "Chrome database over time. Hover over the graph to see more details on their creation dates.")
         vm.last_accessed(cookies)
-        st.write("This graph shows the number of persistent cookies that have accumulated over time. " \
-        "Right now, all of these cookies exist in your cookies database and you can see on what date " \
-        "they were created. You can see these values in the \"creation_utc\" column of your database, "
-        "but these values need to be converted to standard datetimes, which we have done for you in " \
-        "the graph.")
         
     if visualization == "Third Party Cookies & Privacy":
         st.header("Third Party Cookies")
-        st.write("A third party cookie is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
+        st.write("A **third party cookie** is a cookie that belongs to a different domain from the one shown in the address bar. It typically appears when webpages have content from external browsers, such as banner advertisements.")
         st.write("Here's a helpful visualization demonstrating how third-party cookies *retarget*.")
         st.image("3rd_retargeting.png", caption = "Source: https://www.performancemarketingworld.com/article/1800951/third-party-cookies")
         st.write("Third-party servers can combine information from their cookies set on multiple sites, creating a profile of the users. These are called **tracking cookies**." \
@@ -220,43 +213,61 @@ if isinstance(cookies, pd.DataFrame):
 
     #creating some initial visualizations
     if visualization == "Domain Exploration":
+        st.header("Domain Exploration")
         col1, col2 = st.columns((3,1))
         with col2:
-            st.write("")
             st.write("**What is a domain name?**")
             st.write("A domain name is the text that a user types into a browser window to reach a website. For example, Google's domain name is 'google.com'.")
-            st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
             st.write("The domain that a cookie belongs to can be found as the value for the 'host_key' column.")
+            st.write("For the purposes of this visualization, we combined subdomains. For example, 'accounts.google.com' would belong to 'google.com'.")
             st.write("")
-            num = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
+            num1 = st.slider(label="**Number of domains to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10)
 
         with col1:
-            st.subheader(":cookie: Domains Breakdown")
+            st.subheader(":cookie: Domain Breakdown")
             sorted_cookies = m.sort_cookie_domains(cookies)
-            if num:
-                vm.domain_breakdown(sorted_cookies, num)
+            if num1:
+                vm.domain_breakdown(sorted_cookies, num1, "Number of Cookies per Domain", "1")
             else:
-                vm.domain_breakdown(sorted_cookies, 10)
+                vm.domain_breakdown(sorted_cookies, 10, "Number of Cookies per Domain", "2")
+        
+        st.write("If you don't recognize some of these domain names, don't worry! Many of the cookies on your device will be 'third party' cookies. You will learn more about what this means later, and you can explore these cookies in the 'First vs Third Party Cookies' tab.")
 
-        st.subheader(":cookie: Top Frame Site Key")
-        col1, col2 = st.columns((1,3))
-        with col1:
-            with st.expander("Show top frame site keys"):
-                boo = vm.tfsk_breakdown(cookies)
-                if not boo:
-                    st.write("None of your cookies contain a value for top frame site key!")
+        st.subheader(":cookie: Name Breakdown")
+        col1, col2 = st.columns((3,1))
         with col2:
-            st.write("**What is a top frame site key?**")
-            st.write("A cookie's value in the 'top_frame_site_key' column specifies the domain of the uppermost frame in a frame hierarchy.")
-            st.write("A 'frame' is created when a website's contents are opened within the bounds of another website using an embedding such as an iframe.\n\nFor example, if a domain 'example.com' embeds a youtube video in their website, youtube may send a cookie with the top frame site key as 'https://example.com'.")
-            if boo:
-                m.tfsk_example(cookies)
-                st.write("This expander only shows the first 3 domains, to see more expand your database above and sort by top_frame_site_key.")
+            st.write("**What is a cookie name?**")
+            st.write("A cookie's name is the unique identifier for a cookie.")
+            st.write("This identifier helps websites and browsers track the purpose of a cookie.")
+            st.write("Some cookie names are very common, such as '_ga', which you likely see in your graph.")
+            st.write("")
+            num2 = st.slider(label="**Number of names to display**", min_value=1, max_value=m.get_num_names(cookies), value=10, key="slide2")
+
+        with col1:
+            sorted_cookies = m.sort_cookie_names(cookies)
+            if num2:
+                vm.name_breakdown(sorted_cookies, num2, "Number of Cookies per Name", "3")
+            else:
+                vm.name_breakdown(sorted_cookies, 10, "Number of Cookies per Name", "4")
+        
+        col1, col2 = st.columns((2))
+        with col1:
+            st.dataframe(sorted_cookies, hide_index=True, )
+        with col2:
+            st.write("To the left are all of the cookie names in your database, sorted by how often they appear.")
+            st.write("There are many online resources that can help us identify the purpose of a cookie, including one called 'cookiepedia'. If you know the name of a cookie, you can use this website to learn more about it.")
+            st.write("For example, below is cookiepedia's page on the cookie name '_ga', showing that it is associated with Google Analytics.")
+            st.write("**[https://cookiepedia.co.uk/cookies/_ga](%s)**" %"https://cookiepedia.co.uk/cookies/_ga")
+            st.write("Not all cookies will have such a complete description, or even a description at all. There so many cookie names out there, with many being untracked.")
+            st.write(f"Your database includes {m.get_num_names(cookies)} unique cookie names!")
+            st.write("Does your database have 'uid' or 'OTZ'? Try looking these up!")
+
+
 
             
+    # st.write(m.sort_cookie_domains(cookies))
 
-
-    # m.categorize_cookies(cookies)
+    #m.categorize_cookies(cookies)
 
     # vm.last_accessed(cookies)
 
@@ -281,31 +292,5 @@ if isinstance(cookies, pd.DataFrame):
     #     website = cookie_count.text_input('Enter a website:') 
     #     cookies_count = m.get_cookies(website)
 
-    st.divider()
-    st.subheader("Share your cookies")
-    st.write("Streamlit does not automatically save uploaded files.")
-    st.write("The cookies you uploaded for the follow along will be removed from the website's memory when you close the tab.")
-    st.write("Our group would like to continue working with cookies in the future, so we are asking for volunteers to upload their cookies for a potential future project. All uploaded cookies will be anonymized with their values removed for security.")
-    st.write("If you would like to share your cookies, click the checkbox below.")
-
-
-    consent = st.checkbox("I understand and would like to share my cookies.")
-
-    if consent:
-        
-        cookie_name = m.your_cookie_type(cookies)
-        st.write(f"Your anonymized cookie username is: *{cookie_name}*.")
-
-        upload = st.button("Share my cookies!")
-        if upload:
-            try:
-                db.upload_cookies(cookie_name, cookies)
-            except Exception as e:
-                st.warning("An error occured.")
-    
-    st.divider()
-    st.subheader("We appreciate your feedback!")
-    st.link_button("Super Quick Feedback Form", "https://forms.gle/fAFRDY1KVoqiAGceA")
-
 else:
-    st.warning("Please upload your cookies before starting the follow along.")
+    st.warning("Please upload your cookies.")
