@@ -347,3 +347,16 @@ def sort_cookie_names(cookies: pd.DataFrame) -> dict:
     
     else:
         return
+    
+def get_num_names(cookies: pd.DataFrame) -> int:
+    if isinstance(cookies, pd.DataFrame):
+        names = cookies['name']
+        names_list = []
+        for name in names:
+            if name not in names_list:
+                names_list.append(name)
+
+        return len(names_list)
+    
+    else:
+        return

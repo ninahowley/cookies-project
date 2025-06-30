@@ -241,7 +241,7 @@ if isinstance(cookies, pd.DataFrame):
             st.write("This identifier helps websites and browsers track the purpose of a cookie.")
             st.write("Some cookie names are very common, such as '_ga', which you likely see in your graph.")
             st.write("")
-            num2 = st.slider(label="**Number of names to display**", min_value=1, max_value=m.get_num_domains(cookies), value=10, key="slide2")
+            num2 = st.slider(label="**Number of names to display**", min_value=1, max_value=m.get_num_names(cookies), value=10, key="slide2")
 
         with col1:
             sorted_cookies = m.sort_cookie_names(cookies)
