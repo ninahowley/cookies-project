@@ -17,35 +17,37 @@ background-size: cover;
 </style>""")
 
 st.header(":cookie: Follow Along")
-st.subheader("Explore your cookies and learn about data privacy!")
+# st.subheader("Explore your cookies and learn about data privacy!")
 
-st.header("Part 1: Upload your data")
+st.subheader("Part 1: Upload your data")
 
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-with st.expander("Instructions to find cookies with your operating system"):
-    col1, col2 = st.columns((2))
-    with col1:
-        st.subheader("Windows")
-        m.display_windows_filepath()
-    with col2:
-        st.subheader("Mac")
-        m.display_mac_filepath()
+st.write("Make sure you are using this website in a guest profile, with all other browser windows closed.")
+st.write("**Instructions to find cookies with your operating system**")
+
+col1, col2 = st.columns((2))
+with col1:
+    st.subheader("Windows")
+    m.display_windows_filepath()
+with col2:
+    st.subheader("Mac")
+    m.display_mac_filepath()
+
+#upload cookies
+cookies = m.upload_cookies()
 
 with st.expander("I want to use the example cookies instead of my own"):
     st.write("If you want to use the example cookies database, download it from the following link and upload it to the streamlit below.")
     st.write("[Example Cookie Database](%s)" % "https://drive.google.com/file/d/1VIJxjrw6dsAGH5toMLRULxOVTVXDKreW/view?usp=sharing")
 
-#upload cookies
-cookies = m.upload_cookies()
 with st.expander("Error: This file is in use"):
+    st.write("Each chrome profile has it's own unique cookies database. A cookie database cannot be accessed while it's associated profile is in use.")
     st.write("This error occurs when you are currently logged into and using the account associated with that database.")
-    st.write("Each chrome profile has it's own unique cookies database.")
-    st.write("To work around this, you must have atleast 2 chrome profiles.")
-    st.write("Simply choose 'Profile 1', 'Profile 2', (or 'Profile 3', etc...) instead of 'Default' in the filepath.")
-    st.write(rf"**Windows**: C:\Users\🍪\AppData\Local\Google\Chrome\User Data\Profile 2\Network")
-    st.write("**Mac**: ~/Library/Application Support/Google/Chrome/Profile 2/")
+    st.write("To fix this error, make sure you are browsing on a guest profile and have all other windows closed.")
+    st.write("Otherwise, try navigating to a different folder: 'Default', 'Profile 1', 'Profile 2', etc...")
+    
 
 st.divider()
 st.header("Part 2: View your raw data")
