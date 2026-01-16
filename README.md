@@ -1,6 +1,6 @@
 # Cookie Jar
 
-Cookie Jar is an interactive website where users can learn about web cookies and explore their own browsing data. Wrote back-end functions for retrieving data and visualizations.
+Cookie Jar is an interactive website where users can learn about web cookies and explore their own browsing data.
 
 ## Authors
 * Nina Howley '27
