@@ -11,7 +11,7 @@ Cookie Jar is an interactive website where users can learn about web cookies and
 <h3><a href="https://cookiesproject.streamlit.app/" target="_blank">Website</a></h3>
 <h3><a href="https://docs.google.com/presentation/d/1ptwSa7iPPFH59lXnABAMPUpgtUXNqvT1JhtzTnBm1uE/present?slide=id.g148f9c0646e_0_0" target="_blank">Presentation</a></h3>
 
-### Landing Page
+### Follow Along
 
 <img alt="image" src="followalong.png" />
 
