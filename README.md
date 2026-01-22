@@ -19,7 +19,7 @@ Cookie Jar is an interactive website where users can learn about web cookies and
 
 1. **Clone the repository**
     ```
-    git clone https://github.com/ninahowley/cleencode.git
+    git clone https://github.com/ninahowley/cookies-project.git
     ```
 2. **Edit and save file**
     ```
