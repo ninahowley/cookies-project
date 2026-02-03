@@ -17,6 +17,7 @@ def display_windows_filepath():
     st.write(rf"2. C:\Users\ ")
     st.write("3. Choose your windows user")
     st.write(rf"4. \AppData\Local\Google\Chrome\User Data\ ")
+    st.write("* If 'AppData' doesn't appear, click the the three dots > Options > View > Check off 'Show hidden files' > Apply")
     st.write("5. Choose either 'Default' or 'Profile 1', 'Profile 2', etc...")
     st.write(rf"6. \Network\ ")
     st.write("\n**Drag and Drop:** 'Cookies'")
