@@ -24,7 +24,7 @@ st.subheader("Part 1: Upload your data")
 # user = os.getlogin()
 # st.write("Hello, ", user)
 
-st.write("Make sure you are using this website in a guest profile, with all other browser windows closed.")
+st.warning("Make sure you are using this website in a guest profile, with all other browser windows closed.")
 st.write("**Instructions to find cookies with your operating system**")
 
 col1, col2 = st.columns((2))
