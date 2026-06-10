@@ -2,6 +2,14 @@
 
 Cookie Jar is an interactive website where users can learn about web cookies and explore their own browsing data.
 
+## Features
+* Introduction: brief intro to web cookies (check out the slideshow in 'resources' for a more in depth overview)
+* Follow along: upload your cookies to explore your browsing data!
+* First vs. Third Party Cookies: manually sort through your cookies to reveal which sites placed third party cookies (you should only do this if you don't have a lot of data!)
+* Share your data: optionally upload your ANONYMIZED cookies to our database for future projects
+* Share your thoughts: complete a brief survey on your experience using our site
+* Resources: our slideshow, tips on managing your cookies & info on tracking pixels
+
 ## Authors
 * Nina Howley '27
 * Dianna Gonzalez '27
